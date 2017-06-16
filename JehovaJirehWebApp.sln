@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Web.Tests", "Je
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Web.Services", "JehovaJireh.Web.Services\JehovaJireh.Web.Services.csproj", "{E60C5CBF-8819-48D3-9E2D-6306957B3F16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Core", "JehovaJireh.Core\JehovaJireh.Core.csproj", "{AA151837-8B5B-41F0-BCCF-37C31C320D78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E60C5CBF-8819-48D3-9E2D-6306957B3F16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E60C5CBF-8819-48D3-9E2D-6306957B3F16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E60C5CBF-8819-48D3-9E2D-6306957B3F16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA151837-8B5B-41F0-BCCF-37C31C320D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA151837-8B5B-41F0-BCCF-37C31C320D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA151837-8B5B-41F0-BCCF-37C31C320D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA151837-8B5B-41F0-BCCF-37C31C320D78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
