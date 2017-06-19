@@ -11,7 +11,6 @@ namespace JehovaJireh.Core.Entities
 		public virtual string Title { get; set; }
 		public virtual string Description { get; set; }
 		public virtual decimal Amount { get; set; }
-		public virtual  
 		public virtual DateTime DonationDateUTC { get; set; }
 	    public virtual bool IsDonationForMembers { get; set; }
 		public virtual DateTime DonationExpiredDate { get; set; }

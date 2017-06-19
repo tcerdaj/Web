@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="JehovaJireh.Azure.APIApp" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="JehovaJireh.Web.Services">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="SQLConnectionString" value="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\tcerda\Source\Repos\Web\JehovaJireh\src\JehovaJireh.Web.Services\App_Data\jehovajirehDB.mdf;Integrated Security=True" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="JehovaJirehAppWildCardSSLCert" thumbprint="C4135889E6E481F4502171BE83109C32B8DF390A" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>
