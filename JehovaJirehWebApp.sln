@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Web.Services", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh", "JehovaJireh\JehovaJireh.csproj", "{D0C4182C-E093-4317-B331-9F682256DDB2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Infrastructure", "JehovaJireh.Infrastructure\JehovaJireh.Infrastructure.csproj", "{C7F48264-9082-475A-B17D-3EA22FAA7404}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Data", "JehovaJireh.Data\JehovaJireh.Data.csproj", "{F9D19667-CA5F-4799-85BB-65EB973649F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,8 +49,19 @@ Global
 		{D0C4182C-E093-4317-B331-9F682256DDB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0C4182C-E093-4317-B331-9F682256DDB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0C4182C-E093-4317-B331-9F682256DDB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F48264-9082-475A-B17D-3EA22FAA7404}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F48264-9082-475A-B17D-3EA22FAA7404}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F48264-9082-475A-B17D-3EA22FAA7404}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F48264-9082-475A-B17D-3EA22FAA7404}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9D19667-CA5F-4799-85BB-65EB973649F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D19667-CA5F-4799-85BB-65EB973649F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D19667-CA5F-4799-85BB-65EB973649F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D19667-CA5F-4799-85BB-65EB973649F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.0\lib\NET4;packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.WindowsAzure.TransientFaultHandling.5.1.1212.0\lib\NET4;packages\EnterpriseLibrary.WindowsAzure.TransientFaultHandling.5.1.1212.0\DesignTime
 	EndGlobalSection
 EndGlobal
