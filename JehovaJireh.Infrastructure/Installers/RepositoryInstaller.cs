@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+using JehovaJireh.Core.IRepositories;
+using JehovaJireh.Data.Repositories;
 
 namespace JehovaJireh.Infrastructure.Installers
 {
@@ -14,9 +16,9 @@ namespace JehovaJireh.Infrastructure.Installers
 		public void Install(IWindsorContainer container, IConfigurationStore store)
 		{
 			container.Register(
-								//Component.For<IUser>()
-								//		.ImplementedBy<User>()
-								);
+						        Component.For<IUserRepository>()
+								.ImplementedBy<UserRepository>()
+							);
 		}
 	}
 }
