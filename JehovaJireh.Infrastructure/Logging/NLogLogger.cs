@@ -43,9 +43,9 @@ namespace JehovaJireh.Infrastructure.Logging
 		{
 			log.Info(fmt, vars);
 		}
-		public void Info(string message, Exception exception)
+		public void Info(string message, System.Exception exception, params object[] args)
 		{
-			log.Info(message, exception);
+			log.Info(message, exception, args);
 		}
 
 		public void Warn(string message)
@@ -56,9 +56,9 @@ namespace JehovaJireh.Infrastructure.Logging
 		{
 			log.Warn(fmt, vars);
 		}
-		public void Warn(string message, Exception exception)
+		public void Warn(string message, System.Exception exception, params object[] args)
 		{
-			log.Warn(message, exception);
+			log.Warn(message, exception, args);
 		}
 
 		public void Error(string message)
@@ -69,12 +69,12 @@ namespace JehovaJireh.Infrastructure.Logging
 		{
 			log.Error(fmt, vars);
 		}
-		public void Error(string message, Exception exception)
+		public void Error(string message, System.Exception exception, params object[] args)
 		{
-			log.Error(message, exception);
+			log.Error(message, exception, args);
 		}
 
-		public void Error(Exception exception)
+		public void Error(System.Exception exception)
 		{
 			log.Error(exception);
 		}
@@ -105,9 +105,9 @@ namespace JehovaJireh.Infrastructure.Logging
 			log.Debug(fmt, vars);
 		}
 
-		public void Debug(string message, Exception exception)
+		public void Debug(string message, System.Exception exception, params object[] vars)
 		{
-			log.Debug(message, exception);
+			log.Debug(message, exception, vars);
 		}
 
 		public void Fatal(string message)
@@ -115,12 +115,12 @@ namespace JehovaJireh.Infrastructure.Logging
 			log.Fatal(message);
 		}
 
-		public void Fatal(string message, Exception exception)
+		public void Fatal(string message, System.Exception exception, params object[] vars)
 		{
-			log.Fatal(message, exception);
+			log.Fatal(message, exception, vars);
 		}
 
-		public void Fatal(Exception exception)
+		public void Fatal(System.Exception exception)
 		{
 			log.Fatal(exception);
 		}
@@ -167,7 +167,7 @@ namespace JehovaJireh.Infrastructure.Logging
 			log.Info("Worker {0} has been cancelled", workerName);
 		}
 
-		public Exception HandleException(Exception exception, Guid handlingInstanceId)
+		public System.Exception HandleException(System.Exception exception, Guid handlingInstanceId)
 		{
 			string message = string.Format("Error: {0}. {1} Handling Instance ID: {2}", exception.ToString(), Environment.NewLine, handlingInstanceId);
 			log.Error(message);
@@ -371,14 +371,14 @@ namespace JehovaJireh.Infrastructure.Logging
 			var targetAzure = new NLog.Extensions.AzureTableStorage.AzureTableStorageTarget();
 			targetAzure.Layout = "${json-encode:jsonEncode=True:inner=${message}}";
 			targetAzure.Name = "tableStorage";
-			targetAzure.ConnectionString = "LogStorageConnectionString";
+			targetAzure.ConnectionString = JehovaJireh.Configuration.CloudConfiguration.GetConnectionString("LogStorageConnectionString");
 			targetAzure.TableName = "logging";
 			config.AddTarget("tableStorage", targetAzure);
 
 			var targetAzureCustom = new NLogAzureStorageTarget();
 			//targetAzureCustom.Layout = "${json-encode:jsonEncode=True:inner=${message}}";
 			targetAzureCustom.Name = "tableStorageCustom";
-			//targetAzureCustom.ConnectionStringKey = "LogStorageConnectionString";
+			targetAzureCustom.TableStorageConnectionStringName = "LogStorageConnectionString";
 			targetAzureCustom.TableName = "logging";
 			config.AddTarget("tableStorageCustom", targetAzure);
 
@@ -387,12 +387,10 @@ namespace JehovaJireh.Infrastructure.Logging
 			targetConsole.Name = "console";
 			config.AddTarget("console", targetConsole);
 
-
 			var ruleNHibernate = new NLog.Config.LoggingRule("NHibernate*", NLog.LogLevel.Debug, targetAzureCustom);
-			var ruleApplication = new NLog.Config.LoggingRule("Aerocare*", NLog.LogLevel.Trace, targetAzureCustom);
+			var ruleApplication = new NLog.Config.LoggingRule("JehovaJireh*", NLog.LogLevel.Trace, targetAzureCustom);
 			config.LoggingRules.Add(ruleNHibernate);
 			config.LoggingRules.Add(ruleApplication);
-
 
 			var ruleConsole = new NLog.Config.LoggingRule("*", NLog.LogLevel.Trace, targetConsole);
 			config.LoggingRules.Add(ruleConsole);

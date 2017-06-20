@@ -6,7 +6,8 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=jehovajireh;AccountKey=IIl1Hxo8mfl6g6KyV64ermoL1YBjyizzpsCSgcEo0XTKRIBQ3VT8KtBo1HZSD7JvXac5LbWgAMY8LUmTKRXl4A==;EndpointSuffix=core.windows.net" />
       <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName=jehovajireh;AccountKey=sKGAdc3gY6/EhSwNzZ2A4VNIsTATMtejpKy6fHS5d5aZXcA+0ub7NjoKNUwEl2kOxo76/L/8lmFbd1t+LI0DOg==;EndpointSuffix=core.windows.net" />
       <Setting name="SQLConnectionString" value="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\tcerda\Source\Repos\Web\JehovaJireh\src\JehovaJireh.Web.Services\App_Data\jehovajirehDB.mdf;Integrated Security=True" />
-    </ConfigurationSettings>
+	  <Setting name="LogStorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName=jehovajirehlog;AccountKey=SOc5uukf/bs72UN0unp5aK6QwbKc/5O7s112+BVh5Il2XXHCAEajieLFsW8HY7JsDszScfbSFasndZZ6kEg9SQ==;EndpointSuffix=core.windows.net"/>
+	</ConfigurationSettings>
     <Certificates>
       <Certificate name="JehovaJirehAppWildCardSSLCert" thumbprint="C4135889E6E481F4502171BE83109C32B8DF390A" thumbprintAlgorithm="sha1" />
     </Certificates>

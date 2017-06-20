@@ -13,6 +13,7 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="StorageConnectionString" />
       <Setting name="SQLConnectionString" />
+	  <Setting name="LogStorageConnectionString"/>
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Httpln" protocol="http" port="80" />

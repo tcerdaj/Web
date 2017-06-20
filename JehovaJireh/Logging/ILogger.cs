@@ -17,25 +17,25 @@ namespace JehovaJireh.Logging
 
 		void Debug(string message);
 		void Debug(string fmt, params object[] vars);
-		void Debug(string message, Exception exception);
+		void Debug(string message, System.Exception exception, params object[] vars);
 
 		void Info(string message);
 		void Info(string fmt, params object[] vars);
-		void Info(string message, Exception exception);
+		void Info(string message, System.Exception exception, params object[] vars);
 
 		void Warn(string message);
 		void Warn(string fmt, params object[] vars);
-		void Warn(string message, Exception exception);
+		void Warn(string message, System.Exception exception, params object[] vars);
 
 		void Error(string message);
 		void Error(string fmt, params object[] vars);
-		void Error(string message, Exception exception);
-		void Error(Exception exception);
+		void Error(string message, System.Exception exception, params object[] vars);
+		void Error(System.Exception exception);
 
 		void Fatal(string message);
 		void Fatal(string fmt, params object[] vars);
-		void Fatal(string message, Exception exception);
-		void Fatal(Exception exception);
+		void Fatal(string message, System.Exception exception, params object[] vars);
+		void Fatal(System.Exception exception);
 
 		void TraceApi(string componentName, string method, TimeSpan timespan);
 		void TraceApi(string componentName, string method, TimeSpan timespan, string properties);
@@ -55,7 +55,7 @@ namespace JehovaJireh.Logging
 		void WorkerCancelled(string workerName);
 		void WorkerFinished(string workerName, TimeSpan? span = null);
 
-		new Exception HandleException(Exception exception, Guid handlingInstanceId);
+		new System.Exception HandleException(System.Exception exception, Guid handlingInstanceId);
 		#endregion
 
 		#region Caching

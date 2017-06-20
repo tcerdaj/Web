@@ -6,6 +6,7 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="SQLConnectionString" value="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\tcerda\Source\Repos\Web\JehovaJireh\src\JehovaJireh.Web.Services\App_Data\jehovajirehDB.mdf;Integrated Security=True" />
+	  <Setting name="LogStorageConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="JehovaJirehAppWildCardSSLCert" thumbprint="C4135889E6E481F4502171BE83109C32B8DF390A" thumbprintAlgorithm="sha1" />

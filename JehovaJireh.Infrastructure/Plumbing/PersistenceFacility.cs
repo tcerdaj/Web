@@ -60,7 +60,7 @@ namespace JehovaJireh.Infrastructure.Plumbing
 				.Mappings(m => m.FluentMappings.AddFromAssemblyOf<NHUnitOfWork>())
 				.ExposeConfiguration(c =>
 				{
-					//c.SetProperty(@"nhibernate-logger", @"Aerocare.Infrastructure.Logging.NLogNHibernateFactory, Aerocare.Infrastructure"); //TODO: WHY DOESNT THIS WORK?
+					c.SetProperty(@"nhibernate-logger", @"JehovaJireh.Infrastructure.Logging.NLogNHibernateFactory, JehovaJireh.Infrastructure"); //TODO: WHY DOESNT THIS WORK?
 				})
 				.BuildConfiguration();
 			cfg.EventListeners.PreUpdateEventListeners =
