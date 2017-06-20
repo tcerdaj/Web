@@ -10,7 +10,6 @@ namespace JehovaJireh.Core.Entities
 	{
 		#region Properties
 		public virtual string UserName { get; set; }
-		public virtual string PhoneNumber { get; set; }
 		public virtual string FirstName { get; set; }
 		public virtual string LastName { get; set; }
 		public virtual Gender Gender { get; set; }
@@ -21,9 +20,17 @@ namespace JehovaJireh.Core.Entities
 		public virtual string City { get; set; }
 		public virtual string State { get; set; }
 		public virtual string Zip { get; set; }
+		public virtual string PhoneNumber { get; set; }
 		public virtual bool Active { get; set; }
 		public virtual string ConfirmationToken { get; set; }
 		public virtual bool IsConfirmed { get; set; }
+		public virtual bool IsChurchMember { get; set; }
+		public virtual string ChurchName { get; set; }
+		public virtual string ChurchAddress { get; set; }
+		public virtual string ChurchPhone { get; set; }
+		public virtual string ChurchPastor { get; set; }
+		public virtual bool NeedToBeVisited { get; set; }
+		public virtual string Comments { get; set; }
 		public virtual ICollection<Role> Roles { get; set; }
 		#endregion
 	}

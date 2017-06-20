@@ -116,10 +116,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Listeners\AuditEventListener.cs" />
+    <Compile Include="Mappings\NHMappings.cs" />
     <Compile Include="Mappings\ValueInjectorConventions.cs" />
     <Compile Include="NHUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queues\AzureQueue.cs" />
+    <Compile Include="Repositories\NHRepository.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JehovaJireh.Core\JehovaJireh.Core.csproj">
