@@ -79,6 +79,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Installers\PersistenceInstaller.cs" />
+    <Compile Include="Installers\RepositoryInstaller.cs" />
     <Compile Include="Plumbing\PersistenceFacility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
