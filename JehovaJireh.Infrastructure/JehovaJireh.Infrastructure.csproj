@@ -87,6 +87,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\JehovaJireh.Core\JehovaJireh.Core.csproj">
+      <Project>{AA151837-8B5B-41F0-BCCF-37C31C320D78}</Project>
+      <Name>JehovaJireh.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JehovaJireh.Data\JehovaJireh.Data.csproj">
       <Project>{F9D19667-CA5F-4799-85BB-65EB973649F2}</Project>
       <Name>JehovaJireh.Data</Name>

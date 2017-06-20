@@ -8,15 +8,16 @@ using Castle.MicroKernel.Registration;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using JehovaJireh.Configuration;
+using JehovaJireh.Core.Queues;
 using JehovaJireh.Data;
 using JehovaJireh.Data.Listeners;
+using JehovaJireh.Data.Queues;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Microsoft.WindowsAzure.Storage.Table;
 using NHibernate;
 using NHibernate.Event;
-using Sandboxable.Microsoft.WindowsAzure.Storage;
 
 namespace JehovaJireh.Infrastructure.Plumbing
 {
@@ -72,6 +73,7 @@ namespace JehovaJireh.Infrastructure.Plumbing
 		private CloudStorageAccount BuildCloudStorageAccountConfiguration()
 		{
 			var storageAccount = CloudConfiguration.GetStorageAccount("StorageConnectionString");
+			var queueContext = new AzureQueue(storageAccount.CreateCloudQueueClient());
 
 			return storageAccount;
 		}
