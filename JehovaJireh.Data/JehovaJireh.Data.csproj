@@ -121,6 +121,7 @@
     <Compile Include="NHUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queues\AzureQueue.cs" />
+    <Compile Include="Repositories\ATSRepository.cs" />
     <Compile Include="Repositories\NHRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
