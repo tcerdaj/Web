@@ -29,6 +29,10 @@ namespace JehovaJireh.Web.Services
 			//set the IoC container
 			container = BootstrapContainer();
 
+			//initialize controller situation
+			var controllerFactory = new WindsorControllerFactory(container.Kernel);
+			ControllerBuilder.Current.SetControllerFactory(controllerFactory);
+
 		}
 
 		public static IWindsorContainer BootstrapContainer()
