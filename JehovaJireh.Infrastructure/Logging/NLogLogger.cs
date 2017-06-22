@@ -197,6 +197,43 @@ namespace JehovaJireh.Infrastructure.Logging
 		#endregion
 
 		#region EntityCRUD operations
+		public void GetStarted(string id)
+		{
+			log.Info("EntityID {0} has started", id);
+		}
+
+		public void GetFinished(string id, TimeSpan? span)
+		{
+			string message = string.Format("EntityID '{0}' has Finished", id);
+			message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
+			log.Info(message);
+		}
+
+		public void GetStarted<T>(T entity)
+		{
+			Type entityType = ((object)entity).GetType();
+			IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
+			string info = string.Format("Started getting {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
+			//loop through all the properties in the generic class being updated and log their values
+			foreach (PropertyInfo prop in props)
+			{
+				object propValue = prop.GetValue(((object)entity), null);
+				info += string.Format("{0}='{1}'{2}", prop.Name, (propValue == null) ? "null" : propValue.ToString(), Environment.NewLine);
+			}
+			if (log.IsInfoEnabled)
+				log.Info(info);
+		}
+
+		public void GetFinished<T>(T entity, TimeSpan? span)
+		{
+			string message = string.Format("Finished Getting {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
+			if (span != null)
+			{
+				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
+			}
+			if (log.IsInfoEnabled)
+				log.Info(message);
+		}
 
 		public void SaveStarted<T>(T entity)
 		{

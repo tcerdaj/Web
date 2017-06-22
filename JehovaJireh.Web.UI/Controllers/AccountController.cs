@@ -5,12 +5,16 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
+using JehovaJireh.Web.UI.Models;
+using System.Net.Http;
 using Microsoft.AspNet.Identity.Owin;
+using JehovaJireh.Core.Entities;
+using Omu.ValueInjecter;
+using JehovaJireh.Data.Mappings;
+using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using JehovaJirehWebApp.Models;
 
-namespace JehovaJirehWebApp.Controllers
+namespace JehovaJireh.Web.UI.Controllers
 {
     [Authorize]
     public class AccountController : Controller
@@ -149,27 +153,45 @@ namespace JehovaJirehWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					var confirmationToken = await UserManager.CreateConfirmationTokenAsync();
+					var user = (User)new User().InjectFrom<DeepCloneInjection>(model);
+					user.CreatedOnUTC = DateTime.UtcNow;
+					user.Active = true;
 
-                    return RedirectToAction("Index", "Home");
-                }
-                AddErrors(result);
-            }
+					var result = await UserManager.CreateAsync(user, model.PasswordHash);
+					if (result.Succeeded)
+					{
+						await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+						// For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+						// Send an email with this link
+						// string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+						// var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+						// await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+						//Send email to user to complete the proccess.
+						var callbackUrl = Url.Action("RegisterConfirmationCallBack", "Account", new { token = confirmationToken }, protocol: Request.Url.Scheme);
+						var emailResult = UserManager.SendEmailAsync(user.Id.ToString(), "Register Confirmation", "Please complete your registration by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+						return RedirectToAction("RegisterConfirmation");
+					}
+
+					AddErrors(result);
+
+
+				}
+				catch (System.Exception ex)
+				{
+					string[] errors = new string[] { ex.Message };
+					AddErrors(new IdentityResult(errors));
+				}
+
+			}
+				// If we got this far, something failed, redisplay form
+				return View(model);
         }
 
         //
@@ -203,7 +225,7 @@ namespace JehovaJirehWebApp.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id.ToString())))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
@@ -254,7 +276,7 @@ namespace JehovaJirehWebApp.Controllers
                 // Don't reveal that the user does not exist
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            var result = await UserManager.ResetPasswordAsync(user.Id.ToString(), model.Code, model.Password);
             if (result.Succeeded)
             {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
@@ -367,11 +389,11 @@ namespace JehovaJirehWebApp.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new User { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
+                    result = await UserManager.AddLoginAsync(user.Id.ToString(), info.Login);
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);

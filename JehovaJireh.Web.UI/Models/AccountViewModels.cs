@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using JehovaJireh.Core.Entities;
 
-namespace JehovaJirehWebApp.Models
+namespace JehovaJireh.Web.UI.Models
 {
     public class ExternalLoginConfirmationViewModel
     {
@@ -69,19 +70,69 @@ namespace JehovaJirehWebApp.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+		[Display(Name = "User Name")]
+		public string UserName { get; set; }
+
+		[Required]
+		[Display(Name = "First Name")]
+		public string FirstName { get; set; }
+
+		[Required]
+		[Display(Name = "Last Name")]
+		public string LastName { get; set; }
+
+		[Display(Name = "Gender")]
+		public Gender Gender { get; set; }
+
+		[Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("PasswordHash", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-    }
 
-    public class ResetPasswordViewModel
+		[Display(Name = "Address")]
+		public string Address { get; set; }
+
+		[Display(Name = "City")]
+		public string City { get; set; }
+
+		[Display(Name = "State")]
+		public string State { get; set; }
+
+		[Display(Name = "Zip")]
+		public string Zip { get; set; }
+
+		[Display(Name = "Phone")]
+		public string PhoneNumber { get; set; }
+
+		[Display(Name = "Is Church Member?")]
+		public bool IsChurchMember { get; set; }
+
+		[Display(Name = "Church Name")]
+		public string ChurchName { get; set; }
+
+		[Display(Name = "Church Address")]
+		public string ChurchAddress { get; set; }
+
+		[Display(Name = "Church Phone")]
+		public string ChurchPhone { get; set; }
+
+		[Display(Name = "Church Pastor")]
+		public string ChurchPastor { get; set; }
+
+		[Display(Name = "Do you want us to visit you or call you?")]
+		public string NeedToBeVisited { get; set; }
+
+		[Display(Name = "Your opinion is very important to us, please leave us your comments.")]
+		public string Comments { get; set; }
+	}
+
+	public class ResetPasswordViewModel
     {
         [Required]
         [EmailAddress]

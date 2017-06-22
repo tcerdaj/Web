@@ -1,7 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
+using JehovaJireh.Web.Services.Filters;
+using Microsoft.Owin.Security.OAuth;
+using WebApiContrib.Logging.Raygun;
+using JehovaJireh.Web.Services.ErrorHandler;
+using System.Web.Http.Cors;
 
 namespace JehovaJireh.Web.Services
 {
@@ -10,14 +17,33 @@ namespace JehovaJireh.Web.Services
 		public static void Register(HttpConfiguration config)
 		{
 			// Web API configuration and services
+			
+			// Configure Web API to use only bearer token authentication.
+			config.SuppressDefaultHostAuthentication();
+			config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+
+			//Configure Raygun for WebApi
+			var raygunSettings = (Mindscape.Raygun4Net.RaygunSettings)ConfigurationManager.GetSection("RaygunSettings");
+			config.Services.Add(typeof(IExceptionLogger), new RaygunExceptionLogger(raygunSettings.ApiKey)); //Add raygun
+
+			//Unhandled exceptions per controller
+			config.Filters.Add(new ValidationExceptionFilterAttribute());
+
+			//Remove Existing Handler and add custom
+			config.Services.Replace(typeof(IExceptionHandler), new OopsExceptionHandler());
+
+			// Setting Cors
+			var cors = new EnableCorsAttribute(origins: "http://localhost:58095/, http://jehovajirehwebservices.azurewebsites.net", headers: "*", methods: "GET,POST,DELETE,PUT");
+			cors.SupportsCredentials = true;
+			config.EnableCors(cors);
 
 			// Web API routes
 			config.MapHttpAttributeRoutes();
 
 			config.Routes.MapHttpRoute(
 				name: "DefaultApi",
-				routeTemplate: "api/{controller}/{id}",
-				defaults: new { id = RouteParameter.Optional }
+				routeTemplate: "{controller}/{id}/{action}",
+				defaults: new { id = RouteParameter.Optional, action = RouteParameter.Optional }
 			);
 		}
 	}

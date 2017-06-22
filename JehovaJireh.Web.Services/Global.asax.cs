@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using JehovaJireh.Infrastructure.Installers;
+using JehovaJireh.Web.Services.Plumbing;
+using Mindscape.Raygun4Net;
 
 namespace JehovaJireh.Web.Services
 {
@@ -33,6 +36,10 @@ namespace JehovaJireh.Web.Services
 			var controllerFactory = new WindsorControllerFactory(container.Kernel);
 			ControllerBuilder.Current.SetControllerFactory(controllerFactory);
 
+			//WebApi
+			GlobalConfiguration.Configuration.Services.Replace(
+						typeof(IHttpControllerActivator),
+						new WindsorCompositionRoot(container));
 		}
 
 		public static IWindsorContainer BootstrapContainer()
@@ -51,6 +58,12 @@ namespace JehovaJireh.Web.Services
 		protected void Application_End()
 		{
 			container.Dispose();
+		}
+
+		protected void Application_Error()
+		{
+			var exception = Server.GetLastError();
+			new RaygunClient().Send(exception);
 		}
 	}
 }

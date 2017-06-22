@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JehovaJireh.Core.IRepositories;
+using JehovaJireh.Exception;
+using JehovaJireh.Logging;
 using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 using NHibernate;
 using NHibernate.Linq;
@@ -12,6 +15,7 @@ namespace JehovaJireh.Data.Repositories
 {
 	public class NHRepository<T, IdT> : IRepository<T, IdT>
 	{
+		private readonly ILogger log;
 		private readonly ISession session;
 		private readonly ExceptionManager exManager;
 
@@ -20,10 +24,11 @@ namespace JehovaJireh.Data.Repositories
 			get { return session; }
 		}
 
-		public NHRepository(ISession session, ExceptionManager exManager)
+		public NHRepository(ISession session, ExceptionManager exManager, ILogger log)
 		{
 			this.session = session;
 			this.exManager = exManager;
+			this.log = log;
 		}
 
 		public NHRepository(ISession session)
@@ -39,74 +44,96 @@ namespace JehovaJireh.Data.Repositories
 		public IQueryable<T> Query()
 		{
 			IQueryable<T> data = null;
+			Stopwatch timespan = Stopwatch.StartNew();
+			log.GetStarted(new List<T>());
 
 			try
 			{
 				data = Session.Query<T>();
 			}
-			catch (Exception ex)
+			catch (System.Exception ex)
 			{
-				throw ex;
-				//Exception exceptionToThrow;
-				//if (exManager.HandleException(ex, Policies.DataAccess.WebServicePolicy, out exceptionToThrow))
-				//{
-				//    if (exceptionToThrow == null)
-				//        throw;
-				//    else
-				//        throw exceptionToThrow;
-				//}
+				HandleException(ex);
+			}
+			finally
+			{
+				timespan.Stop();
+				log.GetFinished(data, timespan.Elapsed);
 			}
 
 			return data;
 		}
 
+
+		public void HandleException(System.Exception ex)
+		{
+			System.Exception exceptionToThrow;
+			System.Exception results;
+			if (exManager.HandleException(ex, ExceptionPolicies.DataAccess.WebServicePolicy, out exceptionToThrow))
+			{
+				if (exceptionToThrow == null)
+					results =  ex;
+				else
+					results = exceptionToThrow;
+			}
+			else
+			{
+				results =  ex;
+			}
+
+			log.Error(ex);
+			throw results;
+		}
+
 		public T GetById(IdT Id)
 		{
 			object item = new object();
+			Stopwatch timespan = Stopwatch.StartNew();
+			log.GetStarted(Id);
 
 			try
 			{
 				item = Session.Get<T>(Id);
 			}
-			catch (Exception ex)
+			catch (System.Exception ex)
 			{
-				Exception exceptionToThrow;
-				//if (exManager.HandleException(ex, Policies.DataAccess.WebServicePolicy, out exceptionToThrow))
-				//{
-				//	if (exceptionToThrow == null)
-				//		throw;
-				//	else
-				//		throw exceptionToThrow;
-				//}
-				throw ex;
+				HandleException(ex);
 			}
-
+			finally
+			{
+				timespan.Stop();
+				log.GetFinished(Id.ToString(), timespan.Elapsed);
+			}
 			return (T)item;
 		}
 
 		public void Create(T entity)
 		{
-
+			log.SaveInsertStarted(entity);
+			Stopwatch timespan = Stopwatch.StartNew();
 			try
 			{
 				using (var tx = Session.BeginTransaction())
 				{
-
 					Session.Save(entity);
 					tx.Commit();
-
 				}
 			}
-			catch (Exception ex)
+			catch (System.Exception ex)
 			{
-				//log.Error(ex);
-				throw ex;
+				HandleException(ex);
 			}
-
+			finally
+			{
+				timespan.Stop();
+				log.SaveInsertFinished(entity, timespan.Elapsed);
+			}
 		}
 
 		public void Delete(T entity)
 		{
+			log.DeleteStarted(entity);
+			Stopwatch timespan = Stopwatch.StartNew();
 			try
 			{
 				using (var tx = Session.BeginTransaction())
@@ -115,25 +142,21 @@ namespace JehovaJireh.Data.Repositories
 					tx.Commit();
 				}
 			}
-			catch (Exception ex)
+			catch (System.Exception ex)
 			{
-				//Exception exceptionToThrow;
-				//if (exManager.HandleException(ex, Policies.DataAccess.WebServicePolicy, out exceptionToThrow))
-				//{
-				//    if (exceptionToThrow == null)
-				//        throw;
-				//    else
-				//        throw exceptionToThrow;
-				//}
-				throw ex;
+				HandleException(ex);
 			}
-
+			finally
+			{
+				timespan.Stop();
+				log.DeleteFinished(entity);
+			}
 		}
 
 		public void DeleteById(IdT Id)
 		{
-			//log.DeleteStarted(Session.Load<T>(Id));
-			//Stopwatch timespan = Stopwatch.StartNew();
+			log.DeleteStarted(Session.Load<T>(Id));
+			Stopwatch timespan = Stopwatch.StartNew();
 			try
 			{
 				using (var tx = Session.BeginTransaction())
@@ -142,53 +165,44 @@ namespace JehovaJireh.Data.Repositories
 					tx.Commit();
 				}
 			}
-			catch (Exception ex)
+			catch (System.Exception ex)
 			{
-				//Exception exceptionToThrow;
-				//if (exManager.HandleException(ex, Policies.DataAccess.WebServicePolicy, out exceptionToThrow))
-				//{
-				//    if (exceptionToThrow == null)
-				//        throw;
-				//    else
-				//        throw exceptionToThrow;
-				//}
-				throw ex;
+				HandleException(ex);
 			}
-			//timespan.Stop();
-			// log.DeleteFinished(Session.Load<T>(Id), timespan.Elapsed);
-
+			finally
+			{
+				timespan.Stop();
+				log.DeleteFinished(Session.Load<T>(Id));
+			}
 		}
 
 		public void Dispose()
 		{
-		}
 
+		}
 
 		public void Update(T entity)
 		{
-			//log.SaveStarted(entity);
-			//Stopwatch timespan = Stopwatch.StartNew();
+			log.SaveStarted(entity);
+			Stopwatch timespan = Stopwatch.StartNew();
 			try
 			{
 				using (var tx = Session.BeginTransaction())
 				{
 					Session.SaveOrUpdate(entity);
 					tx.Commit();
+					log.SaveFinished(entity);
 				}
 			}
-			catch (Exception ex)
+			catch (System.Exception ex)
 			{
-				Exception exceptionToThrow;
-				//if (exManager.HandleException(ex, Policies.DataAccess.WebServicePolicy, out exceptionToThrow))
-				//{
-				//	if (exceptionToThrow == null)
-				//		throw;
-				//	else
-				//		throw exceptionToThrow;
-				//}
-				throw ex;
+				HandleException(ex);
 			}
-
+			finally
+			{
+				timespan.Stop();
+				log.SaveFinished(entity);
+			}
 		}
 
 
@@ -200,17 +214,9 @@ namespace JehovaJireh.Data.Repositories
 			{
 				item = Session.Load<T>(Id);
 			}
-			catch (Exception ex)
+			catch (System.Exception ex)
 			{
-				//Exception exceptionToThrow;
-				//if (exManager.HandleException(ex, Policies.DataAccess.WebServicePolicy, out exceptionToThrow))
-				//{
-				//    if (exceptionToThrow == null)
-				//        throw;
-				//    else
-				//        throw exceptionToThrow;
-				//}
-				throw ex;
+				HandleException(ex);
 			}
 
 			return (T)item;

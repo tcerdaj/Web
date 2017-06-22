@@ -1,8 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(JehovaJirehWebApp.Startup))]
-namespace JehovaJirehWebApp
+[assembly: OwinStartupAttribute(typeof(JehovaJireh.Web.UI.Startup))]
+namespace JehovaJireh.Web.UI
 {
     public partial class Startup
     {

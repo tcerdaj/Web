@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 
 namespace JehovaJireh.Core.Entities
 {
-	public class User: EntityBase<int>
+	public class User : EntityBase<int>, IUser
 	{
 		#region Properties
 		public virtual string UserName { get; set; }
@@ -32,6 +34,26 @@ namespace JehovaJireh.Core.Entities
 		public virtual bool NeedToBeVisited { get; set; }
 		public virtual string Comments { get; set; }
 		public virtual ICollection<Role> Roles { get; set; }
+
+		string IUser<string>.Id
+		{
+			get { return this.Id.ToString(); }
+		}
+		#endregion
+
+		#region Methods
+		public virtual async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager)
+		{
+			// Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
+			var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+			// Add custom user claims here
+			return userIdentity;
+		}
+
+		public virtual void SetStatus(Boolean active)
+		{
+			this.Active = active;
+		}
 		#endregion
 	}
 }

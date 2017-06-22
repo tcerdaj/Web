@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace JehovaJirehWebApp.Models
+namespace JehovaJireh.Web.UI.Models
 {
     public class IndexViewModel
     {

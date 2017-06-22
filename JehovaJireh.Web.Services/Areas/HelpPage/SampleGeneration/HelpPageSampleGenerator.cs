@@ -330,7 +330,7 @@ namespace JehovaJireh.Web.Services.Areas.HelpPage
                         type.Name));
                 }
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
                 sample = new InvalidSample(String.Format(
                     CultureInfo.CurrentCulture,
@@ -354,7 +354,7 @@ namespace JehovaJireh.Web.Services.Areas.HelpPage
             return sample;
         }
 
-        internal static Exception UnwrapException(Exception exception)
+        internal static System.Exception UnwrapException(System.Exception exception)
         {
             AggregateException aggregateException = exception as AggregateException;
             if (aggregateException != null)

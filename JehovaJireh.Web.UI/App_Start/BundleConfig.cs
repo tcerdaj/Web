@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace JehovaJirehWebApp
+namespace JehovaJireh.Web.UI
 {
     public class BundleConfig
     {

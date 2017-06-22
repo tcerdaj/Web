@@ -5,7 +5,7 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="SQLConnectionString" value="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\tcerda\Source\Repos\Web\JehovaJireh\src\JehovaJireh.Web.Services\App_Data\jehovajirehDB.mdf;Integrated Security=True" />
+      <Setting name="SQLConnectionString" value="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\tcerda\Source\Repos\Web\JehovaJireh\src\JehovaJireh.Web.Services\App_Data\jehovajirehlocalDB.mdf;Integrated Security=True" />
 	  <Setting name="LogStorageConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
     <Certificates>

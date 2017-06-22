@@ -5,9 +5,9 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace JehovaJirehWebApp
+namespace JehovaJireh.Web.UI
 {
-    public class RouteConfig
+	public class RouteConfig
     {
         public static void RegisterRoutes(RouteCollection routes)
         {

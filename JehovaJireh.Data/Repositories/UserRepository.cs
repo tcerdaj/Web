@@ -1,19 +1,26 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using JehovaJireh.Core.Entities;
 using JehovaJireh.Core.IRepositories;
+using JehovaJireh.Logging;
+using Microsoft.AspNet.Identity;
 using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 using NHibernate;
+using NHibernate.Linq;
 
 namespace JehovaJireh.Data.Repositories
 {
-	public class UserRepository:NHRepository<User, int>, IUserRepository
+	public class UserRepository:NHRepository<User, int>, IUserRepository, IUserStore<User>, IUserPasswordStore<User>, IUserSecurityStampStore<User>, IQueryableUserStore<User>, IUserEmailStore<User>
 	{
 		ISession session;
+		ILogger log;
 
-		public UserRepository(ISession session, ExceptionManager exManager)
-			: base(session, exManager)
+		public UserRepository(ISession session, ExceptionManager exManager, ILogger log)
+			: base(session, exManager, log)
 		{
-
+			this.log = log;
 		}
 
 		public UserRepository(ISession session)
@@ -26,6 +33,7 @@ namespace JehovaJireh.Data.Repositories
 		{
 
 		}
+
 
 		public User GetByUserName(string userName)
 		{
@@ -40,6 +48,210 @@ namespace JehovaJireh.Data.Repositories
 		public User GetByConfirmationToken(string token)
 		{
 			return (from u in this.Query() where u.ConfirmationToken == token select u).SingleOrDefault();
+		}
+
+		public IQueryable<User> Users
+		{
+			get { return Query().AsQueryable<User>(); }
+		}
+
+		public Task CreateAsync(User user)
+		{
+			if ((object)user == null)
+				throw new ArgumentNullException("user");
+
+			var result = string.Empty;
+
+			try
+			{
+				this.Update(user);
+
+				result = user.Id.ToString();
+			}
+			catch (System.Exception ex)
+			{
+				log.Error(ex);
+				throw ex;
+			}
+
+			return Task.FromResult(result);
+		}
+
+		public Task DeleteAsync(User user)
+		{
+			var result = string.Empty;
+			this.Delete(user);
+			return Task.FromResult(result);
+		}
+
+		public Task<User> FindByNameAsync(string userName)
+		{
+			return Task.FromResult(this.GetByUserName(userName));
+		}
+
+		public Task UpdateAsync(User user)
+		{
+			if ((object)user == null)
+				throw new ArgumentNullException("user");
+
+			this.Update(user);
+			return Task.FromResult(0);
+		}
+
+		public Task<string> GetPasswordHashAsync(User user)
+		{
+			if (user == null)
+			{
+				throw new ArgumentNullException("user");
+			}
+
+			return Task.FromResult(user.PasswordHash);
+		}
+
+		public Task<bool> HasPasswordAsync(User user)
+		{
+			return Task.FromResult(user.PasswordHash != null);
+		}
+
+		public Task SetPasswordHashAsync(User user, string passwordHash)
+		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			user.PasswordHash = passwordHash;
+
+			return Task.FromResult(0);
+		}
+
+		public Task<string> GetSecurityStampAsync(User user)
+		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			return Task.FromResult(user.SecurityStamp);
+		}
+
+		public Task SetSecurityStampAsync(User user, string stamp)
+		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			user.SecurityStamp = stamp;
+
+			return Task.FromResult(0);
+		}
+
+		public Task<User> FindByEmailAsync(string email)
+		{
+			if (string.IsNullOrEmpty(email))
+				throw new ArgumentNullException("email");
+
+			var result = (from u in this.Query() where u.Email == email select u).FirstOrDefault();
+
+			return Task<User>.FromResult(result);
+		}
+
+		public Task<string> GetEmailAsync(User user)
+		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			return Task.FromResult(user.Email);
+		}
+
+		public Task<bool> GetEmailConfirmedAsync(User user)
+		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			var result = (from u in this.Query() where u.Email == user.Email select u).FirstOrDefault() != null;
+
+			return Task<bool>.FromResult(result);
+
+		}
+
+		public Task SetEmailAsync(User user, string email)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task SetEmailConfirmedAsync(User user, bool confirmed)
+		{
+			throw new NotImplementedException();
+		}
+		
+
+		public Task<User> FindByIdAsync(string userId)
+		{
+			if (userId == string.Empty)
+				throw new ArgumentNullException("user");
+
+			return Task.FromResult(this.GetById(userId)).Result;
+		}
+
+		public Task<User> FindByIdAsync(int userId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<User> GetById(string id)
+		{
+			if (id == string.Empty)
+				throw new ArgumentNullException("Id");
+
+			return Task.FromResult((from u in this.Query() where u.Id == int.Parse(id) select u).SingleOrDefault());
+		}
+
+		public Task AddToRoleAsync(User user, string roleName)
+		{
+			if (user == null)
+				throw new NullReferenceException("user");
+
+			if (string.IsNullOrEmpty(roleName))
+				throw new NullReferenceException("roleName");
+
+			//user.AddRole(new Role { Name = roleName });
+
+			return Task.FromResult(roleName);
+		}
+
+		public Task AddToRoles(User user, string[] roles)
+		{
+			if (roles == null)
+				throw new NullReferenceException("roles");
+
+			//user.AddRoles(roles);
+
+			return Task.FromResult(roles);
+		}
+
+		public Task RemoveFromRoleAsync(User user, string roleName)
+		{
+			if (user == null)
+				throw new NullReferenceException("user");
+
+			if (string.IsNullOrEmpty(roleName))
+				throw new NullReferenceException("roleName");
+
+			var role = session.Query<Role>().Where(x => x.Name == roleName).FirstOrDefault();
+
+			//if (role != null)
+			//	user.RemoveRole(role);
+
+			return Task.FromResult(user);
+		}
+
+		public Task<IList<string>> GetRolesAsync(User user)
+		{
+			if (user == null)
+				throw new NullReferenceException("user");
+
+			return Task.FromResult<IList<string>>(user.Roles.Select(x => x.Name).ToArray());
+		}
+
+		public Task<bool> IsInRoleAsync(User user, string roleName)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

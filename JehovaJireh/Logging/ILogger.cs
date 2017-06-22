@@ -52,6 +52,7 @@ namespace JehovaJireh.Logging
 		void WebApplicationStarted();
 
 		void WorkerStarted(string workerName);
+		
 		void WorkerCancelled(string workerName);
 		void WorkerFinished(string workerName, TimeSpan? span = null);
 
@@ -82,7 +83,10 @@ namespace JehovaJireh.Logging
 		#endregion
 
 		#region EntityCRUD operations
-
+		void GetStarted(string id);
+		void GetFinished(string id, TimeSpan? span);
+		void GetStarted<T>(T entity);
+		void GetFinished<T>(T entity, TimeSpan? span);
 		void SaveStarted<T>(T entity);
 		void SaveFinished<T>(T entity, TimeSpan? span = null);
 		void SaveInsertStarted<T>(T entity);

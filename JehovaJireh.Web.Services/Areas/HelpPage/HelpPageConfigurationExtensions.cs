@@ -402,7 +402,7 @@ namespace JehovaJireh.Web.Services.Areas.HelpPage
                     LogInvalidSampleAsError(apiModel, item.Value);
                 }
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
                 apiModel.ErrorMessages.Add(String.Format(CultureInfo.CurrentCulture,
                     "An exception has occurred while generating the sample. Exception message: {0}",
