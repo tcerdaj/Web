@@ -22,3 +22,13 @@ select,
 textarea {
     max-width: 280px;
 }
+
+/*Register page*/
+.page-register {}
+.page-register .secction-main {background: aliceblue;border: 1px solid rgb(214, 214, 214);}
+.page-register .secction-main .secction-content {padding: 18px}
+	.page-register .secction-main .secction-content .form-group input,
+	.page-register .secction-main .secction-content .form-group textarea {
+		max-width: 100%
+	}
+																						   
