@@ -66,12 +66,13 @@ namespace JehovaJireh.Web.UI.Models
     public class RegisterViewModel
     {
         [Required(ErrorMessageResourceType = typeof(Resources.Resources),
-			  ErrorMessageResourceName = "EmailRequired"))]
-        [EmailAddress]
+			  ErrorMessageResourceName = "EmailRequired")]
+        [EmailAddress(ErrorMessageResourceType = typeof(Resources.Resources),
+			  ErrorMessageResourceName = "EmailInvalid")]
         [Display(Name = "Email", ResourceType = typeof(Resources.Resources))]
         public string Email { get; set; }
 
-		[Display(Name = "User Name")]
+		[Display(Name = "User Name", ResourceType = typeof(Resources.Resources))]
 		[StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string UserName { get; set; }
 
