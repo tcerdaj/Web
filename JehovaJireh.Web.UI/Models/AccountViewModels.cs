@@ -65,12 +65,14 @@ namespace JehovaJireh.Web.UI.Models
 
     public class RegisterViewModel
     {
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Resources.Resources),
+			  ErrorMessageResourceName = "EmailRequired"))]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "Email", ResourceType = typeof(Resources.Resources))]
         public string Email { get; set; }
 
 		[Display(Name = "User Name")]
+		[StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string UserName { get; set; }
 
 		[Display(Name = "Please enter your photo")]
@@ -78,13 +80,16 @@ namespace JehovaJireh.Web.UI.Models
 
 		[Required]
 		[Display(Name = "First Name")]
+		[StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string FirstName { get; set; }
 
 		[Required]
 		[Display(Name = "Last Name")]
+		[StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string LastName { get; set; }
 
 		[Display(Name = "Gender")]
+		[StringLength(15, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public Gender Gender { get; set; }
 
 		[Required]
@@ -99,33 +104,44 @@ namespace JehovaJireh.Web.UI.Models
         public string ConfirmPassword { get; set; }
 
 		[Display(Name = "Address")]
+		[StringLength(80, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string Address { get; set; }
 
 		[Display(Name = "City")]
+		[StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string City { get; set; }
 
 		[Display(Name = "State")]
+		[StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string State { get; set; }
 
 		[Display(Name = "Zip")]
+		[StringLength(15, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string Zip { get; set; }
 
 		[Display(Name = "Phone")]
+		[Phone]
+		[StringLength(15, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string PhoneNumber { get; set; }
 
 		[Display(Name = "Is Church Member?")]
 		public bool IsChurchMember { get; set; }
 
 		[Display(Name = "Church Name")]
+		[StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string ChurchName { get; set; }
 
 		[Display(Name = "Church Address")]
+		[StringLength(80, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string ChurchAddress { get; set; }
 
+		[Phone]
 		[Display(Name = "Church Phone")]
+		[StringLength(15, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string ChurchPhone { get; set; }
 
 		[Display(Name = "Church Pastor")]
+		[StringLength(20, ErrorMessage = "The {0} must be at least {2} characters long.")]
 		public string ChurchPastor { get; set; }
 
 		[Display(Name = "Do you want us to visit you or call you?")]
