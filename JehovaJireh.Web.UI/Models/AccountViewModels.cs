@@ -73,6 +73,9 @@ namespace JehovaJireh.Web.UI.Models
 		[Display(Name = "User Name")]
 		public string UserName { get; set; }
 
+		[Display(Name = "Please enter your photo")]
+		public string FileData{ get; set; }
+
 		[Required]
 		[Display(Name = "First Name")]
 		public string FirstName { get; set; }
@@ -126,7 +129,7 @@ namespace JehovaJireh.Web.UI.Models
 		public string ChurchPastor { get; set; }
 
 		[Display(Name = "Do you want us to visit you or call you?")]
-		public string NeedToBeVisited { get; set; }
+		public bool NeedToBeVisited { get; set; }
 
 		[Display(Name = "Your opinion is very important to us, please leave us your comments.")]
 		public string Comments { get; set; }

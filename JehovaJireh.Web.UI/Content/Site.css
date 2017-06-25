@@ -29,4 +29,7 @@ textarea {
 .page-register .secction-main .secction-content {padding: 18px}
 .page-register .secction-main .secction-content .form-group input,
 .page-register .secction-main .secction-content .form-group textarea {max-width: 100%}
+.img-rounded {
+	border-radius: 6px;
+}
 																						   

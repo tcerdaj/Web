@@ -14,7 +14,7 @@ namespace JehovaJireh.Core.Entities
 		public virtual string UserName { get; set; }
 		public virtual string FirstName { get; set; }
 		public virtual string LastName { get; set; }
-		public virtual Gender Gender { get; set; }
+		public virtual string Gender { get; set; }
 		public virtual string PasswordHash { get; set; }
 		public virtual string SecurityStamp { get; set; }
 		public virtual string Email { get; set; }

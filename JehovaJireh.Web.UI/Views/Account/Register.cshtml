@@ -11,149 +11,197 @@
 	<h4>Create a new account.</h4>
 	<hr />
 	@Html.ValidationSummary("", new { @class = "text-danger" })
-	<section class="secction-main">
-		<div class="secction-content">
-			<h3>Account Info</h3>
-			<div class="form-group">
-				@Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+			<section class="secction-main">
+				<div class="secction-content">
+					<h3>Account Photo</h3>
+					<div class="form-group">
+						@Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							<div class="well" data-bind="fileDrag: fileData">
+								<div class="form-group row">
+									<div class="col-md-6">
+										<img style="height: 125px;" class="img-rounded  thumb" data-bind="attr: { src: fileData().dataURL }, visible: fileData().dataURL">
+										<div data-bind="ifnot: fileData().dataURL">
+											<label class="drag-label">Drag file here</label>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<input type="file" data-bind="fileInput: fileData, customFileInput: {
+															  buttonClass: 'btn btn-success',
+															  fileNameClass: 'disabled form-control',
+															  onClear: onClear,
+															}" accept="image/*">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.PasswordHash, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.PasswordFor(m => m.PasswordHash, new { @class = "form-control" })
+			</section>
+			<section class="secction-main">
+				<div class="secction-content">
+					<h3>Account Info</h3>
+					<div class="form-group">
+						@Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.PasswordHash, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.PasswordFor(m => m.PasswordHash, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							<div class="user-gender">
+								Male @Html.RadioButtonFor(m => m.Gender, "Male", new { @class = "" })
+								Female @Html.RadioButtonFor(m => m.Gender, "Female", new { @class = "" })
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+			</section>
+			<section class="secction-main">
+				<div class="secction-content">
+					<h3>Contact Info</h3>
+					<div class="form-group">
+						@Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+			</section>
+			<section class="secction-main">
+				<div class="secction-content">
+					<h3>Contact Address</h3>
+					<div class="form-group">
+						@Html.LabelFor(m => m.Address, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.City, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.State, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.State, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.Zip, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.Zip, new { @class = "form-control" })
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+			</section>
+			<section class="secction-main">
+				<div class="secction-content">
+					<h3>Additional Info</h3>
+					<div class="form-group">
+						@Html.LabelFor(m => m.IsChurchMember, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.CheckBoxFor(m => m.IsChurchMember, new { @class = "checkbox", @data_bind = "checked:IsChurchMember" })
+						</div>
+					</div>
+					<div class="form-group" data-bind="visible:!IsChurchMember()">
+						@Html.LabelFor(m => m.ChurchName, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.ChurchName, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group" data-bind="visible:!IsChurchMember()">
+						@Html.LabelFor(m => m.ChurchAddress, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.ChurchAddress, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group" data-bind="visible:!IsChurchMember()">
+						@Html.LabelFor(m => m.ChurchPhone, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.ChurchPhone, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group" data-bind="visible:!IsChurchMember()">
+						@Html.LabelFor(m => m.ChurchPastor, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextBoxFor(m => m.ChurchPastor, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.NeedToBeVisited, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.CheckBoxFor(m => m.NeedToBeVisited, new { @class = "checkbox" })
+						</div>
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.Comments, new { @class = "col-md-2 control-label" })
+						<div class="col-md-10">
+							@Html.TextAreaFor(m => m.Comments, new { @class = "form-control" })
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.Gender, new { @class = "form-control" })
-				</div>
-			</div>
-		</div>
-	</section>
-	<section class="secction-main">
-		<div class="secction-content">
-			<h3>Contact Info</h3>
-			<div class="form-group">
-				@Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
-				</div>
-			</div>
-		</div>
-	</section>
-	<section class="secction-main">
-		<div class="secction-content">
-			<h3>Contact Address</h3>
-			<div class="form-group">
-				@Html.LabelFor(m => m.Address, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.City, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.State, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.State, new { @class = "form-control" })
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.Zip, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.Zip, new { @class = "form-control" })
-				</div>
-			</div>
-		</div>
-	</section>
-	<section class="secction-main">
-		<div class="secction-content">
-			<h3>Additional Info</h3>
-			<div class="form-group">
-				@Html.LabelFor(m => m.IsChurchMember, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.IsChurchMember, new { @class = "form-control" })
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.ChurchName, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.ChurchName, new { @class = "form-control" })
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.ChurchAddress, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.ChurchAddress, new { @class = "form-control" })
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.ChurchPhone, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.ChurchPhone, new { @class = "form-control" })
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.ChurchPastor, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.ChurchPastor, new { @class = "form-control" })
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.NeedToBeVisited, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.NeedToBeVisited, new { @class = "form-control" })
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.Comments, new { @class = "col-md-2 control-label" })
-				<div class="col-md-10">
-					@Html.TextAreaFor(m => m.Comments, new { @class = "form-control" })
-				</div>
-			</div>
-		</div>
-	</section>
+			</section>
 
-	<div class="form-group">
-		<div class="col-md-offset-2 col-md-10">
-			<input type="submit" class="btn btn-default" value="Register" />
-		</div>
-	</div>
-
+			<div class="form-group" style="padding-top: 29px;">
+				<div class="col-md-offset-2 col-md-10">
+					<input type="submit" class="btn btn-default" value="Register" />
+				</div>
+			</div>
 			}
 
-@section Scripts {
-	@Scripts.Render("~/bundles/jqueryval")
-}
+			@section Scripts {
+				@Scripts.Render("~/bundles/jqueryval")
+				@Scripts.Render("~/bundles/areYouSure")
+				@Scripts.Render("~/bundles/knockout")
+				@Scripts.Render("~/bundles/maskedinput")
+				@Scripts.Render("~/bundles/account/registerviewmodel")
+
+				<script type="text/javascript">
+		var mask = "(999) 999-9999";
+		$(document).ready(function () {
+			var data = function () { return @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)); }() || {};
+			Init(data);
+
+			$('form').areYouSure(
+				{
+					message: "Los cambios realizados aun no se han guardado."
+				}
+			);
+			$("#PhoneNumber").mask(mask);
+        });
+				</script>
+			}
