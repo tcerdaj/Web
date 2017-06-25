@@ -151,6 +151,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Must be lest than 15 characters.
+        /// </summary>
+        public static string GenderLong {
+            get {
+                return ResourceManager.GetString("GenderLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Must be lest than 50 characters.
         /// </summary>
         public static string LastNameLong {
@@ -178,11 +187,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password invalid.
+        /// </summary>
+        public static string PasswordInvalid {
+            get {
+                return ResourceManager.GetString("PasswordInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Must be lest than 100 characters.
         /// </summary>
         public static string PasswordLong {
             get {
                 return ResourceManager.GetString("PasswordLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is required.
+        /// </summary>
+        public static string PasswordRequired {
+            get {
+                return ResourceManager.GetString("PasswordRequired", resourceCulture);
             }
         }
         

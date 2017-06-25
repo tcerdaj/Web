@@ -147,6 +147,9 @@
   <data name="FirstNameRequired" xml:space="preserve">
     <value>Nombre es requerido</value>
   </data>
+  <data name="GenderLong" xml:space="preserve">
+    <value>Debe ser menos de 15 caracteres</value>
+  </data>
   <data name="LastNameLong" xml:space="preserve">
     <value>Debe ser menos de 50 caracteres</value>
   </data>
@@ -156,8 +159,14 @@
   <data name="PasswordCompare" xml:space="preserve">
     <value>El password and confirmacion password no coinciden.</value>
   </data>
+  <data name="PasswordInvalid" xml:space="preserve">
+    <value>Password no es valido</value>
+  </data>
   <data name="PasswordLong" xml:space="preserve">
     <value>Debe ser menos de 100 caracteres</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>Password es requerido</value>
   </data>
   <data name="PhoneInvalid" xml:space="preserve">
     <value>Telefono no es valido</value>
