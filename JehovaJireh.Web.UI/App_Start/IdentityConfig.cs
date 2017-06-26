@@ -2,36 +2,37 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using CSharpVitamins;
+using JehovaJireh.Core.Entities;
+using JehovaJireh.Data.Repositories;
+using JehovaJireh.Logging;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using JehovaJireh.Core.Entities;
-using JehovaJireh.Data.Repositories;
-using NHibernate;
 using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
-using JehovaJireh.Logging;
-using CSharpVitamins;
+using NHibernate;
+using NHibernate.Linq;
 
 namespace JehovaJireh.Web.UI
 {
-    public class EmailService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
-        }
-    }
+	public class EmailService : IIdentityMessageService
+	{
+		public Task SendAsync(IdentityMessage message)
+		{
+			// Plug in your email service here to send an email.
+			return Task.FromResult(0);
+		}
+	}
 
-    public class SmsService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // Plug in your SMS service here to send a text message.
-            return Task.FromResult(0);
-        }
-    }
+	public class SmsService : IIdentityMessageService
+	{
+		public Task SendAsync(IdentityMessage message)
+		{
+			// Plug in your SMS service here to send a text message.
+			return Task.FromResult(0);
+		}
+	}
 
 	// Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
 	public class ApplicationUserManager : UserManager<User>
@@ -54,7 +55,7 @@ namespace JehovaJireh.Web.UI
 			var container = MvcApplication.BootstrapContainer();
 			var session = container.Resolve<ISession>();
 			var errorHandler = container.Resolve<ExceptionManager>();
-			var manager = new ApplicationUserManager(new UserRepository(_session, errorHandler,_log), _session, _log);
+			var manager = new ApplicationUserManager(new UserRepository(_session, errorHandler, _log), _session, _log);
 
 			// Configure validation logic for usernames
 			manager.UserValidator = new UserValidator<User>(manager)
@@ -116,6 +117,7 @@ namespace JehovaJireh.Web.UI
 
 		public Task<User> GetByConfirmationTokennAsync(string token)
 		{
+			var us = userRepository.Query();
 			var user = (from u in userRepository.Query() where u.ConfirmationToken == token select u).SingleOrDefault();
 			return Task.FromResult(user);
 		}

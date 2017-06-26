@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Web;
 using System.Web.Mvc;
 using JehovaJireh.Web.UI.Helpers;
 
 namespace JehovaJireh.Web.UI.Controllers
 {
-    public class BaseController : Controller
-    {
+	public class BaseController : Controller
+	{
 		protected override IAsyncResult BeginExecuteCore(AsyncCallback callback, object state)
 		{
 			string cultureName = RouteData.Values["culture"] as string;

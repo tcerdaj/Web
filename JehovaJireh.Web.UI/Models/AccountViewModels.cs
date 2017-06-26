@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using JehovaJireh.Core.Entities;
+using Resources;
 
 namespace JehovaJireh.Web.UI.Models
 {
@@ -97,7 +97,7 @@ namespace JehovaJireh.Web.UI.Models
 		[Display(Name = "Gender", ResourceType = typeof(Resources.Resources))]
 		[StringLength(15, ErrorMessageResourceType = typeof(Resources.Resources),
 			  ErrorMessageResourceName = "GenderLong")]
-		public Gender Gender { get; set; }
+		public string Gender { get; set; }
 
 		[Required(ErrorMessageResourceType = typeof(Resources.Resources),
 			  ErrorMessageResourceName = "PasswordRequired")]

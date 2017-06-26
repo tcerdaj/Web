@@ -7,7 +7,6 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
-using JehovaJireh.Web.UI.Plumbing;
 
 namespace JehovaJireh.Web.UI
 {
@@ -21,13 +20,7 @@ namespace JehovaJireh.Web.UI
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-			container = BootstrapContainer();
-			//initialize controller situation
-			var controllerFactory = new WindsorControllerFactory(container.Kernel);
-			ControllerBuilder.Current.SetControllerFactory(controllerFactory);
-
-		}
+        }
 
 		public static IWindsorContainer BootstrapContainer()
 		{
@@ -37,7 +30,7 @@ namespace JehovaJireh.Web.UI
 			}
 
 			return container = new WindsorContainer()
-				.Install(FromAssembly.This(), FromAssembly.Containing<JehovaJireh.Infrastructure.Installers.RepositoryInstaller>());
+				.Install(FromAssembly.This(), FromAssembly.Containing<Infrastructure.Installers.RepositoryInstaller>());
 		}
 
 		protected void Application_End()
