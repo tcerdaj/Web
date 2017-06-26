@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Web.UI", "JehovaJireh.Web.UI\JehovaJireh.Web.UI.csproj", "{DA300C78-A729-424B-B0B8-538E48D83689}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Web.Tests", "JehovaJireh.Web.Tests\JehovaJireh.Web.Tests.csproj", "{821AE296-C908-43CD-A55C-317629406EDA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Core", "JehovaJireh.Core\JehovaJireh.Core.csproj", "{AA151837-8B5B-41F0-BCCF-37C31C320D78}"
@@ -21,16 +19,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Data", "JehovaJ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Web.UI", "JehovaJireh.Web.UI\JehovaJireh.Web.UI.csproj", "{DA300C78-A729-424B-B0B8-538E48D83689}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DA300C78-A729-424B-B0B8-538E48D83689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA300C78-A729-424B-B0B8-538E48D83689}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA300C78-A729-424B-B0B8-538E48D83689}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA300C78-A729-424B-B0B8-538E48D83689}.Release|Any CPU.Build.0 = Release|Any CPU
 		{821AE296-C908-43CD-A55C-317629406EDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{821AE296-C908-43CD-A55C-317629406EDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{821AE296-C908-43CD-A55C-317629406EDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +59,10 @@ Global
 		{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA300C78-A729-424B-B0B8-538E48D83689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA300C78-A729-424B-B0B8-538E48D83689}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA300C78-A729-424B-B0B8-538E48D83689}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA300C78-A729-424B-B0B8-538E48D83689}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

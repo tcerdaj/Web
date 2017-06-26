@@ -16,7 +16,7 @@ var RegisterViewModel = function (data) {
 	//If the data is coming from edit, use it to fill the fields.
 	if (data !== null) {
 		self.fileData = ko.observable({
-			dataURL: ko.observable(data.FileData),
+			dataURL: ko.observable(data.FileData)
 			// base64String: ko.observable(),
 		});
 
@@ -24,25 +24,25 @@ var RegisterViewModel = function (data) {
 			// dataURL has changed do something with it!
 		});
 
-		self.OnClear = function (fileData) {
+		self.onClear = function (fileData) {
 			if (confirm('Are you sure?')) {
 				fileData.clear && fileData.clear();
 			}
 		};
 		self.UserName = ko.observable(data.UserName || '').extend({
 			required: true,
-			maxLength: 35,
+			maxLength: 35
 		});
 
 		//Properties from NameEntity
 		self.FirstName = ko.observable(data.FirstName || '').extend({
 			required: true,
-			maxLength: 35,
+			maxLength: 35
 		});
 
 		self.LastName = ko.observable(data.LastName || '').extend({
 			required: true,
-			maxLength: 35,
+			maxLength: 35
 		});
 
 		self.Gender = ko.observable(data.Gender || '');
@@ -61,16 +61,16 @@ var RegisterViewModel = function (data) {
 		self.NeedToBeVisited = ko.observable(data.NeedToBeVisited || '');
 		self.Comments = ko.observable(data.Comments || '');
 		self.Address = ko.observable(data.Address || '').extend({
-			maxLength: 80,
+			maxLength: 80
 		});
 		self.City = ko.observable(data.City || '').extend({
-				maxLength: 31,
+				maxLength: 31
 			});
 		self.State = ko.observable(data.State || '').extend({
-			maxLength: 21,
+			maxLength: 21
 		});
 		self.Zip = ko.observable(data.Zip || '').extend({
-			maxLength: 13,
+			maxLength: 13
 		});
 	}
 

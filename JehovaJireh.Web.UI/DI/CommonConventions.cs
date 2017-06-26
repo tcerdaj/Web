@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace JehovaJirehWebApp.DI
+namespace JehovaJireh.Web.UI.DI
 {
     internal class CommonConventions
     {

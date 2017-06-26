@@ -4,7 +4,7 @@ using System.Web.Routing;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Loader;
 using MvcSiteMapProvider.Xml;
-using JehovaJirehWebApp.DI;
+using JehovaJireh.Web.UI.DI;
 
 internal class MvcSiteMapProviderConfig
 {

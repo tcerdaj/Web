@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Web.Routing;
 using System.Web.Mvc;
 
-namespace JehovaJirehWebApp.DI
+namespace JehovaJireh.Web.UI.DI
 {
     internal class InjectableDependencyResolver
         : IDependencyResolver

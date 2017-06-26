@@ -2,7 +2,7 @@ using System;
 using System.Web.Routing;
 using System.Web.Mvc;
 
-namespace JehovaJirehWebApp.DI
+namespace JehovaJireh.Web.UI.DI
 {
     internal class InjectableControllerFactory
         : DefaultControllerFactory

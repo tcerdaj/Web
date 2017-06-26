@@ -117,12 +117,6 @@
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JehovaJireh.Web.UI\JehovaJireh.Web.UI.csproj">
-      <Project>{DA300C78-A729-424B-B0B8-538E48D83689}</Project>
-      <Name>JehovaJireh.Web.UI</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

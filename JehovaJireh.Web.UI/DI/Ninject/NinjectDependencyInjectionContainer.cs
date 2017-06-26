@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Ninject;
 
-namespace JehovaJirehWebApp.DI.Ninject
+namespace JehovaJireh.Web.UI.DI.Ninject
 {
 	public class NinjectDependencyInjectionContainer : IDependencyInjectionContainer
 	{

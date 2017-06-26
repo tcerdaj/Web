@@ -1,8 +1,8 @@
 using System;
 using Ninject;
-using JehovaJirehWebApp.DI;
-using JehovaJirehWebApp.DI.Ninject;
-using JehovaJirehWebApp.DI.Ninject.Modules;
+using JehovaJireh.Web.UI.DI;
+using JehovaJireh.Web.UI.DI.Ninject;
+using JehovaJireh.Web.UI.DI.Ninject.Modules;
 
 internal class CompositionRoot
 {

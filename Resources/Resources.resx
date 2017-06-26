@@ -117,23 +117,68 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
   <data name="AddressLong" xml:space="preserve">
     <value>Must be lest than 80 characters</value>
   </data>
+  <data name="Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="AgeRange" xml:space="preserve">
+    <value>Must be between 10 and 130</value>
+  </data>
+  <data name="AgeRequired" xml:space="preserve">
+    <value>Age is required</value>
+  </data>
+  <data name="Biography" xml:space="preserve">
+    <value>Biography</value>
+  </data>
+  <data name="ChooseYourLanguage" xml:space="preserve">
+    <value>Choose Your Language</value>
+  </data>
+  <data name="ChurchAddress" xml:space="preserve">
+    <value>Church's Address</value>
+  </data>
   <data name="ChurchAddressLong" xml:space="preserve">
     <value>Must be lest than 80 characters</value>
+  </data>
+  <data name="ChurchName" xml:space="preserve">
+    <value>Church's Name</value>
   </data>
   <data name="ChurchNameLong" xml:space="preserve">
     <value>Must be lest than 50 characters</value>
   </data>
   <data name="ChurchPastor" xml:space="preserve">
+    <value>Church Pastor</value>
+  </data>
+  <data name="ChurchPastorLong" xml:space="preserve">
     <value>Must be lest than {1} characters</value>
+  </data>
+  <data name="ChurchPhone" xml:space="preserve">
+    <value>Church Phone</value>
   </data>
   <data name="ChurchPhoneLong" xml:space="preserve">
     <value>Must be lest than 15 characters</value>
   </data>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
+  </data>
   <data name="CityLong" xml:space="preserve">
     <value>Must be lest than 50 characters</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Your opinion is very important to us, please leave us your comments.</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
   </data>
   <data name="EmailInvalid" xml:space="preserve">
     <value>Email is not valid</value>
@@ -141,14 +186,29 @@
   <data name="EmailRequired" xml:space="preserve">
     <value>Email is required</value>
   </data>
+  <data name="FileData" xml:space="preserve">
+    <value>Please enter your photo</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
   <data name="FirstNameLong" xml:space="preserve">
     <value>Must be lest than 50 characters</value>
   </data>
   <data name="FirstNameRequired" xml:space="preserve">
     <value>First Name is required</value>
   </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Gender</value>
+  </data>
   <data name="GenderLong" xml:space="preserve">
     <value>Must be lest than 15 characters</value>
+  </data>
+  <data name="IsChurchMember" xml:space="preserve">
+    <value>Is Church Member?</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last Name</value>
   </data>
   <data name="LastNameLong" xml:space="preserve">
     <value>Must be lest than 50 characters</value>
@@ -156,8 +216,26 @@
   <data name="LastNameRequired" xml:space="preserve">
     <value>Last Name is required</value>
   </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Log In</value>
+  </data>
+  <data name="LogOff" xml:space="preserve">
+    <value>Log Off</value>
+  </data>
+  <data name="LogOn" xml:space="preserve">
+    <value>Log on</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NeedToBeVisited" xml:space="preserve">
+    <value>Need To Be Visited?</value>
+  </data>
   <data name="PasswordCompare" xml:space="preserve">
     <value>The password and confirmation password do not match.</value>
+  </data>
+  <data name="PasswordHash" xml:space="preserve">
+    <value>Password</value>
   </data>
   <data name="PasswordInvalid" xml:space="preserve">
     <value>Password invalid</value>
@@ -168,20 +246,35 @@
   <data name="PasswordRequired" xml:space="preserve">
     <value>Password is required</value>
   </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
   <data name="PhoneInvalid" xml:space="preserve">
     <value>Phone is not valid</value>
   </data>
   <data name="PhoneLong" xml:space="preserve">
     <value>Must be lest than 15 characters</value>
   </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
   <data name="StateLong" xml:space="preserve">
     <value>Must be lest than 50 characters</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User Name</value>
   </data>
   <data name="UserNameLong" xml:space="preserve">
     <value>Must be lest than 50 characters</value>
   </data>
   <data name="UserNameRequired" xml:space="preserve">
     <value>Use Name is required</value>
+  </data>
+  <data name="Zip" xml:space="preserve">
+    <value>Zip</value>
   </data>
   <data name="ZipLong" xml:space="preserve">
     <value>Must be lest than 15 characters</value>

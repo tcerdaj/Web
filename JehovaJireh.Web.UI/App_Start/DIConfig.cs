@@ -1,6 +1,6 @@
 using System;
 using System.Web.Mvc;
-using JehovaJirehWebApp.DI;
+using JehovaJireh.Web.UI.DI;
 
 
 [assembly: WebActivatorEx.PostApplicationStartMethod(typeof(DIConfig), "Register")]

@@ -13,11 +13,12 @@ using Omu.ValueInjecter;
 using JehovaJireh.Data.Mappings;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using JehovaJireh.Web.UI.Helpers;
 
 namespace JehovaJireh.Web.UI.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -43,8 +44,7 @@ namespace JehovaJireh.Web.UI.Controllers
                 _signInManager = value; 
             }
         }
-
-        public ApplicationUserManager UserManager
+		public ApplicationUserManager UserManager
         {
             get
             {
@@ -62,7 +62,11 @@ namespace JehovaJireh.Web.UI.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+
+			if (!string.IsNullOrEmpty(returnUrl))
+				SetCulture(returnUrl);
+
+			return View();
         }
 
         //
@@ -141,9 +145,11 @@ namespace JehovaJireh.Web.UI.Controllers
         //
         // GET: /Account/Register
         [AllowAnonymous]
-        public ActionResult Register()
+        public ActionResult Register(string culture = null)
         {
-            return View();
+			if (!string.IsNullOrEmpty(culture))
+				SetCulture(culture);
+			return View();
         }
 
         //

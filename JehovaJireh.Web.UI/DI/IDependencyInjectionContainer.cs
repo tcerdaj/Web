@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace JehovaJirehWebApp.DI
+namespace JehovaJireh.Web.UI.DI
 {
     public interface IDependencyInjectionContainer
     {

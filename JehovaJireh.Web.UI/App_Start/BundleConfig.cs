@@ -52,6 +52,17 @@ namespace JehovaJireh.Web.UI
                       "~/Content/site.css", 
 					  "~/Content/knockout-file-bindings.css"
 					  ));
-        }
+
+
+			bundles.Add(new ScriptBundle("~/bundles/bootstrap-rtl").Include(
+					  "~/Scripts/bootstrap-rtl.js",
+					  "~/Scripts/respond.js"));
+
+			bundles.Add(new StyleBundle("~/Content/css-rtl").Include(
+					  "~/Content/bootstrap-rtl.css",
+					  "~/Content/site.css",
+					  "~/Content/knockout-file-bindings.css"
+					  ));
+		}
     }
 }

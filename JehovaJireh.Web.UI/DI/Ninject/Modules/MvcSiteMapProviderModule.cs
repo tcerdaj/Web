@@ -14,7 +14,7 @@ using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Xml;
 
-namespace JehovaJirehWebApp.DI.Ninject.Modules
+namespace JehovaJireh.Web.UI.DI.Ninject.Modules
 {
     public class MvcSiteMapProviderModule
         : NinjectModule
