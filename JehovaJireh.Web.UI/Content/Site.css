@@ -31,8 +31,8 @@ textarea {
 .page-register .secction-main .secction-content .form-group textarea {max-width: 100%}
 .img-rounded {border-radius: 6px;}
 .culture-form {	color : #999999}
-.culture-form ul > li > a {position: relative;display: block;padding-top: 13px;}
+.culture-form ul > li > a {padding-top: 15px;padding-bottom: 8px;}
 .culture-form ul > li > a label {font-weight:100}
 .culture-form .selected {background-color: #999999;}
 .culture-form .selected label {color:white;}
-																						   
+.nav .navbar-nav .navbar-right .culture:last-child {margin-right: 0 !important;}																						   

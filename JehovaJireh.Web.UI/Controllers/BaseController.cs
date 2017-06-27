@@ -48,7 +48,7 @@ namespace JehovaJireh.Web.UI.Controllers
 			string cultureName = null;
 
 			// Attempt to read the culture cookie from Request
-			HttpCookie cultureCookie = request.Cookies["_culture"];
+			HttpCookie cultureCookie = request.Cookies["culture"];
 			if (cultureCookie != null)
 				cultureName = cultureCookie.Value;
 			else
@@ -65,9 +65,11 @@ namespace JehovaJireh.Web.UI.Controllers
 			{
 				culture = cultureName;
 			}
+
 			
-			Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(culture);
+			Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(cultureName);
 			Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+
 			base.Initialize(requestContext);
 		}
 
