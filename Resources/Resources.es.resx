@@ -303,6 +303,9 @@
   <data name="StateLong" xml:space="preserve">
     <value>Debe ser menos de 50 caracteres</value>
   </data>
+  <data name="Support" xml:space="preserve">
+    <value>Soporte técnico</value>
+  </data>
   <data name="UserName" xml:space="preserve">
     <value>Usuario</value>
   </data>
