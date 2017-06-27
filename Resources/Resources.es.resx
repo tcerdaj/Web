@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountInfo" xml:space="preserve">
+    <value>Informacion de la cuenta</value>
+  </data>
+  <data name="AccountPhoto" xml:space="preserve">
+    <value>Foto de la cuenta</value>
+  </data>
+  <data name="AdditionalInfo" xml:space="preserve">
+    <value>Informacion adicional</value>
+  </data>
   <data name="Address" xml:space="preserve">
     <value>Dirección</value>
   </data>
@@ -173,6 +182,12 @@
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Confirmar contraseña</value>
+  </data>
+  <data name="ContactAddress" xml:space="preserve">
+    <value>DIreccion de contacto</value>
+  </data>
+  <data name="ContactInfo" xml:space="preserve">
+    <value>Infomacion de contacto</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Crear</value>
@@ -233,6 +248,9 @@
   </data>
   <data name="NeedToBeVisited" xml:space="preserve">
     <value>Necesita ser visitado?</value>
+  </data>
+  <data name="NewAccount" xml:space="preserve">
+    <value>Crear nueva cuenta</value>
   </data>
   <data name="PasswordCompare" xml:space="preserve">
     <value>El password and confirmacion password no coinciden.</value>
