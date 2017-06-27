@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
   <data name="AccountInfo" xml:space="preserve">
     <value>Account Info</value>
   </data>
@@ -140,6 +143,9 @@
   </data>
   <data name="AgeRequired" xml:space="preserve">
     <value>Age is required</value>
+  </data>
+  <data name="ApplicationName" xml:space="preserve">
+    <value>Iglesia Jehova Churh</value>
   </data>
   <data name="Biography" xml:space="preserve">
     <value>Biography</value>
@@ -183,6 +189,9 @@
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Confirm password</value>
   </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
   <data name="ContactAddress" xml:space="preserve">
     <value>Contact Address</value>
   </data>
@@ -191,6 +200,9 @@
   </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
+  </data>
+  <data name="DragFileHere" xml:space="preserve">
+    <value>Drag file here</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
@@ -218,6 +230,12 @@
   </data>
   <data name="GenderLong" xml:space="preserve">
     <value>Must be lest than 15 characters</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hello </value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
   </data>
   <data name="HomePage" xml:space="preserve">
     <value>Home Page</value>

@@ -48,10 +48,10 @@ namespace JehovaJireh.Web.UI
 			if (Request.Cookies["Culture"] != null && !string.IsNullOrEmpty(Request.Cookies["Culture"].Value))
 			{
 				string culture = Request.Cookies["culture"].Value;
+				culture = CultureHelper.GetImplementedCulture(culture); // This is safe
 				CultureInfo ci = new CultureInfo(culture);
 				Thread.CurrentThread.CurrentUICulture = ci;
 				Thread.CurrentThread.CurrentCulture = ci;
-				
 			}
 		}
 	}

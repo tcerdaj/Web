@@ -72,6 +72,8 @@ namespace JehovaJireh.Web.UI.Models
 		[Display(Name = "Email", ResourceType = typeof(Resources.Resources))]
 		public string Email { get; set; }
 
+		[Required(ErrorMessageResourceType = typeof(Resources.Resources),
+			  ErrorMessageResourceName = "UserNameRequired")]
 		[Display(Name = "UserName", ResourceType = typeof(Resources.Resources))]
 		[StringLength(50, ErrorMessageResourceType = typeof(Resources.Resources),
 			  ErrorMessageResourceName = "UserNameLong")]
