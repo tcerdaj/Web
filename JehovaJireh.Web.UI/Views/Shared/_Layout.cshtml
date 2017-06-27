@@ -7,22 +7,10 @@
 	<title>@ViewBag.Title - My ASP.NET Application</title>
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/bundles/modernizr")
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/common")
 
-	@*culture implementationj*@
-	@{
-		var routeValues = this.ViewContext.RouteData.Values;
-		var controller = routeValues["controller"] as string;
-		var action = routeValues["action"] as string;
-		var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
-	}
-
-	@helper selected(string c, string culture)
-	{
-	if (c == culture)
-	{
-		@:checked="checked"
-	}
-}
+	
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top">
@@ -42,10 +30,9 @@
 					<li>@Html.ActionLink("Contact", "Contact", "Home")</li>
 				</ul>
 				@Html.Partial("_LoginPartial")
-				<ul>
-					<li><input name="culture" id="en-us" value="en-us" type="radio" @selected("en-us", culture) />  @Html.ActionLink("Englhis", @action, @controller, new { culture = "en" }, new { rel = "alternate", hreflang = "en" })</li>
-					<li><input name="culture" id="es" value="es" type="radio" @selected("es", culture) /> @Html.ActionLink("Spanish", @action, @controller, new { culture = "es" }, new { rel = "alternate", hreflang = "es" })</li>
-				</ul>
+				
+				@RenderSection("SlideCulture", required: false)
+				
 			</div>
 		</div>
 	</div>
@@ -57,7 +44,38 @@
 		</footer>
 	</div>
 
-	@Scripts.Render("~/bundles/jquery")
+	<script type="text/javascript">
+		(function ($) {
+			$("input[type = 'radio']").click(function () {
+				var cookieName = "culture";
+				eraseCookie(cookieName);
+				createCookie(cookieName, (this).value, 5);
+				$(this).parents("#culture-form").submit(); // post form
+			});
+		})(jQuery);
+
+		//$('input[name="culture"').on('change', (function () {
+		//	var cookieName = "culture";
+		//	eraseCookie(cookieName);
+		//	createCookie(cookieName, (this).value, 5);
+		//}));
+
+		//$('a[class="_culture"]').on('click', (function (arg) {
+		//	var check = $($(this).prev('input'));
+		//	check.prop("checked", true);
+		//	var cookieName = "culture";
+		//	eraseCookie(cookieName);
+		//	createCookie(cookieName, this.hreflang, 5);
+		//}));
+
+		function getCurrentCulture()
+		{
+			console.log("@System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant()");
+		}
+		
+	</script>
+
+
 	@Scripts.Render("~/bundles/bootstrap")
 	@RenderSection("scripts", required: false)
 </body>

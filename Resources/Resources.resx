@@ -204,6 +204,9 @@
   <data name="GenderLong" xml:space="preserve">
     <value>Must be lest than 15 characters</value>
   </data>
+  <data name="HomePage" xml:space="preserve">
+    <value>Home Page</value>
+  </data>
   <data name="IsChurchMember" xml:space="preserve">
     <value>Is Church Member?</value>
   </data>

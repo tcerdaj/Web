@@ -54,10 +54,7 @@
 					<li>@Html.ActionLink("Contact", "Contact", "Home")</li>
 				</ul>
 				@Html.Partial("_LoginPartial")
-				<ul>
-					<li><input name="culture" id="en-us" value="en-us" type="radio" @selected("en-us", culture) />  @Html.ActionLink("Englhis", @action, @controller, new { culture = "en" }, new { rel = "alternate", hreflang = "en" })</li>
-					<li><input name="culture" id="es" value="es" type="radio" @selected("es", culture) /> @Html.ActionLink("Spanish", @action, @controller, new { culture = "es" }, new { rel = "alternate", hreflang = "es" })</li>
-				</ul>
+				@RenderSection("SlideCulture", required: false)
 			</div>
 		</div>
 	</div>

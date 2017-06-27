@@ -51,33 +51,33 @@ if (c == culture)
 	<h4>Create a new account.</h4>
 	<hr />
 	@Html.ValidationSummary("", new { @class = "text-danger" })
-			<section class="secction-main">
-				<div class="secction-content">
-					<h3>Account Photo</h3>
-					<div class="form-group">
-						@Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
-						<div class="col-md-10">
-							<div class="well" data-bind="fileDrag: fileData">
-								<div class="form-group row">
-									<div class="col-md-6">
-										<img style="height: 125px;" class="img-rounded  thumb" data-bind="attr: { src: fileData().dataURL }, visible: fileData().dataURL">
-										<div data-bind="ifnot: fileData().dataURL">
-											<label class="drag-label">Drag file here</label>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<input type="file" data-bind="fileInput: fileData, customFileInput: {
+	<section class="secction-main">
+		<div class="secction-content">
+			<h3>Account Photo</h3>
+			<div class="form-group">
+				@Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+				<div class="col-md-10">
+					<div class="well" data-bind="fileDrag: fileData">
+						<div class="form-group row">
+							<div class="col-md-6">
+								<img style="height: 125px;" class="img-rounded  thumb" data-bind="attr: { src: fileData().dataURL }, visible: fileData().dataURL">
+								<div data-bind="ifnot: fileData().dataURL">
+									<label class="drag-label">Drag file here</label>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<input type="file" data-bind="fileInput: fileData, customFileInput: {
 															  buttonClass: 'btn btn-success',
 															  fileNameClass: 'disabled form-control',
 															  onClear: onClear,
 															}" accept="image/*">
-									</div>
-								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</section>
+			</div>
+		</div>
+	</section>
 			<section class="secction-main">
 				<div class="secction-content">
 					<h3>Account Info</h3>
@@ -221,16 +221,16 @@ if (c == culture)
 					<input type="submit" class="btn btn-default" value="Register" />
 				</div>
 			</div>
-			}
+}
 
-			@section Scripts {
-				@Scripts.Render("~/bundles/jqueryval")
-				@Scripts.Render("~/bundles/areYouSure")
-				@Scripts.Render("~/bundles/knockout")
-				@Scripts.Render("~/bundles/maskedinput")
-				@Scripts.Render("~/bundles/account/registerviewmodel")
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/areYouSure")
+	@Scripts.Render("~/bundles/knockout")
+	@Scripts.Render("~/bundles/maskedinput")
+	@Scripts.Render("~/bundles/account/registerviewmodel")
 
-				<script type="text/javascript">
+	<script type="text/javascript">
 					(function ($) {
 						$("input[type = 'radio']").click(function () {
 							$(this).parents("form").submit(); // post form
@@ -243,12 +243,12 @@ if (c == culture)
 			var data = function () { return @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)); }() || {};
 			Init(data);
 
-			//$('form').areYouSure(
-			//	{
-			//		message: "Los cambios realizados aun no se han guardado."
-			//	}
-			//);
+			$('register-form').areYouSure(
+				{
+					message: "Los cambios realizados aun no se han guardado."
+				}
+			);
 			$("#PhoneNumber").mask(mask);
         });
-				</script>
-			}
+	</script>
+}

@@ -322,6 +322,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Home Page.
+        /// </summary>
+        public static string HomePage {
+            get {
+                return ResourceManager.GetString("HomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is Church Member?.
         /// </summary>
         public static string IsChurchMember {

@@ -6,10 +6,13 @@ using System.Web.Mvc;
 
 namespace JehovaJireh.Web.UI.Controllers
 {
-	public class HomeController : Controller
+	public class HomeController : BaseController
 	{
 		public ActionResult Index()
 		{
+			var r = Request.Cookies.Get("culture");
+			if (r !=null && !string.IsNullOrEmpty(r.Value))
+				SetCulture(r.Value);
 			return View();
 		}
 
