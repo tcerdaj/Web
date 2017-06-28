@@ -142,7 +142,7 @@ namespace JehovaJireh.Web.UI.Models
 		[Display(Name = "Phone", ResourceType = typeof(Resources.Resources))]
 		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", 
 			ErrorMessageResourceType = typeof(Resources.Resources),
-			ErrorMessageResourceName = "PhoneInvalid"))]
+			ErrorMessageResourceName = "PhoneInvalid")]
 		[StringLength(15, ErrorMessageResourceType = typeof(Resources.Resources),
 			  ErrorMessageResourceName = "PhoneLong")]
 		public string PhoneNumber { get; set; }
@@ -162,7 +162,7 @@ namespace JehovaJireh.Web.UI.Models
 
 		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$",
 			ErrorMessageResourceType = typeof(Resources.Resources),
-			ErrorMessageResourceName = "PhoneInvalid"))]
+			ErrorMessageResourceName = "PhoneInvalid")]
 		[Display(Name = "ChurchPhone", ResourceType = typeof(Resources.Resources))]
 		[StringLength(15, ErrorMessageResourceType = typeof(Resources.Resources),
 			  ErrorMessageResourceName = "PhoneLong")]
