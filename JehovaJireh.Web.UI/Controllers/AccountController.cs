@@ -10,6 +10,7 @@ using Omu.ValueInjecter;
 using JehovaJireh.Data.Mappings;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using JehovaJireh.Data.Repositories;
 
 namespace JehovaJireh.Web.UI.Controllers
 {
@@ -160,7 +161,10 @@ namespace JehovaJireh.Web.UI.Controllers
 				try
 				{
 					var confirmationToken = await UserManager.CreateConfirmationTokenAsync();
+					ImageService imageService = new ImageService();
+
 					var user = (User)new User().InjectFrom<DeepCloneInjection>(model);
+					user.ImageUrl = await imageService.CreateUploadedImageAsync(model.ImageFile);
 					user.CreatedOnUTC = DateTime.UtcNow;
 					user.Active = true;
 

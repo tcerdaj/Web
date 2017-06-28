@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Reso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Web.UI", "JehovaJireh.Web.UI\JehovaJireh.Web.UI.csproj", "{6525FBD4-1CD7-4883-8811-6CD5DBE89894}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Web.UI1", "JehovaJireh.Web.UI2\JehovaJireh.Web.UI1.csproj", "{DA300C78-A729-424B-B0B8-538E48D83689}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,10 +63,6 @@ Global
 		{6525FBD4-1CD7-4883-8811-6CD5DBE89894}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6525FBD4-1CD7-4883-8811-6CD5DBE89894}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6525FBD4-1CD7-4883-8811-6CD5DBE89894}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA300C78-A729-424B-B0B8-538E48D83689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA300C78-A729-424B-B0B8-538E48D83689}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA300C78-A729-424B-B0B8-538E48D83689}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA300C78-A729-424B-B0B8-538E48D83689}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

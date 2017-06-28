@@ -16,6 +16,7 @@ namespace JehovaJireh.Data.Mappings
 			Id(x => x.Id)
 				.Column("UserId")
 				.GeneratedBy.Increment();
+			Map(x => x.ImageUrl);
 			Map(x => x.UserName);
 			Map(x => x.FirstName);
 			Map(x => x.LastName);

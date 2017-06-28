@@ -11,6 +11,7 @@ namespace JehovaJireh.Core.Entities
 	public class User : EntityBase<int>, IUser
 	{
 		#region Properties
+		public virtual string ImageUrl { get; set; }
 		public virtual string UserName { get; set; }
 		public virtual string FirstName { get; set; }
 		public virtual string LastName { get; set; }

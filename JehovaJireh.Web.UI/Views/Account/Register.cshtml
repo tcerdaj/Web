@@ -19,16 +19,16 @@
 			<div class="form-group">
 				@Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
 				<div class="col-md-10">
-					<div class="well" data-bind="fileDrag: fileData">
+					<div class="well" data-bind="fileDrag: ImageFile">
 						<div class="form-group row">
 							<div class="col-md-6">
-								<img style="height: 125px;" class="img-rounded  thumb" data-bind="attr: { src: fileData().dataURL }, visible: fileData().dataURL">
-								<div data-bind="ifnot: fileData().dataURL">
+								<img style="height: 125px;" class="img-rounded  thumb" data-bind="attr: { src: ImageFile().dataURL }, visible: ImageFile().dataURL">
+								<div data-bind="ifnot: ImageFile().dataURL">
 									<label class="drag-label">@Resources.DragFileHere</label>
 								</div>
 							</div>
 							<div class="col-md-6">
-								<input type="file" data-bind="fileInput: fileData, customFileInput: {
+								<input type="file" data-bind="fileInput: ImageFile, customFileInput: {
 															  buttonClass: 'btn btn-success',
 															  fileNameClass: 'disabled form-control',
 															  onClear: onClear,
@@ -215,6 +215,7 @@
 			});
 
 			$("#PhoneNumber").mask(mask);
+			$("#ChurchPhone").mask(mask);
         });
 	</script>
 }

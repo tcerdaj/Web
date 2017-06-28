@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 using Resources;
 
 namespace JehovaJireh.Web.UI.Models
@@ -80,7 +81,9 @@ namespace JehovaJireh.Web.UI.Models
 		public string UserName { get; set; }
 
 		[Display(Name = "FileData", ResourceType = typeof(Resources.Resources))]
-		public string FileData { get; set; }
+		public string ImageUrl { get; set; }
+
+		public HttpPostedFileBase ImageFile { get; set; }
 
 		[Required(ErrorMessageResourceType = typeof(Resources.Resources),
 			  ErrorMessageResourceName = "FirstNameRequired")]
@@ -137,8 +140,9 @@ namespace JehovaJireh.Web.UI.Models
 		public string Zip { get; set; }
 
 		[Display(Name = "Phone", ResourceType = typeof(Resources.Resources))]
-		[Phone(ErrorMessageResourceType = typeof(Resources.Resources),
-			  ErrorMessageResourceName = "PhoneInvalid")]
+		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", 
+			ErrorMessageResourceType = typeof(Resources.Resources),
+			ErrorMessageResourceName = "PhoneInvalid"))]
 		[StringLength(15, ErrorMessageResourceType = typeof(Resources.Resources),
 			  ErrorMessageResourceName = "PhoneLong")]
 		public string PhoneNumber { get; set; }
@@ -156,8 +160,9 @@ namespace JehovaJireh.Web.UI.Models
 			  ErrorMessageResourceName = "ChurchAddressLong")]
 		public string ChurchAddress { get; set; }
 
-		[Phone(ErrorMessageResourceType = typeof(Resources.Resources),
-			  ErrorMessageResourceName = "PhoneInvalid")]
+		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$",
+			ErrorMessageResourceType = typeof(Resources.Resources),
+			ErrorMessageResourceName = "PhoneInvalid"))]
 		[Display(Name = "ChurchPhone", ResourceType = typeof(Resources.Resources))]
 		[StringLength(15, ErrorMessageResourceType = typeof(Resources.Resources),
 			  ErrorMessageResourceName = "PhoneLong")]
@@ -173,6 +178,8 @@ namespace JehovaJireh.Web.UI.Models
 
 		[Display(Name = "Comments", ResourceType = typeof(Resources.Resources))]
 		public string Comments { get; set; }
+
+		
 	}
 
 	public class ResetPasswordViewModel

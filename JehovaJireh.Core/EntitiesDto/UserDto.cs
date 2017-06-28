@@ -10,6 +10,7 @@ namespace JehovaJireh.Core.EntitiesDto
 	public class UserDto: EntityBase<int>
 	{
 		#region Properties
+		public virtual string ImageUrl { get; set; }
 		public virtual string UserName { get; set; }
 		public virtual string FirstName { get; set; }
 		public virtual string LastName { get; set; }

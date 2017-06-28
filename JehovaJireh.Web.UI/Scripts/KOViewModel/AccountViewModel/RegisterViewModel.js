@@ -15,12 +15,12 @@ var RegisterViewModel = function (data) {
 
 	//If the data is coming from edit, use it to fill the fields.
 	if (data !== null) {
-		self.fileData = ko.observable({
-			dataURL: ko.observable(data.FileData)
+		self.ImageFile = ko.observable({
+			dataURL: ko.observable()
 			// base64String: ko.observable(),
 		});
 
-		self.fileData().dataURL.subscribe(function (dataURL) {
+		self.ImageFile().dataURL.subscribe(function (dataURL) {
 			// dataURL has changed do something with it!
 		});
 
