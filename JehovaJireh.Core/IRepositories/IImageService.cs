@@ -9,6 +9,6 @@ namespace JehovaJireh.Core.IRepositories
 {
 	public interface IImageService
 	{
-		Task<string> CreateUploadedImageAsync(HttpPostedFileBase file);
+		Task<string> CreateUploadedImageAsync(HttpPostedFileBase file, string fileName);
 	}
 }

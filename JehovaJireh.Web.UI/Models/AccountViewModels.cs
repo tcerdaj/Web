@@ -79,11 +79,11 @@ namespace JehovaJireh.Web.UI.Models
 		[StringLength(50, ErrorMessageResourceType = typeof(Resources.Resources),
 			  ErrorMessageResourceName = "UserNameLong")]
 		public string UserName { get; set; }
+		
+		public object ImageUrl { get; set; }
 
 		[Display(Name = "FileData", ResourceType = typeof(Resources.Resources))]
-		public string ImageUrl { get; set; }
-
-		public HttpPostedFileBase ImageFile { get; set; }
+		public HttpPostedFileBase FileData { get; set; }
 
 		[Required(ErrorMessageResourceType = typeof(Resources.Resources),
 			  ErrorMessageResourceName = "FirstNameRequired")]

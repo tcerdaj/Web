@@ -7,7 +7,7 @@
 
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "page-register form-horizontal", role = "form" }))
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "page-register form-horizontal", role = "form", @enctype = "multipart/form-data" }))
 {
 	@Html.AntiForgeryToken()
 	<h4>@Resources.NewAccount</h4>
@@ -16,19 +16,20 @@
 	<section class="secction-main">
 		<div class="secction-content">
 			<h3>@Resources.AccountPhoto</h3>
+			
 			<div class="form-group">
 				@Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
 				<div class="col-md-10">
-					<div class="well" data-bind="fileDrag: ImageFile">
+					<div class="well" data-bind="fileDrag: FileData">
 						<div class="form-group row">
 							<div class="col-md-6">
-								<img style="height: 125px;" class="img-rounded  thumb" data-bind="attr: { src: ImageFile().dataURL }, visible: ImageFile().dataURL">
-								<div data-bind="ifnot: ImageFile().dataURL">
+								<img style="height: 125px;" class="img-rounded  thumb" data-bind="attr: { src: FileData().dataURL }, visible: FileData().dataURL">
+								<div data-bind="ifnot: FileData().dataURL">
 									<label class="drag-label">@Resources.DragFileHere</label>
 								</div>
 							</div>
 							<div class="col-md-6">
-								<input type="file" data-bind="fileInput: ImageFile, customFileInput: {
+								<input type="file" name="FileData" data-bind="fileInput: FileData, customFileInput: {
 															  buttonClass: 'btn btn-success',
 															  fileNameClass: 'disabled form-control',
 															  onClear: onClear,

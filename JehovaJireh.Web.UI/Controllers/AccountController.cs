@@ -162,9 +162,10 @@ namespace JehovaJireh.Web.UI.Controllers
 				{
 					var confirmationToken = await UserManager.CreateConfirmationTokenAsync();
 					ImageService imageService = new ImageService();
+					//await imageService.CreateIfNotExist();
 
 					var user = (User)new User().InjectFrom<DeepCloneInjection>(model);
-					user.ImageUrl = await imageService.CreateUploadedImageAsync(model.ImageFile);
+					user.ImageUrl = await imageService.CreateUploadedImageAsync(model.FileData, model.UserName);
 					user.CreatedOnUTC = DateTime.UtcNow;
 					user.Active = true;
 

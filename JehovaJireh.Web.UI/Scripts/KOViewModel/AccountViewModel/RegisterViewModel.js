@@ -15,20 +15,22 @@ var RegisterViewModel = function (data) {
 
 	//If the data is coming from edit, use it to fill the fields.
 	if (data !== null) {
-		self.ImageFile = ko.observable({
-			dataURL: ko.observable()
-			// base64String: ko.observable(),
+
+		self.FileData = ko.observable({
+			dataURL: ko.observable(),
+			base64String: ko.observable()
 		});
 
-		self.ImageFile().dataURL.subscribe(function (dataURL) {
+		self.FileData().dataURL.subscribe(function (dataURL) {
 			// dataURL has changed do something with it!
 		});
 
-		self.onClear = function (fileData) {
+		self.onClear = function (imageFile) {
 			if (confirm('Are you sure?')) {
-				fileData.clear && fileData.clear();
+				imageFile.clear && imageFile.clear();
 			}
 		};
+
 		self.UserName = ko.observable(data.UserName || '').extend({
 			required: true,
 			maxLength: 35
@@ -52,6 +54,8 @@ var RegisterViewModel = function (data) {
 				message: "Invalid email address."
 			} 
 		});
+
+		
 		self.PhoneNumber = ko.observable(data.PhoneNumber || '');
 		self.IsChurchMember = ko.observable(data.IsChurchMember || '');
 		self.ChurchName = ko.observable(data.ChurchName || '');
@@ -89,28 +93,24 @@ var RegisterViewModel = function (data) {
 
 	self.errors = ko.validation.group(this),
 
-		self.submit = function (formElement) {
-
-			if (!self.isSubmiting()) {
-				//If no errors please submit the form
-				if (self.errors().length === 0) {
-					self.isSubmiting(true);
-					return true;
+		self.submit = function () {
+			//Ajax call to Insert the Employee
+			$.ajax({
+				type: "POST",
+				url: "/Account/Register",
+				data: ko.toJSON(PerData),
+				contentType: "application/json",
+				dataType: 'json',
+				//cache: false,
+				mimeType: "multipart/form-data",
+				//processData: false,
+				success: function () {
+					alert("successful");
+				},
+				error: function () {
+					alert("fail");
 				}
-				else {
-					self.isSubmiting(false);
-					//if Errors display the messages
-					self.errors.showAllMessages();
-					$('.alert-danger.formError').remove();
-					var new_span = $("<span class='alert-danger' style=margin-left:10px> Please check your information!</span>").addClass('formError');
-					new_span.insertAfter("#create");
-					//setTimeout(function ()
-					//{
-					//   $('.alert-danger.formError').remove();
-					//}, 2000);
-					return false;
-				}
-			}
+			});
 		};
 };
 
