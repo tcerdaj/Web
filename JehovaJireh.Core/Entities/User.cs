@@ -11,6 +11,12 @@ namespace JehovaJireh.Core.Entities
 {
 	public class User : EntityBase<int>, IUser
 	{
+		#region constructor
+		public User()
+		{
+			Roles = new List<Role>().AsQueryable();
+		}
+		#endregion
 		#region Properties
 		public virtual string ImageUrl { get; set; }
 		public virtual string UserName { get; set; }
@@ -29,13 +35,16 @@ namespace JehovaJireh.Core.Entities
 		public virtual string ConfirmationToken { get; set; }
 		public virtual bool IsConfirmed { get; set; }
 		public virtual bool IsChurchMember { get; set; }
+		public virtual bool LockoutEnabled { get; set; }
+		public virtual bool TwoFactorEnabled { get; set; }
+		public virtual int FailedCount { get; set; }
 		public virtual string ChurchName { get; set; }
 		public virtual string ChurchAddress { get; set; }
 		public virtual string ChurchPhone { get; set; }
 		public virtual string ChurchPastor { get; set; }
 		public virtual bool NeedToBeVisited { get; set; }
 		public virtual string Comments { get; set; }
-		public virtual ICollection<Role> Roles { get; set; }
+		public virtual IQueryable<Role> Roles { get; set; }
 
 		string IUser<string>.Id
 		{

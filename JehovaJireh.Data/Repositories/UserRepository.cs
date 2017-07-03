@@ -12,7 +12,7 @@ using NHibernate.Linq;
 
 namespace JehovaJireh.Data.Repositories
 {
-	public class UserRepository:NHRepository<User, int>, IUserRepository, IUserStore<User>, IUserPasswordStore<User>, IUserSecurityStampStore<User>, IQueryableUserStore<User>, IUserEmailStore<User>,IUserLockoutStore<User, string>, Microsoft.AspNet.Identity.IUserRoleStore<User, string>
+	public class UserRepository:NHRepository<User, int>, IUserRepository, IUserStore<User>, IUserPasswordStore<User>, IUserSecurityStampStore<User>, IQueryableUserStore<User>, IUserEmailStore<User>,IUserLockoutStore<User, string>, Microsoft.AspNet.Identity.IUserRoleStore<User, string>, IUserTwoFactorStore<User,string>
 	{
 		ISession session;
 		ILogger log;
@@ -256,7 +256,7 @@ namespace JehovaJireh.Data.Repositories
 
 		public Task<DateTimeOffset> GetLockoutEndDateAsync(User user)
 		{
-			//throw new NotImplementedException();
+			throw new NotImplementedException();
 		}
 
 		public Task SetLockoutEndDateAsync(User user, DateTimeOffset lockoutEnd)
@@ -276,17 +276,34 @@ namespace JehovaJireh.Data.Repositories
 
 		public Task<int> GetAccessFailedCountAsync(User user)
 		{
-			throw new NotImplementedException();
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			return Task.FromResult(user.FailedCount);
 		}
 
 		public Task<bool> GetLockoutEnabledAsync(User user)
 		{
-			throw new NotImplementedException();
+			if (user == null)
+				throw new ArgumentNullException("user");
+			return Task.FromResult(user.LockoutEnabled);
 		}
 
 		public Task SetLockoutEnabledAsync(User user, bool enabled)
 		{
 			throw new NotImplementedException();
+		}
+
+		public Task SetTwoFactorEnabledAsync(User user, bool enabled)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<bool> GetTwoFactorEnabledAsync(User user)
+		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+			return Task.FromResult(user.TwoFactorEnabled);
 		}
 	}
 }

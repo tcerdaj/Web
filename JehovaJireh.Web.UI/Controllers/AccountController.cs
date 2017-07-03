@@ -67,10 +67,6 @@ namespace JehovaJireh.Web.UI.Controllers
 		public ActionResult Login(string returnUrl)
 		{
 			ViewBag.ReturnUrl = returnUrl;
-
-			if (!string.IsNullOrEmpty(returnUrl))
-				SetCulture(returnUrl);
-
 			return View();
 		}
 

@@ -24,6 +24,9 @@ namespace JehovaJireh.Core.EntitiesDto
 		public virtual string Zip { get; set; }
 		public virtual string PhoneNumber { get; set; }
 		public virtual bool Active { get; set; }
+		public virtual bool LockoutEnabled { get; set; }
+		public virtual bool TwoFactorEnabled { get; set; }
+		public virtual int FailedCount { get; set; }
 		public virtual string ConfirmationToken { get; set; }
 		public virtual bool IsConfirmed { get; set; }
 		public virtual bool IsChurchMember { get; set; }

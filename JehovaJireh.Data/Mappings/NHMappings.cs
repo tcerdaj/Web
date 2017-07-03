@@ -30,6 +30,9 @@ namespace JehovaJireh.Data.Mappings
 			Map(x => x.Zip);
 			Map(x => x.PhoneNumber).Column("Phone");
 			Map(x => x.Active);
+			Map(x => x.LockoutEnabled);
+			Map(x => x.TwoFactorEnabled);
+			Map(x => x.FailedCount);
 			Map(x => x.ConfirmationToken);
 			Map(x => x.IsConfirmed);
 			Map(x => x.IsChurchMember);
