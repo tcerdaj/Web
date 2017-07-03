@@ -11,6 +11,7 @@ using Castle.Windsor;
 using Castle.Windsor.Installer;
 using JehovaJireh.Web.UI.CustomIAttribute;
 using JehovaJireh.Web.UI.Helpers;
+using JehovaJireh.Web.UI.Plumbing;
 
 namespace JehovaJireh.Web.UI
 {
@@ -24,7 +25,13 @@ namespace JehovaJireh.Web.UI
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-			ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new CultureAwareControllerActivator()));
+			container = BootstrapContainer();
+			
+			//initialize controller situation
+			var controllerFactory = new WindsorControllerFactory(container.Kernel);
+			ControllerBuilder.Current.SetControllerFactory(controllerFactory);
+			
+			//ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new CultureAwareControllerActivator()));
 		}
 
 		public static IWindsorContainer BootstrapContainer()

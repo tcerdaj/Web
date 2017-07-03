@@ -85,6 +85,7 @@ namespace JehovaJireh.Logging
 		#region EntityCRUD operations
 		void GetStarted(string id);
 		void GetFinished(string id, TimeSpan? span);
+		//void GetStarted<T>();
 		void GetStarted<T>(T entity);
 		void GetFinished<T>(T entity, TimeSpan? span);
 		void SaveStarted<T>(T entity);

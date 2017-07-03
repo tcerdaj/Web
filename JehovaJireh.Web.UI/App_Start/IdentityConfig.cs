@@ -38,24 +38,20 @@ namespace JehovaJireh.Web.UI
 	public class ApplicationUserManager : UserManager<User>
 	{
 		UserRepository userRepository;
-		private static ISession _session;
-		private static ILogger _log;
-
-		public ApplicationUserManager(UserRepository store, ISession session, ILogger log)
+		public ApplicationUserManager(UserRepository store)
 			: base(store)
 		{
 			userRepository = store;
-			_session = session;
-			_log = log;
 		}
 
 
 		public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
 		{
 			var container = MvcApplication.BootstrapContainer();
+			var log = container.Resolve<ILogger>();
 			var session = container.Resolve<ISession>();
 			var errorHandler = container.Resolve<ExceptionManager>();
-			var manager = new ApplicationUserManager(new UserRepository(_session, errorHandler, _log), _session, _log);
+			var manager = new ApplicationUserManager(new UserRepository(session, errorHandler, log));
 
 			// Configure validation logic for usernames
 			manager.UserValidator = new UserValidator<User>(manager)

@@ -1,14 +1,20 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@using JehovaJireh.Web.UI.Helpers
+@using Microsoft.AspNet.Identity
 @using  Resources
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
     @Html.AntiForgeryToken()
-
+	
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink(Resources.Hello + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            @Html.ActionLink(Resources.Hello + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage",@class="welcome-user" })
+			<ion-item class="item-profile">
+				<div class="item-avatar">
+					@Html.GravatarImage(User.Identity.GetUserName(),"Index","Manage",null, new GravatarOptions { Size = 30, CssClass = "img-circle" })
+				</div>
+			</ion-item>
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">@Resources.LogOff</a></li>
     </ul>

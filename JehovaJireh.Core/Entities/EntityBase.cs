@@ -23,12 +23,12 @@ namespace JehovaJireh.Core.Entities
 		public virtual string CreatedBy { get; set; }
 		public virtual string ModifiedBy { get; set; }
 
-		public virtual string ToJson()
+		public virtual string ToJsonBase()
 		{
 			return JsonConvert.SerializeObject(this);
 		}
-
-		public virtual IdT ToObject(string json)
+		
+		public virtual IdT ToObjectID(string json)
 		{
 			try
 			{
@@ -36,7 +36,7 @@ namespace JehovaJireh.Core.Entities
 
 				return result;
 			}
-			catch (Exception ex)
+			catch (System.Exception ex)
 			{
 				Console.WriteLine("Error in BaseEntity line 25, method ToObject(): " + ex.Message);
 				throw ex;
@@ -45,7 +45,7 @@ namespace JehovaJireh.Core.Entities
 
 		public virtual string ToXml(string rootNode)
 		{
-			return JsonConvert.DeserializeXNode(this.ToJson(), rootNode).ToString();
+			return JsonConvert.DeserializeXNode(this.ToJsonBase(), rootNode).ToString();
 		}
 
 		public virtual string ToXml()

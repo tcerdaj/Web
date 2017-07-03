@@ -50,6 +50,7 @@
 				eraseCookie(cookieName);
 				createCookie(cookieName, (this).value, 5);
 				$(this).parents("#culture-form").submit(); // post form
+				$('a[href="/Manage"]')[0].css('float','left');
 			});
 		})(jQuery);
 

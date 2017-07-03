@@ -12,7 +12,7 @@ using NHibernate.Linq;
 
 namespace JehovaJireh.Data.Repositories
 {
-	public class UserRepository:NHRepository<User, int>, IUserRepository, IUserStore<User>, IUserPasswordStore<User>, IUserSecurityStampStore<User>, IQueryableUserStore<User>, IUserEmailStore<User>
+	public class UserRepository:NHRepository<User, int>, IUserRepository, IUserStore<User>, IUserPasswordStore<User>, IUserSecurityStampStore<User>, IQueryableUserStore<User>, IUserEmailStore<User>,IUserLockoutStore<User, string>, Microsoft.AspNet.Identity.IUserRoleStore<User, string>
 	{
 		ISession session;
 		ILogger log;
@@ -34,7 +34,7 @@ namespace JehovaJireh.Data.Repositories
 
 		}
 
-
+		
 		public User GetByUserName(string userName)
 		{
 			return (from u in this.Query() where u.UserName == userName select u).SingleOrDefault();
@@ -250,6 +250,41 @@ namespace JehovaJireh.Data.Repositories
 		}
 
 		public Task<bool> IsInRoleAsync(User user, string roleName)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<DateTimeOffset> GetLockoutEndDateAsync(User user)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task SetLockoutEndDateAsync(User user, DateTimeOffset lockoutEnd)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<int> IncrementAccessFailedCountAsync(User user)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task ResetAccessFailedCountAsync(User user)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<int> GetAccessFailedCountAsync(User user)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<bool> GetLockoutEnabledAsync(User user)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task SetLockoutEnabledAsync(User user, bool enabled)
 		{
 			throw new NotImplementedException();
 		}

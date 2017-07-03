@@ -6814,3 +6814,14 @@ td.visible-print {
     display: none !important;
   }
 }
+
+.item-avatar .img-circle {
+		border-radius: 50%;
+		width: 40%;
+		vertical-align:text-top;
+	}
+.welcome-user,.item-profile {
+	float: left;
+}
+
+.avatar-image-container{display:block;}

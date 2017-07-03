@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JehovaJireh.Core.Entities;
+using JehovaJireh.Logging;
 
 namespace JehovaJireh.Core.IRepositories
 {

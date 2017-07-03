@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using JehovaJireh.Configuration;
 using JehovaJireh.Core.IRepositories;
+using JehovaJireh.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -17,15 +19,26 @@ namespace JehovaJireh.Data.Repositories
 		internal CloudBlobClient cloudBlobClient;
 		internal CloudBlobContainer cloudBlobContainer;
 		internal CloudStorageAccount cloudStorageAccount;
-		public ImageService()
+		internal ILogger log;
+
+		public ImageService(ILogger log)
 		{
-			this.cloudStorageAccount = CloudConfiguration.GetStorageAccount("StorageConnectionString");
-			this.cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-			this.cloudBlobContainer = cloudBlobClient.GetContainerReference("images");
-			this.cloudBlobContainer.SetPermissions(
-				new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob }
-			);
-			this.cloudBlobContainer.CreateIfNotExistsAsync();
+			try
+			{
+				this.log = log;
+				this.cloudStorageAccount = CloudConfiguration.GetStorageAccount("StorageConnectionString");
+				this.cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+				this.cloudBlobContainer = cloudBlobClient.GetContainerReference("images");
+				this.cloudBlobContainer.SetPermissions(
+					new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob }
+				);
+				this.cloudBlobContainer.CreateIfNotExistsAsync();
+			}
+			catch (System.Exception ex)
+			{
+				if (this.log != null)
+					this.log.Error("An error occurred in  ImageService(ILogger log) constructor.", ex);
+			}
 		}
 
 		public async Task CreateIfNotExist()
@@ -43,7 +56,7 @@ namespace JehovaJireh.Data.Repositories
 		public async Task<string> CreateUploadedImageAsync(HttpPostedFileBase file, string fileName)
 		{
 			if (file == null)
-				throw new ArgumentNullException("file");
+				return null;
 
 			string imageFullPath = null;
 			try
@@ -57,7 +70,11 @@ namespace JehovaJireh.Data.Repositories
 			}
 			catch (System.Exception ex)
 			{
-
+					Console.WriteLine("An error ocurred in CreateUploadedImageAsync method.", ex);
+			}
+			finally
+			{
+				Console.WriteLine("CreateUploadedImageAsync Finish.");
 			}
 
 			return imageFullPath;

@@ -11,6 +11,9 @@ using JehovaJireh.Data.Mappings;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using JehovaJireh.Data.Repositories;
+using JehovaJireh.Logging;
+using Castle.Windsor;
+using System.Diagnostics;
 
 namespace JehovaJireh.Web.UI.Controllers
 {
@@ -19,6 +22,9 @@ namespace JehovaJireh.Web.UI.Controllers
 	{
 		private ApplicationSignInManager _signInManager;
 		private ApplicationUserManager _userManager;
+		private static IWindsorContainer container;
+		private ILogger log;
+		
 
 		public AccountController()
 		{
@@ -28,6 +34,8 @@ namespace JehovaJireh.Web.UI.Controllers
 		{
 			UserManager = userManager;
 			SignInManager = signInManager;
+			
+			
 		}
 
 		public ApplicationSignInManager SignInManager
@@ -80,7 +88,7 @@ namespace JehovaJireh.Web.UI.Controllers
 
 			// This doesn't count login failures towards account lockout
 			// To enable password failures to trigger account lockout, change to shouldLockout: true
-			var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+			var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
 			switch (result)
 			{
 				case SignInStatus.Success:
@@ -160,16 +168,23 @@ namespace JehovaJireh.Web.UI.Controllers
 			{
 				try
 				{
+					Stopwatch timespan = Stopwatch.StartNew();
 					var confirmationToken = await UserManager.CreateConfirmationTokenAsync();
-					ImageService imageService = new ImageService();
-					//await imageService.CreateIfNotExist();
+					container = MvcApplication.BootstrapContainer();
+					log = container.Resolve<ILogger>();
+					ImageService imageService = new ImageService(log);
 
 					var user = (User)new User().InjectFrom<DeepCloneInjection>(model);
+					log.SaveStarted<User>(user);
+
 					user.ImageUrl = await imageService.CreateUploadedImageAsync(model.FileData, model.UserName);
 					user.CreatedOnUTC = DateTime.UtcNow;
 					user.Active = true;
 
 					var result = await UserManager.CreateAsync(user, model.PasswordHash);
+					timespan.Stop();
+					log.SaveFinished(user, timespan.Elapsed);
+
 					if (result.Succeeded)
 					{
 						await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -180,10 +195,10 @@ namespace JehovaJireh.Web.UI.Controllers
 						// await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
 						//Send email to user to complete the proccess.
-						var callbackUrl = Url.Action("RegisterConfirmationCallBack", "Account", new { token = confirmationToken }, protocol: Request.Url.Scheme);
-						var emailResult = UserManager.SendEmailAsync(user.Id.ToString(), "Register Confirmation", "Please complete your registration by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-						return RedirectToAction("RegisterConfirmation");
+						//var callbackUrl = Url.Action("RegisterConfirmationCallBack", "Account", new { token = confirmationToken }, protocol: Request.Url.Scheme);
+						//var emailResult = UserManager.SendEmailAsync(user.Id.ToString(), "Register Confirmation", "Please complete your registration by clicking <a href=\"" + callbackUrl + "\">here</a>");
+						Session["UserSettings"] = user.ToJson();
+						return RedirectToAction("Index","Home");
 					}
 
 					AddErrors(result);

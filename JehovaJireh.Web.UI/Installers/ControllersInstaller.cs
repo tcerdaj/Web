@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
@@ -18,9 +13,9 @@ namespace JehovaJireh.Web.UI.Installers
 								.BasedOn<IController>()
 								.LifestyleTransient());
 
-			container.Register(Classes.FromThisAssembly()
-							   .BasedOn<ApiController>()
-							   .LifestylePerWebRequest());
+			//container.Register(Classes.FromThisAssembly()
+			//				   .BasedOn<ApiController>()
+			//				   .LifestylePerWebRequest());
 		}
 	}
 }

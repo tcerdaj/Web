@@ -74,7 +74,7 @@ namespace JehovaJireh.Infrastructure.Plumbing
 		{
 			var storageAccount = CloudConfiguration.GetStorageAccount("StorageConnectionString");
 			var queueContext = new AzureQueue(storageAccount.CreateCloudQueueClient());
-
+			queueContext.EnsureQueueExists<UserMessage>();
 			return storageAccount;
 		}
 	}

@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 
 namespace JehovaJireh.Core.Entities
 {
@@ -54,6 +55,25 @@ namespace JehovaJireh.Core.Entities
 		public virtual void SetStatus(Boolean active)
 		{
 			this.Active = active;
+		}
+
+		public virtual User ToObject(string json)
+		{
+			try
+			{
+				var result = JsonConvert.DeserializeObject<User>(json);
+				return result;
+			}
+			catch (System.Exception ex)
+			{
+				Console.WriteLine("Error in BaseEntity line 25, method ToObject(): " + ex.Message);
+				throw ex;
+			}
+		}
+
+		public virtual string ToJson()
+		{
+			return JsonConvert.SerializeObject(this);
 		}
 		#endregion
 	}

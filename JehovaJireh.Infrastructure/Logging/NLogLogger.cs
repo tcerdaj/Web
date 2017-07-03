@@ -224,6 +224,22 @@ namespace JehovaJireh.Infrastructure.Logging
 				log.Info(info);
 		}
 
+		//public void GetStarted<T>()
+		//{
+		//	var entity = typeof(T);
+		//	Type entityType = ((object)entity).GetType();
+		//	IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
+		//	string info = string.Format("Started getting {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
+		//	//loop through all the properties in the generic class being updated and log their values
+		//	foreach (PropertyInfo prop in props)
+		//	{
+		//		object propValue = prop.GetValue(((object)entity), null);
+		//		info += string.Format("{0}='{1}'{2}", prop.Name, (propValue == null) ? "null" : propValue.ToString(), Environment.NewLine);
+		//	}
+		//	if (log.IsInfoEnabled)
+		//		log.Info(info);
+		//}
+
 		public void GetFinished<T>(T entity, TimeSpan? span)
 		{
 			string message = string.Format("Finished Getting {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
@@ -249,6 +265,7 @@ namespace JehovaJireh.Infrastructure.Logging
 			if (log.IsInfoEnabled)
 				log.Info(info);
 		}
+
 
 		public void SaveFinished<T>(T entity, TimeSpan? span)
 		{
