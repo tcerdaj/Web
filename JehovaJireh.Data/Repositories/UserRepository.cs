@@ -256,7 +256,7 @@ namespace JehovaJireh.Data.Repositories
 
 		public Task<DateTimeOffset> GetLockoutEndDateAsync(User user)
 		{
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
 		}
 
 		public Task SetLockoutEndDateAsync(User user, DateTimeOffset lockoutEnd)
