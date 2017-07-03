@@ -157,6 +157,9 @@ namespace JehovaJireh.Web.UI
 		public override async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
 		{
 			User user = this.UserManager.FindByName(userName);
+			user = user== null? this.UserManager.FindByEmail(userName) : user;
+			userName = user!=null? user.UserName : userName;
+
 			if (null != user)
 			{
 				if (false == user.Active)

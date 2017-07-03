@@ -28,14 +28,16 @@ namespace JehovaJireh.Web.UI.Controllers
 
 		public AccountController()
 		{
+			container = MvcApplication.BootstrapContainer();
+			log = container.Resolve<ILogger>();
 		}
 
-		public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+		public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ILogger log)
 		{
 			UserManager = userManager;
 			SignInManager = signInManager;
-			
-			
+			container = MvcApplication.BootstrapContainer();
+			log = container.Resolve<ILogger>();
 		}
 
 		public ApplicationSignInManager SignInManager
@@ -77,14 +79,19 @@ namespace JehovaJireh.Web.UI.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
 		{
+
 			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
 
+			Stopwatch timespan = Stopwatch.StartNew();
+			log.LoginStarted(model.UserName);
 			// This doesn't count login failures towards account lockout
 			// To enable password failures to trigger account lockout, change to shouldLockout: true
 			var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+			timespan.Stop();
+			log.LoginFinished(model.UserName,result.ToString(), timespan.Elapsed);
 			switch (result)
 			{
 				case SignInStatus.Success:
@@ -148,8 +155,6 @@ namespace JehovaJireh.Web.UI.Controllers
 		[AllowAnonymous]
 		public ActionResult Register(string culture = null)
 		{
-			if (!string.IsNullOrEmpty(culture))
-				SetCulture(culture);
 			return View();
 		}
 
@@ -166,20 +171,18 @@ namespace JehovaJireh.Web.UI.Controllers
 				{
 					Stopwatch timespan = Stopwatch.StartNew();
 					var confirmationToken = await UserManager.CreateConfirmationTokenAsync();
-					container = MvcApplication.BootstrapContainer();
-					log = container.Resolve<ILogger>();
 					ImageService imageService = new ImageService(log);
 
 					var user = (User)new User().InjectFrom<DeepCloneInjection>(model);
-					log.SaveStarted<User>(user);
+					log.RegisterStarted<User>(user);
 
-					user.ImageUrl = await imageService.CreateUploadedImageAsync(model.FileData, model.UserName);
+					user.ImageUrl = await imageService.CreateUploadedImageAsync(model.FileData, new Guid().ToString());
 					user.CreatedOnUTC = DateTime.UtcNow;
 					user.Active = true;
 
 					var result = await UserManager.CreateAsync(user, model.PasswordHash);
 					timespan.Stop();
-					log.SaveFinished(user, timespan.Elapsed);
+					log.RegisterFinished(user, result.ToString(), timespan.Elapsed);
 
 					if (result.Succeeded)
 					{
@@ -431,6 +434,7 @@ namespace JehovaJireh.Web.UI.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult LogOff()
 		{
+			log.LogOff(User.Identity.Name);
 			AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 			return RedirectToAction("Index", "Home");
 		}

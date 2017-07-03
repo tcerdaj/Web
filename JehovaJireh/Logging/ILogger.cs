@@ -95,6 +95,16 @@ namespace JehovaJireh.Logging
 		void DeleteStarted<T>(T entity);
 		void DeleteFinished<T>(T entity, TimeSpan? span = null);
 		#endregion
+		
+		
+		#region User Account Access
+		void LoginStarted(string username);
+		void RegisterStarted<T>(T entity);
+		void LoginFinished(string userName, string results, TimeSpan? span = null);
+		void RegisterFinished<T>(T entity, string results, TimeSpan? span = null);
+		void LogOff(string userName);
+
+		#endregion
 
 		#endregion
 

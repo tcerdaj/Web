@@ -11,7 +11,7 @@ using JehovaJireh.Core.Entities;
 
 namespace JehovaJireh.Infrastructure.Logging
 {
-	class NLogLogger : JehovaJireh.Logging.ILogger
+	public class NLogLogger : JehovaJireh.Logging.ILogger
 	{
 		private static Logger log;
 
@@ -199,12 +199,12 @@ namespace JehovaJireh.Infrastructure.Logging
 		#region EntityCRUD operations
 		public void GetStarted(string id)
 		{
-			log.Info("EntityID {0} has started", id);
+			log.Info("Getting EntityID {0} has started", id);
 		}
 
 		public void GetFinished(string id, TimeSpan? span)
 		{
-			string message = string.Format("EntityID '{0}' has Finished", id);
+			string message = string.Format("Getting EntityID '{0}' has Finished", id);
 			message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
 			log.Info(message);
 		}
@@ -213,7 +213,7 @@ namespace JehovaJireh.Infrastructure.Logging
 		{
 			Type entityType = ((object)entity).GetType();
 			IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
-			string info = string.Format("Started getting {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
+			string info = string.Format("Getting {0} Started entity.{1}", entity.GetType().Name, Environment.NewLine);
 			//loop through all the properties in the generic class being updated and log their values
 			foreach (PropertyInfo prop in props)
 			{
@@ -224,25 +224,9 @@ namespace JehovaJireh.Infrastructure.Logging
 				log.Info(info);
 		}
 
-		//public void GetStarted<T>()
-		//{
-		//	var entity = typeof(T);
-		//	Type entityType = ((object)entity).GetType();
-		//	IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
-		//	string info = string.Format("Started getting {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
-		//	//loop through all the properties in the generic class being updated and log their values
-		//	foreach (PropertyInfo prop in props)
-		//	{
-		//		object propValue = prop.GetValue(((object)entity), null);
-		//		info += string.Format("{0}='{1}'{2}", prop.Name, (propValue == null) ? "null" : propValue.ToString(), Environment.NewLine);
-		//	}
-		//	if (log.IsInfoEnabled)
-		//		log.Info(info);
-		//}
-
 		public void GetFinished<T>(T entity, TimeSpan? span)
 		{
-			string message = string.Format("Finished Getting {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
+			string message = string.Format("Getting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
 			if (span != null)
 			{
 				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
@@ -255,7 +239,7 @@ namespace JehovaJireh.Infrastructure.Logging
 		{
 			Type entityType = ((object)entity).GetType();
 			IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
-			string info = string.Format("Started saving {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
+			string info = string.Format("Saving Started {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
 			//loop through all the properties in the generic class being updated and log their values
 			foreach (PropertyInfo prop in props)
 			{
@@ -269,7 +253,7 @@ namespace JehovaJireh.Infrastructure.Logging
 
 		public void SaveFinished<T>(T entity, TimeSpan? span)
 		{
-			string message = string.Format("Finished saving {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
+			string message = string.Format("Saving Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
 			if (span != null)
 			{
 				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
@@ -282,7 +266,7 @@ namespace JehovaJireh.Infrastructure.Logging
 		{
 			Type entityType = ((object)entity).GetType();
 			IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
-			string info = string.Format("Inserting {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
+			string info = string.Format("Inserting Started {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
 			//loop through all the properties in the generic class being updated and log their values
 			foreach (PropertyInfo prop in props)
 			{
@@ -295,7 +279,7 @@ namespace JehovaJireh.Infrastructure.Logging
 
 		public void SaveInsertFinished<T>(T entity, TimeSpan? span)
 		{
-			string message = string.Format("Finished Inserting {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<Guid>)(object)entity).Id);
+			string message = string.Format("Inserting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<Guid>)(object)entity).Id);
 			if (span != null)
 			{
 				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
@@ -321,7 +305,7 @@ namespace JehovaJireh.Infrastructure.Logging
 
 		public void DeleteFinished<T>(T entity, TimeSpan? span)
 		{
-			string message = string.Format("Finished Deleting {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<Guid>)(object)entity).Id);
+			string message = string.Format("Deleting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<Guid>)(object)entity).Id);
 			if (span != null)
 			{
 				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
@@ -330,6 +314,52 @@ namespace JehovaJireh.Infrastructure.Logging
 				log.Info(message);
 		}
 
+		public void LoginStarted(string username)
+		{
+			log.Info("Login Started - UserName {0} has started", username);
+		}
+
+		public void RegisterStarted<T>(T entity)
+		{
+			Type entityType = ((object)entity).GetType();
+			IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
+			string info = string.Format("Register Started  {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
+			//loop through all the properties in the generic class being updated and log their values
+			foreach (PropertyInfo prop in props)
+			{
+				object propValue = prop.GetValue(((object)entity), null);
+				info += string.Format("{0}='{1}'{2}", prop.Name, (propValue == null) ? "null" : propValue.ToString(), Environment.NewLine);
+			}
+			//if (log.IsInfoEnabled)
+			log.Info(info);
+		}
+
+		public void LoginFinished(string userName, string results, TimeSpan? span = null)
+		{
+			string message = string.Format("Login Finished  - UserName {0} finish Results {1} ", userName, results);
+			if (span != null)
+			{
+				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
+			}
+			//if (log.IsInfoEnabled)
+			log.Info(message);
+		}
+
+		public void RegisterFinished<T>(T entity, string results, TimeSpan? span = null)
+		{
+			string message = string.Format("Register Finished {0} entity with ID='{1}', results: {2}", entity.GetType().Name, ((EntityBase<Guid>)(object)entity).Id, results);
+			if (span != null)
+			{
+				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
+			}
+			if (log.IsInfoEnabled)
+				log.Info(message);
+		}
+
+		public void LogOff(string userName)
+		{
+			log.Info(string.Format("LofOff user {0}.", userName));
+        }
 		#endregion
 
 		#region User Interface

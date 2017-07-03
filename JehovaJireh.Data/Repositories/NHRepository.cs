@@ -45,7 +45,7 @@ namespace JehovaJireh.Data.Repositories
 		{
 			IQueryable<T> data = null;
 			Stopwatch timespan = Stopwatch.StartNew();
-			log.GetStarted("Query Start");
+			//log.GetStarted("Query Start");
 
 			try
 			{
@@ -57,8 +57,8 @@ namespace JehovaJireh.Data.Repositories
 			}
 			finally
 			{
-				timespan.Stop();
-				log.GetFinished("Query Finish", timespan.Elapsed);
+				//timespan.Stop();
+				//log.GetFinished("Query Finish", timespan.Elapsed);
 			}
 
 			return data;

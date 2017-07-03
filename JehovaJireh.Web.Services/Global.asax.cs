@@ -10,6 +10,7 @@ using System.Web.Routing;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using JehovaJireh.Infrastructure.Installers;
+using JehovaJireh.Logging;
 using JehovaJireh.Web.Services.Plumbing;
 using Mindscape.Raygun4Net;
 
@@ -31,6 +32,8 @@ namespace JehovaJireh.Web.Services
 
 			//set the IoC container
 			container = BootstrapContainer();
+			var log = container.Resolve<ILogger>();
+			log.APIApplicationStarting();
 
 			//initialize controller situation
 			var controllerFactory = new WindsorControllerFactory(container.Kernel);

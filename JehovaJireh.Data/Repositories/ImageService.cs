@@ -62,7 +62,7 @@ namespace JehovaJireh.Data.Repositories
 			try
 			{
 				var _fileName = file.FileName;
-				var imageName = fileName + "-" + Path.GetExtension(_fileName);
+				var imageName = fileName + Path.GetExtension(_fileName);
 				CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(imageName);
 				cloudBlockBlob.Properties.ContentType = file.ContentType;
 				await cloudBlockBlob.UploadFromStreamAsync(file.InputStream);

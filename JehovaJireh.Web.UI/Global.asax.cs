@@ -9,6 +9,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
+using JehovaJireh.Logging;
 using JehovaJireh.Web.UI.CustomIAttribute;
 using JehovaJireh.Web.UI.Helpers;
 using JehovaJireh.Web.UI.Plumbing;
@@ -26,6 +27,8 @@ namespace JehovaJireh.Web.UI
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 			container = BootstrapContainer();
+			var log = container.Resolve<ILogger>();
+			log.WebApplicationStarting();
 			
 			//initialize controller situation
 			var controllerFactory = new WindsorControllerFactory(container.Kernel);
