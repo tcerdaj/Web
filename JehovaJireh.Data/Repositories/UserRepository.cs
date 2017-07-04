@@ -13,6 +13,7 @@ using NHibernate.Linq;
 namespace JehovaJireh.Data.Repositories
 {
 	public class UserRepository:NHRepository<User, int>, IUserRepository, IUserStore<User>, IUserPasswordStore<User>, IUserSecurityStampStore<User>, IQueryableUserStore<User>, IUserEmailStore<User>,IUserLockoutStore<User, string>, Microsoft.AspNet.Identity.IUserRoleStore<User, string>, IUserTwoFactorStore<User,string>
+		,IUserPhoneNumberStore<User,string>, IUserLoginStore<User,string>
 	{
 		ISession session;
 		ILogger log;
@@ -304,6 +305,60 @@ namespace JehovaJireh.Data.Repositories
 			if (user == null)
 				throw new ArgumentNullException("user");
 			return Task.FromResult(user.TwoFactorEnabled);
+		}
+
+		public Task SetPhoneNumberAsync(User user, string phoneNumber)
+		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			user.PhoneNumber = phoneNumber;
+
+			return Task.FromResult(user);
+		}
+
+		public Task<string> GetPhoneNumberAsync(User user)
+		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			return Task.FromResult(user.PhoneNumber);
+		}
+
+		public Task<bool> GetPhoneNumberConfirmedAsync(User user)
+		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			return Task.FromResult(true);
+		}
+
+		public Task SetPhoneNumberConfirmedAsync(User user, bool confirmed)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task AddLoginAsync(User user, UserLoginInfo login)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task RemoveLoginAsync(User user, UserLoginInfo login)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<IList<UserLoginInfo>> GetLoginsAsync(User user)
+		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			return Task.FromResult<IList<UserLoginInfo>>(new List<UserLoginInfo>());
+		}
+
+		public Task<User> FindAsync(UserLoginInfo login)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

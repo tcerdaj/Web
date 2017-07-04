@@ -89,6 +89,7 @@ namespace JehovaJireh.Web.UI.Models
 
 		[Display(Name = "FileData", ResourceType = typeof(Resources.Resources))]
 		public HttpPostedFileBase FileData { get; set; }
+		public bool FileDataChange { get; set; }
 
 		[Required(ErrorMessageResourceType = typeof(Resources.Resources),
 			  ErrorMessageResourceName = "FirstNameRequired")]

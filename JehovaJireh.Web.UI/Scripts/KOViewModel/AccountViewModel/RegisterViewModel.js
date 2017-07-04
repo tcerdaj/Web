@@ -21,8 +21,11 @@ var RegisterViewModel = function (data) {
 			base64String: ko.observable()
 		});
 
+		self.FileDataChange = ko.observable(false);
+
 		self.FileData().dataURL.subscribe(function (dataURL) {
 			// dataURL has changed do something with it!
+			self.FileDataChange(true);
 		});
 
 		self.onClear = function (imageFile) {

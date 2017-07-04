@@ -7,6 +7,12 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using JehovaJireh.Web.UI.Models;
+using System.Diagnostics;
+using JehovaJireh.Data.Repositories;
+using JehovaJireh.Core.Entities;
+using JehovaJireh.Data.Mappings;
+using JehovaJireh.Logging;
+using Omu.ValueInjecter;
 
 namespace JehovaJireh.Web.UI.Controllers
 {
@@ -15,15 +21,20 @@ namespace JehovaJireh.Web.UI.Controllers
 	{
 		private ApplicationSignInManager _signInManager;
 		private ApplicationUserManager _userManager;
+		private ILogger log;
 
 		public ManageController()
 		{
+			var container = MvcApplication.BootstrapContainer();
+			log = container.Resolve<ILogger>();
 		}
 
 		public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
 		{
 			UserManager = userManager;
 			SignInManager = signInManager;
+			var container = MvcApplication.BootstrapContainer();
+			log = container.Resolve<ILogger>();
 		}
 
 		public ApplicationSignInManager SignInManager
@@ -61,6 +72,7 @@ namespace JehovaJireh.Web.UI.Controllers
 				: message == ManageMessageId.Error ? "An error has occurred."
 				: message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
 				: message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+				: message == ManageMessageId.UpdateAccountSuccess? "Your account has been updated."
 				: "";
 
 			var userId = User.Identity.GetUserId();
@@ -211,6 +223,49 @@ namespace JehovaJireh.Web.UI.Controllers
 				await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 			}
 			return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
+		}
+		
+		// GET: /Manage/UpdateAccount
+		public ActionResult UpdateAccount()
+		{
+			var user = UserManager.FindById(User.Identity.GetUserId());
+			var model = (RegisterViewModel)new RegisterViewModel().InjectFrom<DeepCloneInjection>(user);
+			return View(model);
+		}
+
+		//
+		// POST: /Manage/UpdateAccount
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> UpdateAccount(RegisterViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			Stopwatch timespan = Stopwatch.StartNew();
+			var user = (User)new User().InjectFrom<DeepCloneInjection>(model);
+			var imageUrl = string.Empty;
+			log.SaveStarted<User>(user);
+
+			if (model.FileDataChange)
+			{
+				ImageService imageService = new ImageService(log);
+				user.ImageUrl = await imageService.CreateUploadedImageAsync(model.FileData, new Guid().ToString());
+			}
+
+			user.ModifiedOnUTC = DateTime.UtcNow;
+			var result = await UserManager.UpdateAsync(user);
+			timespan.Stop();
+			log.SaveFinished(user, timespan.Elapsed);
+
+			if (result.Succeeded)
+			{
+				return RedirectToAction("Index", new { Message = ManageMessageId.UpdateAccountSuccess });
+			}
+			AddErrors(result);
+			return View(model);
 		}
 
 		//
@@ -381,7 +436,8 @@ namespace JehovaJireh.Web.UI.Controllers
 			SetPasswordSuccess,
 			RemoveLoginSuccess,
 			RemovePhoneSuccess,
-			Error
+			Error,
+			UpdateAccountSuccess
 		}
 
 		#endregion

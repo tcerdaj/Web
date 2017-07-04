@@ -306,6 +306,9 @@
   <data name="Support" xml:space="preserve">
     <value>Soporte técnico</value>
   </data>
+  <data name="UpdateAccount" xml:space="preserve">
+    <value>Actualizar tu cuenta</value>
+  </data>
   <data name="UserName" xml:space="preserve">
     <value>Usuario</value>
   </data>
