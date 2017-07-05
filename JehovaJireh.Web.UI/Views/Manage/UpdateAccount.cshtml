@@ -45,12 +45,30 @@
 		<div class="secction-content">
 			<h3>@Resources.AccountInfo</h3>
 			<div class="form-group">
-				<ul>
-					<li>@Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })</li>
-					<li>@Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })</li>
-					<li>@Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })</li>
-					<li>@Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })</li>
-				</ul>
+				@Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+				<div class="col-md-10">
+					@Html.DisplayFor(m => m.UserName, new { @class = "form-control" })
+				</div>
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+				<div class="col-md-10">
+					@Html.DisplayFor(m => m.FirstName, new { @class = "form-control" })
+				</div>
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+				<div class="col-md-10">
+					@Html.DisplayFor(m => m.LastName, new { @class = "form-control" })
+				</div>
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })
+				<div class="col-md-10">
+					<div class="user-gender">
+						<select id="sex" data-bind="options: $root.Sex, optionsText: 'SexLabel', value:'SexValue',optionsCaption: 'Choose...'"></select>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -58,11 +76,10 @@
 		<div class="secction-content">
 			<h3>@Resources.ContactInfo</h3>
 			<div class="form-group">
-				<ul>
-					<li>
-						@Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-					</li>
-				</ul>
+				@Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+				<div class="col-md-10">
+					@Html.DisplayFor(m => m.Email, new { @class = "form-control" })
+				</div>
 			</div>
 			<div class="form-group">
 				@Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })

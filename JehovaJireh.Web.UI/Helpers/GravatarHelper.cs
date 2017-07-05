@@ -6,6 +6,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using JehovaJireh.Core.Entities;
+using JehovaJireh.Core.IRepositories;
 using JehovaJireh.Data.Repositories;
 using JehovaJireh.Logging;
 using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
@@ -15,17 +16,23 @@ namespace JehovaJireh.Web.UI.Helpers
 {
 	public static class GravatarHelper
 	{
-
 		public static HtmlString GravatarImage(this HtmlHelper htmlHelper, string userName, string action = null, string controllerName = null, object routeValues = null, GravatarOptions options = null)
 		{
 			if (options == null)
 				options = GravatarOptions.GetDefaults();
 
 			var imgTag = new TagBuilder("img");
-			var user = new User();
+			User user = null;
 
 			if (HttpContext.Current.Session["UserSettings"] != null)
 				user = user.ToObject(HttpContext.Current.Session["UserSettings"].ToString());
+
+			if (user == null && HttpContext.Current.User.Identity.IsAuthenticated)
+			{
+				var container = MvcApplication.BootstrapContainer();
+				var userRepository = container.Resolve<IUserRepository>();
+				user = userRepository.GetByUserName(HttpContext.Current.User.Identity.Name);
+			}
 
 			if (!string.IsNullOrEmpty(options.CssClass))
 			{
@@ -42,7 +49,7 @@ namespace JehovaJireh.Web.UI.Helpers
 				)
 			);
 
-			imgTag.MergeAttribute("alt", "Mange");
+			imgTag.MergeAttribute("alt", "Manage");
 			// build the <a> tag
 			if (!string.IsNullOrEmpty(action) && !string.IsNullOrEmpty(controllerName))
 			{

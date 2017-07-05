@@ -210,6 +210,7 @@
     <Compile Include="Helpers\CultureHelper.cs" />
     <Compile Include="Helpers\GravatarHelper.cs" />
     <Compile Include="Helpers\GravatarOptions.cs" />
+    <Compile Include="Extentions\ResizeImage.cs" />
     <Compile Include="Installers\ControllersInstaller.cs" />
     <Compile Include="Installers\ServicesInstaller.cs" />
     <Compile Include="Models\AccountViewModels.cs" />

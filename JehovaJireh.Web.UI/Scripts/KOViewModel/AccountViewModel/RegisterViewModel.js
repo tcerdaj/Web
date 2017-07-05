@@ -17,12 +17,12 @@ var RegisterViewModel = function (data) {
 	if (data !== null) {
 
 		self.FileData = ko.observable({
-			dataURL: ko.observable(),
-			base64String: ko.observable()
+			dataURL: ko.observable(data.ImageUrl ||  ''),
+			base64String: ko.observable(data.ImageUrl || '')
 		});
 
 		self.FileDataChange = ko.observable(false);
-
+		//self.ImageUrl = ko.observable(data.ImageUrl || '');
 		self.FileData().dataURL.subscribe(function (dataURL) {
 			// dataURL has changed do something with it!
 			self.FileDataChange(true);
