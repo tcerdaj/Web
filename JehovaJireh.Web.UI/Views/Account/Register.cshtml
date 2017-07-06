@@ -83,8 +83,10 @@
 						@Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })
 						<div class="col-md-10">
 							<div class="user-gender">
-								Male @Html.RadioButtonFor(m => m.Gender, "Male", new { @class = "" })
-								Female @Html.RadioButtonFor(m => m.Gender, "Female", new { @class = "" })
+								<div class="user-gender">
+									Male: @Html.RadioButtonFor(m => m.Gender, "0")
+									Female: @Html.RadioButtonFor(m => m.Gender, "1")
+								</div>
 							</div>
 						</div>
 					</div>

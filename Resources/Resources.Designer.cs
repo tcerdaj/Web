@@ -160,6 +160,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change.
+        /// </summary>
+        public static string Change {
+            get {
+                return ResourceManager.GetString("Change", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change you accout settings.
+        /// </summary>
+        public static string ChangeAccoutSettings {
+            get {
+                return ResourceManager.GetString("ChangeAccoutSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose Your Language.
         /// </summary>
         public static string ChooseYourLanguage {
@@ -349,6 +367,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error has occurred..
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter your photo.
         /// </summary>
         public static string FileData {
@@ -489,6 +516,15 @@ namespace Resources {
         public static string LogOn {
             get {
                 return ResourceManager.GetString("LogOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage.
+        /// </summary>
+        public static string Manage {
+            get {
+                return ResourceManager.GetString("Manage", resourceCulture);
             }
         }
         
@@ -660,6 +696,33 @@ namespace Resources {
         public static string UserNameRequired {
             get {
                 return ResourceManager.GetString("UserNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account has been updated..
+        /// </summary>
+        public static string YourAccoutHasUpdated {
+            get {
+                return ResourceManager.GetString("YourAccoutHasUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your password has been changed..
+        /// </summary>
+        public static string YourPasswordHaschanged {
+            get {
+                return ResourceManager.GetString("YourPasswordHaschanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your password has been set.
+        /// </summary>
+        public static string YourPasswordHasSet {
+            get {
+                return ResourceManager.GetString("YourPasswordHasSet", resourceCulture);
             }
         }
         

@@ -150,6 +150,12 @@
   <data name="Biography" xml:space="preserve">
     <value>Biography</value>
   </data>
+  <data name="Change" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="ChangeAccoutSettings" xml:space="preserve">
+    <value>Change you accout settings</value>
+  </data>
   <data name="ChooseYourLanguage" xml:space="preserve">
     <value>Choose Your Language</value>
   </data>
@@ -213,6 +219,9 @@
   <data name="EmailRequired" xml:space="preserve">
     <value>Email is required</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>An error has occurred.</value>
+  </data>
   <data name="FileData" xml:space="preserve">
     <value>Please enter your photo</value>
   </data>
@@ -260,6 +269,9 @@
   </data>
   <data name="LogOn" xml:space="preserve">
     <value>Log on</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Manage</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
@@ -317,6 +329,15 @@
   </data>
   <data name="UserNameRequired" xml:space="preserve">
     <value>Use Name is required</value>
+  </data>
+  <data name="YourAccoutHasUpdated" xml:space="preserve">
+    <value>Your account has been updated.</value>
+  </data>
+  <data name="YourPasswordHaschanged" xml:space="preserve">
+    <value>Your password has been changed.</value>
+  </data>
+  <data name="YourPasswordHasSet" xml:space="preserve">
+    <value>Your password has been set</value>
   </data>
   <data name="Zip" xml:space="preserve">
     <value>Zip</value>

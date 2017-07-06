@@ -18,7 +18,7 @@ using Omu.ValueInjecter;
 namespace JehovaJireh.Web.UI.Controllers
 {
 	[Authorize]
-	public class ManageController : Controller
+	public class ManageController : BaseController
 	{
 		private ApplicationSignInManager _signInManager;
 		private ApplicationUserManager _userManager;
@@ -66,14 +66,17 @@ namespace JehovaJireh.Web.UI.Controllers
 		// GET: /Manage/Index
 		public async Task<ActionResult> Index(ManageMessageId? message)
 		{
+			//if (!string.IsNullOrEmpty(culture))
+				//SetCulture(culture);
+
 			ViewBag.StatusMessage =
-				message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-				: message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
+				message == ManageMessageId.ChangePasswordSuccess ? Resources.Resources.YourPasswordHaschanged
+				: message == ManageMessageId.SetPasswordSuccess ? Resources.Resources.YourPasswordHasSet
 				: message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-				: message == ManageMessageId.Error ? "An error has occurred."
+				: message == ManageMessageId.Error ? Resources.Resources.Error
 				: message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
 				: message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-				: message == ManageMessageId.UpdateAccountSuccess? "Your account has been updated."
+				: message == ManageMessageId.UpdateAccountSuccess? Resources.Resources.YourAccoutHasUpdated
 				: "";
 
 			var userId = User.Identity.GetUserId();

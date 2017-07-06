@@ -155,6 +155,7 @@ namespace JehovaJireh.Web.UI.Controllers
 		[AllowAnonymous]
 		public ActionResult Register(string culture = null)
 		{
+			var culture1 = Request.Cookies["culture"];
 			return View();
 		}
 

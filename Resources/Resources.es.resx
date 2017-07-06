@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>Conosca sobre nosotros</value>
+    <value>Sobre nosotros</value>
   </data>
   <data name="AccountInfo" xml:space="preserve">
     <value>Informacion de la cuenta</value>
   </data>
   <data name="AccountPhoto" xml:space="preserve">
-    <value>Foto de la cuenta</value>
+    <value>Foto</value>
   </data>
   <data name="AdditionalInfo" xml:space="preserve">
     <value>Informacion adicional</value>
@@ -149,6 +149,12 @@
   </data>
   <data name="Biography" xml:space="preserve">
     <value>Biografía</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Cambiar</value>
+  </data>
+  <data name="ChangeAccoutSettings" xml:space="preserve">
+    <value>Cambiar configuracion de tu cuenta</value>
   </data>
   <data name="ChooseYourLanguage" xml:space="preserve">
     <value>Eliga su idioma</value>
@@ -213,6 +219,9 @@
   <data name="EmailRequired" xml:space="preserve">
     <value>Email es requerido</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Un error ha ocurrido.</value>
+  </data>
   <data name="FileData" xml:space="preserve">
     <value>Por favor entre su foto</value>
   </data>
@@ -235,7 +244,7 @@
     <value>Hola </value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>Página de inicio</value>
+    <value>Inicio</value>
   </data>
   <data name="HomePage" xml:space="preserve">
     <value>Página Principal</value>
@@ -260,6 +269,9 @@
   </data>
   <data name="LogOn" xml:space="preserve">
     <value>Iniciar sesión</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Administrar</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Nombre</value>
@@ -317,6 +329,15 @@
   </data>
   <data name="UserNameRequired" xml:space="preserve">
     <value>Nombre de usario es requerido</value>
+  </data>
+  <data name="YourAccoutHasUpdated" xml:space="preserve">
+    <value>Su cuenta ha sido actualizada.</value>
+  </data>
+  <data name="YourPasswordHaschanged" xml:space="preserve">
+    <value>Su contrasena ha sido cambiada.</value>
+  </data>
+  <data name="YourPasswordHasSet" xml:space="preserve">
+    <value>Su contrasena ha sido establecida.</value>
   </data>
   <data name="Zip" xml:space="preserve">
     <value>Código Postal</value>
