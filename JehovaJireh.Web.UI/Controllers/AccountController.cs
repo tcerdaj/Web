@@ -176,13 +176,13 @@ namespace JehovaJireh.Web.UI.Controllers
 					var user = (User)new User().InjectFrom<DeepCloneInjection>(model);
 					log.RegisterStarted<User>(user);
 
-					user.ImageUrl = await imageService.CreateUploadedImageAsync(model.FileData, new Guid().ToString());
+					user.ImageUrl = await imageService.CreateUploadedImageAsync(model.FileData, Guid.NewGuid().ToString(),true, 100,100);
 					user.CreatedOnUTC = DateTime.UtcNow;
 					user.Active = true;
 
 					var result = await UserManager.CreateAsync(user, model.PasswordHash);
 					timespan.Stop();
-					log.RegisterFinished(user, result.ToString(), timespan.Elapsed);
+					log.SaveFinished(user, timespan.Elapsed);
 
 					if (result.Succeeded)
 					{

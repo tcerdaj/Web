@@ -10,7 +10,7 @@ namespace JehovaJireh.Core.EntitiesDto
 	public class UserDto: EntityBase<int>
 	{
 		#region Properties
-		public virtual string ImageUrl { get; set; }
+		public virtual string[] ImageUrl { get; set; }
 		public virtual string UserName { get; set; }
 		public virtual string FirstName { get; set; }
 		public virtual string LastName { get; set; }
@@ -36,6 +36,7 @@ namespace JehovaJireh.Core.EntitiesDto
 		public virtual string ChurchPastor { get; set; }
 		public virtual bool NeedToBeVisited { get; set; }
 		public virtual string Comments { get; set; }
+		public virtual DateTimeOffset LockoutEndDate { get; set; }
 		#endregion
 	}
 }

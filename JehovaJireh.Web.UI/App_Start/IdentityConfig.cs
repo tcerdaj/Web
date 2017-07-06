@@ -106,6 +106,12 @@ namespace JehovaJireh.Web.UI
 			return Task.FromResult(user);
 		}
 
+		public Task<User> GetUserById(int id)
+		{
+			var user = userRepository.GetById(id);
+			return Task.FromResult(user);
+		}
+
 		public Task<string> CreateConfirmationTokenAsync()
 		{
 			return Task.FromResult<string>(ShortGuid.NewGuid().ToString());

@@ -1,4 +1,4 @@
-﻿@model JehovaJireh.Web.UI.Models.RegisterViewModel
+﻿@model JehovaJireh.Web.UI.Models.UpdateAccountViewModel
 @using Resources
 @{
 	ViewBag.Title = Resources.UpdateAccount;
@@ -12,13 +12,21 @@
 	<h4>@ViewBag.Title</h4>
 	<hr />
 	@Html.ValidationSummary("", new { @class = "text-danger" })
+	@Html.HiddenFor(m=>m.Id)
+	@Html.HiddenFor(m => m.ImageUrl)
+	@Html.HiddenFor(m => m.FileData)
+	@Html.HiddenFor(m => m.UserName)
+	@Html.HiddenFor(m => m.FirstName)
+	@Html.HiddenFor(m => m.LastName)
+	@Html.HiddenFor(m => m.Email)
+
 	<section class="secction-main">
 		<div class="secction-content">
 			<h3>@Resources.AccountPhoto</h3>
 
 			<div class="form-group">
 				@Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
-				@Html.HiddenFor(m => m.FileDataChange, new { @data_bind = "value:FileDataChange" })
+		
 				<div class="col-md-10">
 					<div class="well" data-bind="fileDrag: FileData">
 						<div class="form-group row">
@@ -66,7 +74,8 @@
 				@Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })
 				<div class="col-md-10">
 					<div class="user-gender">
-						<select id="sex" data-bind="options: $root.Sex, optionsText: 'SexLabel', value:'SexValue',optionsCaption: 'Choose...'"></select>
+					   Male: @Html.RadioButtonFor(m=>m.Gender, "0")
+					   Female: @Html.RadioButtonFor(m => m.Gender, "1")
 					</div>
 				</div>
 			</div>

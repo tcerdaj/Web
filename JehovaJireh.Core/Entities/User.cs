@@ -44,6 +44,7 @@ namespace JehovaJireh.Core.Entities
 		public virtual string ChurchPastor { get; set; }
 		public virtual bool NeedToBeVisited { get; set; }
 		public virtual string Comments { get; set; }
+		public virtual DateTimeOffset LockoutEndDate { get; set; }
 		public virtual IQueryable<Role> Roles { get; set; }
 
 		string IUser<string>.Id

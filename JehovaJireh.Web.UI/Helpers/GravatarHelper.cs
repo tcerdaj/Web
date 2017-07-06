@@ -25,13 +25,16 @@ namespace JehovaJireh.Web.UI.Helpers
 			User user = null;
 
 			if (HttpContext.Current.Session["UserSettings"] != null)
-				user = user.ToObject(HttpContext.Current.Session["UserSettings"].ToString());
+			{
+				user = (new User()).ToObject(HttpContext.Current.Session["UserSettings"].ToString());
+			}
 
 			if (user == null && HttpContext.Current.User.Identity.IsAuthenticated)
 			{
 				var container = MvcApplication.BootstrapContainer();
 				var userRepository = container.Resolve<IUserRepository>();
 				user = userRepository.GetByUserName(HttpContext.Current.User.Identity.Name);
+				HttpContext.Current.Session["UserSettings"] = user.ToJson();
 			}
 
 			if (!string.IsNullOrEmpty(options.CssClass))
@@ -40,15 +43,15 @@ namespace JehovaJireh.Web.UI.Helpers
 			}
 
 			var imageUrl = user != null && !string.IsNullOrEmpty(user.ImageUrl) ? user.ImageUrl : "/img/no-photo.png";
-			imgTag.Attributes.Add("src", string.Format("{0}?{1}&s={2}{3}{4}",
+			imgTag.Attributes.Add("src", string.Format("{0}?width={1}&height={2}",
 				imageUrl,
-			    GetMd5Hash(userName),
-				options.Size,
-				"&d=" + options.DefaultImageType,
-				"&r=" + options.RatingLevel
+				50,
+				50
 				)
 			);
 
+			imgTag.MergeAttribute("width", "50px");
+			imgTag.MergeAttribute("height", "50px");
 			imgTag.MergeAttribute("alt", "Manage");
 			// build the <a> tag
 			if (!string.IsNullOrEmpty(action) && !string.IsNullOrEmpty(controllerName))

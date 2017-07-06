@@ -252,27 +252,45 @@ namespace JehovaJireh.Data.Repositories
 
 		public Task<bool> IsInRoleAsync(User user, string roleName)
 		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
 			throw new NotImplementedException();
 		}
 
 		public Task<DateTimeOffset> GetLockoutEndDateAsync(User user)
 		{
-			throw new NotImplementedException();
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			return Task.FromResult(user.LockoutEndDate);
 		}
 
 		public Task SetLockoutEndDateAsync(User user, DateTimeOffset lockoutEnd)
 		{
-			throw new NotImplementedException();
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			user.LockoutEndDate = lockoutEnd;
+			return Task.FromResult(user);
 		}
 
 		public Task<int> IncrementAccessFailedCountAsync(User user)
 		{
-			throw new NotImplementedException();
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			user.FailedCount++;
+			return Task.FromResult(user.FailedCount);
 		}
 
 		public Task ResetAccessFailedCountAsync(User user)
 		{
-			throw new NotImplementedException();
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			user.FailedCount = 0;
+			return Task.FromResult(user);
 		}
 
 		public Task<int> GetAccessFailedCountAsync(User user)
@@ -292,11 +310,18 @@ namespace JehovaJireh.Data.Repositories
 
 		public Task SetLockoutEnabledAsync(User user, bool enabled)
 		{
-			throw new NotImplementedException();
+			if (user == null)
+				throw new ArgumentNullException("user");
+
+			user.LockoutEnabled = enabled;
+			return Task.FromResult(user);
 		}
 
 		public Task SetTwoFactorEnabledAsync(User user, bool enabled)
 		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
 			throw new NotImplementedException();
 		}
 
@@ -313,7 +338,6 @@ namespace JehovaJireh.Data.Repositories
 				throw new ArgumentNullException("user");
 
 			user.PhoneNumber = phoneNumber;
-
 			return Task.FromResult(user);
 		}
 
@@ -335,16 +359,25 @@ namespace JehovaJireh.Data.Repositories
 
 		public Task SetPhoneNumberConfirmedAsync(User user, bool confirmed)
 		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
 			throw new NotImplementedException();
 		}
 
 		public Task AddLoginAsync(User user, UserLoginInfo login)
 		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
 			throw new NotImplementedException();
 		}
 
 		public Task RemoveLoginAsync(User user, UserLoginInfo login)
 		{
+			if (user == null)
+				throw new ArgumentNullException("user");
+
 			throw new NotImplementedException();
 		}
 
@@ -358,6 +391,9 @@ namespace JehovaJireh.Data.Repositories
 
 		public Task<User> FindAsync(UserLoginInfo login)
 		{
+			if (login == null)
+				throw new ArgumentNullException("login");
+
 			throw new NotImplementedException();
 		}
 	}

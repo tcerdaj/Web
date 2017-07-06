@@ -11,6 +11,8 @@ using JehovaJireh.Core.IRepositories;
 using JehovaJireh.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using JehovaJireh.Data.Extentions;
+using System.Drawing;
 
 namespace JehovaJireh.Data.Repositories
 {
@@ -53,7 +55,7 @@ namespace JehovaJireh.Data.Repositories
 					);
 			}
 		}
-		public async Task<string> CreateUploadedImageAsync(HttpPostedFileBase file, string fileName)
+		public async Task<string> CreateUploadedImageAsync(HttpPostedFileBase file, string fileName, bool resizeImage = false, int width = 0, int height = 0)
 		{
 			if (file == null)
 				return null;
@@ -65,12 +67,62 @@ namespace JehovaJireh.Data.Repositories
 				var imageName = fileName + Path.GetExtension(_fileName);
 				CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(imageName);
 				cloudBlockBlob.Properties.ContentType = file.ContentType;
-				await cloudBlockBlob.UploadFromStreamAsync(file.InputStream);
+
+				if (resizeImage)
+				{
+					Bitmap bitmap = new Bitmap(file.InputStream);
+
+					int oldWidth = bitmap.Width;
+					int oldHeight = bitmap.Height;
+
+					GraphicsUnit units = System.Drawing.GraphicsUnit.Pixel;
+					RectangleF r = bitmap.GetBounds(ref units);
+					Size newSize = new Size();
+
+					float expectedWidth = r.Width;
+					float expectedHeight = r.Height;
+					float dimesion = r.Width / r.Height;
+
+					if (width < r.Width)
+					{
+						expectedWidth = width;
+						expectedHeight = expectedWidth / dimesion;
+					}
+					else if (height < r.Height)
+					{
+						expectedHeight = height;
+						expectedWidth = dimesion * expectedHeight;
+					}
+					if (expectedWidth > width)
+					{
+						expectedWidth = width;
+						expectedHeight = expectedHeight / expectedWidth;
+					}
+					//else if (nPozadovanaVyska > height)
+					//{
+					//	expectedHeight = height;
+					//	expectedWidth = dimesion * expectedHeight;
+					//}
+					newSize.Width = (int)Math.Round(expectedWidth);
+					newSize.Height = (int)Math.Round(expectedHeight);
+
+					Bitmap b = new Bitmap(bitmap, newSize);
+
+					Image img = (Image)b;
+					byte[] data = ImageToByte(img);
+
+					cloudBlockBlob.UploadFromByteArray(data, 0, data.Length);
+				}
+				else
+				{
+					await cloudBlockBlob.UploadFromStreamAsync(file.InputStream);
+				}
+
 				imageFullPath = cloudBlockBlob.Uri.ToString();
 			}
 			catch (System.Exception ex)
 			{
-					Console.WriteLine("An error ocurred in CreateUploadedImageAsync method.", ex);
+				Console.WriteLine("An error ocurred in CreateUploadedImageAsync method.", ex);
 			}
 			finally
 			{
@@ -78,6 +130,24 @@ namespace JehovaJireh.Data.Repositories
 			}
 
 			return imageFullPath;
+		}
+
+		/// <summary>
+		/// Image to byte
+		/// </summary>
+		/// <param name="img">Image</param>
+		/// <returns>byte array</returns>
+		public static byte[] ImageToByte(Image img)
+		{
+			byte[] byteArray = new byte[0];
+			using (MemoryStream stream = new MemoryStream())
+			{
+				img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+				stream.Close();
+
+				byteArray = stream.ToArray();
+			}
+			return byteArray;
 		}
 	}
 }

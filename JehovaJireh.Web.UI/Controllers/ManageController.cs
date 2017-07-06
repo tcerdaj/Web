@@ -14,6 +14,7 @@ using JehovaJireh.Data.Mappings;
 using JehovaJireh.Logging;
 using Omu.ValueInjecter;
 
+
 namespace JehovaJireh.Web.UI.Controllers
 {
 	[Authorize]
@@ -229,7 +230,7 @@ namespace JehovaJireh.Web.UI.Controllers
 		public ActionResult UpdateAccount()
 		{
 			var user = UserManager.FindById(User.Identity.GetUserId());
-			var model = (RegisterViewModel)new RegisterViewModel().InjectFrom<DeepCloneInjection>(user);
+			var model = (UpdateAccountViewModel)new UpdateAccountViewModel().InjectFrom<DeepCloneInjection>(user);
 			return View(model);
 		}
 
@@ -237,7 +238,7 @@ namespace JehovaJireh.Web.UI.Controllers
 		// POST: /Manage/UpdateAccount
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> UpdateAccount(RegisterViewModel model)
+		public async Task<ActionResult> UpdateAccount(UpdateAccountViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -245,23 +246,38 @@ namespace JehovaJireh.Web.UI.Controllers
 			}
 
 			Stopwatch timespan = Stopwatch.StartNew();
-			var user = (User)new User().InjectFrom<DeepCloneInjection>(model);
+			var user = await  UserManager.GetUserById(model.Id);
+			user.Gender = model.Gender;
+			user.PhoneNumber = model.PhoneNumber;
+			user.Address = model.Address;
+			user.City = model.City;
+			user.State = model.State;
+			user.Zip = model.Zip;
+			user.IsChurchMember = model.IsChurchMember;
+			user.ChurchName = model.ChurchName;
+			user.ChurchAddress = model.ChurchAddress;
+			user.ChurchPhone = model.ChurchPhone;
+			user.Comments = model.Comments;
+			user.ModifiedOnUTC = DateTime.UtcNow;
+
+			//user = (User)new User().InjectFrom<DeepCloneInjection>(model);
 			var imageUrl = string.Empty;
 			log.SaveStarted<User>(user);
 
-			if (model.FileDataChange)
+			if (model.FileData != null)
 			{
 				ImageService imageService = new ImageService(log);
-				user.ImageUrl = await imageService.CreateUploadedImageAsync(model.FileData, new Guid().ToString());
+				var fileName = model.FileData.FileName;
+				user.ImageUrl = await imageService.CreateUploadedImageAsync(model.FileData, fileName, true, 100, 100);
 			}
-
-			user.ModifiedOnUTC = DateTime.UtcNow;
+			
 			var result = await UserManager.UpdateAsync(user);
 			timespan.Stop();
 			log.SaveFinished(user, timespan.Elapsed);
 
 			if (result.Succeeded)
 			{
+				Session["UserSettings"] = user.ToJson();
 				return RedirectToAction("Index", new { Message = ManageMessageId.UpdateAccountSuccess });
 			}
 			AddErrors(result);

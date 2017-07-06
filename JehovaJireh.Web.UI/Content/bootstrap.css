@@ -6816,10 +6816,11 @@ td.visible-print {
 }
 
 .item-avatar .img-circle {
-		border-radius: 50%;
-		width: 40%;
-		vertical-align:text-top;
-	}
+	border-radius: 50%;
+	height: 50px;
+	width: 50px;
+	padding: 5px;
+}
 .welcome-user,.item-profile {
 	float: left;
 }

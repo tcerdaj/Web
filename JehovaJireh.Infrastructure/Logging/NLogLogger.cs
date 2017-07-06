@@ -279,7 +279,7 @@ namespace JehovaJireh.Infrastructure.Logging
 
 		public void SaveInsertFinished<T>(T entity, TimeSpan? span)
 		{
-			string message = string.Format("Inserting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<Guid>)(object)entity).Id);
+			string message = string.Format("Inserting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
 			if (span != null)
 			{
 				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
@@ -305,7 +305,7 @@ namespace JehovaJireh.Infrastructure.Logging
 
 		public void DeleteFinished<T>(T entity, TimeSpan? span)
 		{
-			string message = string.Format("Deleting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<Guid>)(object)entity).Id);
+			string message = string.Format("Deleting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
 			if (span != null)
 			{
 				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
@@ -347,7 +347,7 @@ namespace JehovaJireh.Infrastructure.Logging
 
 		public void RegisterFinished<T>(T entity, string results, TimeSpan? span = null)
 		{
-			string message = string.Format("Register Finished {0} entity with ID='{1}', results: {2}", entity.GetType().Name, ((EntityBase<Guid>)(object)entity).Id, results);
+			string message = string.Format("Register Finished {0} entity with ID='{1}', results: {2}", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id, results);
 			if (span != null)
 			{
 				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());

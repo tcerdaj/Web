@@ -21,11 +21,14 @@ var RegisterViewModel = function (data) {
 			base64String: ko.observable(data.ImageUrl || '')
 		});
 
+		self.ImageUrl = ko.observable(data.ImageUrl || '');
+
 		self.FileDataChange = ko.observable(false);
 		//self.ImageUrl = ko.observable(data.ImageUrl || '');
 		self.FileData().dataURL.subscribe(function (dataURL) {
 			// dataURL has changed do something with it!
 			self.FileDataChange(true);
+			self.ImageUrl(dataURL);
 		});
 
 		self.onClear = function (imageFile) {
@@ -50,14 +53,13 @@ var RegisterViewModel = function (data) {
 			maxLength: 35
 		});
 
-		self.Gender = ko.observable(data.Gender || '');
+		self.Gender = ko.observable(data.Gender || '0');
 		self.Email = ko.observable(data.Email || '').extend({
 			pattern: {
 				params: /^([\d\w-\.]+@([\d\w-]+\.)+[\w]{2,4})?$/,
 				message: "Invalid email address."
 			} 
 		});
-
 		
 		self.PhoneNumber = ko.observable(data.PhoneNumber || '');
 		self.IsChurchMember = ko.observable(data.IsChurchMember || '');
@@ -85,10 +87,17 @@ var RegisterViewModel = function (data) {
 	self.FullName = ko.computed(function () { return self.FirstName() + ' ' + self.LastName(); });
 
 	// Sex List  
-	self.Sex = [{ SexValue: "", SexLabel: "" },
+	self.genders = [{ SexValue: "", SexLabel: "" },
 	{ SexValue: 0, SexLabel: "Male" },
 	{ SexValue: 1, SexLabel: "Female" }];
 
+	this.genderChanged = function (obj, event) {
+		if (event.originalEvent) { //user changed
+		
+		} else { // program changed
+
+		}
+	}
 	self.isSubmiting = ko.observable(false);
 	self.showChurchMember = ko.observable(function () {
 		return this.IsChurchMember();
