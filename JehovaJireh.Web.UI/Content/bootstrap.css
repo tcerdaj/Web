@@ -6814,19 +6814,3 @@ td.visible-print {
     display: none !important;
   }
 }
-
-.item-avatar .img-circle {
-	border-radius: 50%;
-	height: 50px;
-	width: 50px;
-	padding: 5px;
-}
-.welcome-user,.item-profile {
-	float: left;
-}
-
-.avatar-image-container{display:block;}
-
-.navbar-collapse .navbar-nav.navbar-right:last-child {
-	margin-right: 0; 
-}

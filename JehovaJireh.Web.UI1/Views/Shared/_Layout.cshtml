@@ -1,0 +1,65 @@
+﻿@using JehovaJireh.Web.UI.Helpers
+@using Resources
+<!DOCTYPE html>
+<html lang="@CultureHelper.GetCurrentNeutralCulture()" dir="@(CultureHelper.IsRighToLeft() ? "rtl" : "ltr")">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.Title - @Resources.ApplicationName</title>
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/modernizr")
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/common")
+</head>
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				@Html.ActionLink(@Resources.ApplicationName, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li>@Html.ActionLink(Resources.Home, "Index", "Home")</li>
+					<li>@Html.ActionLink(Resources.About, "About", "Home")</li>
+					<li>@Html.ActionLink(Resources.Contact, "Contact", "Home")</li>
+				</ul>
+				@Html.Partial("_LoginPartial")
+				
+				@Html.Partial("_CulturePartial")
+				
+			</div>
+		</div>
+	</div>
+	<div class="container body-content">
+		@RenderBody()
+		<hr />
+		<footer>
+			<p>&copy; @DateTime.Now.Year - @Resources.ApplicationName</p>
+		</footer>
+	</div>
+
+	<script type="text/javascript">
+		(function ($) {
+			$("input[name = 'culture']").click(function () {
+				var cookieName = "culture";
+				eraseCookie(cookieName);
+				createCookie(cookieName, (this).value, 5);
+				$(this).parents("#culture-form").submit(); // post form
+				$('a[href="/Manage"]')[0].css('float','left');
+			});
+		})(jQuery);
+
+		function getCurrentCulture()
+		{
+			console.log("@System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant()");
+		}
+	</script>
+	@Scripts.Render("~/bundles/bootstrap")
+	@RenderSection("scripts", required: false)
+</body>
+</html>

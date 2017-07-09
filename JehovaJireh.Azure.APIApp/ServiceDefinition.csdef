@@ -13,14 +13,19 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="StorageConnectionString" />
       <Setting name="SQLConnectionString" />
-	  <Setting name="LogStorageConnectionString"/>
+      <Setting name="LogStorageConnectionString" />
+      <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Httpln" protocol="http" port="80" />
-      <InputEndpoint name="Httpsln" protocol="https" port="443" certificate="JehovaJirehAppWildCardSSLCert" />
+      <InputEndpoint name="Httpsln" protocol="https" port="443" certificate="Client-VPN" />
     </Endpoints>
     <Certificates>
-      <Certificate name="JehovaJirehAppWildCardSSLCert" storeLocation="LocalMachine" storeName="My" />
+      <Certificate name="Client-VPN" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
+    <Imports>
+      <Import moduleName="RemoteAccess" />
+      <Import moduleName="RemoteForwarder" />
+    </Imports>
   </WebRole>
 </ServiceDefinition>

@@ -23,35 +23,9 @@ namespace JehovaJireh.Web.UI
 					  "~/Scripts/bootstrap.js",
 					  "~/Scripts/respond.js"));
 
-
-			bundles.Add(new ScriptBundle("~/bundles/common").Include(
-					  "~/Scripts/common.js"));
-
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 					  "~/Content/bootstrap.css",
-					  "~/Content/site.css",
-					   "~/Content/knockout-file-bindings.css"));
-
-			bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
-					 "~/Scripts/knockout-{version}.debug.js",
-					 "~/Scripts/knockout.validation.debug.js",
-					 "~/Scripts/knockout-file-bindings.js"
-					 ));
-
-			bundles.Add(new ScriptBundle("~/bundles/maskedinput").Include(
-					 "~/Scripts/jquery.maskedinput.min.js"));
-
-			bundles.Add(new ScriptBundle("~/bundles/areYouSure").Include(
-			   "~/Scripts/jquery.are-you-sure.js"
-			   ));
-			
-			//Account/Register
-			bundles.Add(new ScriptBundle("~/bundles/account/registerviewmodel")
-			   .Include(
-					"~/Scripts/KOViewModel/AccountViewModel/RegisterViewModel.js",
-					"~/Scripts/KOViewModel/AccountViewModel/RegisterInit.js"
-			   ));
-
+					  "~/Content/site.css"));
 		}
 	}
 }
