@@ -22,3 +22,17 @@ select,
 textarea {
     max-width: 280px;
 }
+
+/*Register page*/
+.page-register .secction-main { background: aliceblue;border: 1px solid rgb(214, 214, 214);}
+.page-register .secction-main .secction-content { padding: 18px}
+.page-register .secction-main .secction-content .form-group input,
+.page-register .secction-main .secction-content .form-group textarea { max-width: 100%}
+.img-rounded { border-radius: 6px;}
+.culture-form {	color : #999999}
+.culture-form ul > li > a { padding-top: 15px;padding-bottom: 8px;}
+.culture-form ul > li > a label { font-weight:100}
+.culture-form .selected { background-color: #999999;}
+.culture-form .selected label { color:white;}
+.nav .navbar-nav .navbar-right .culture:last-child {margin-right: 0!important}
+

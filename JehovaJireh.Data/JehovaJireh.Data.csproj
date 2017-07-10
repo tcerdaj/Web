@@ -40,7 +40,8 @@
     <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ImageResizer.4.1.9\lib\net45\ImageResizer.dll</HintPath>
     </Reference>
-    <Reference Include="JehovaJireh">
+    <Reference Include="JehovaJireh, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\JehovaJireh\bin\Debug\JehovaJireh.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

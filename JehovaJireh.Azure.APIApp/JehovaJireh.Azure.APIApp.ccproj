@@ -54,7 +54,7 @@
     <DiagnosticsConfiguration Include="JehovaJireh.Web.ServicesContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <ItemGroup>
-    <PublishProfile Include="Profiles\jehovajirehProduction.azurePubxml" />
+    <PublishProfile Include="Profiles\jehovajirehwebapiProduction.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
