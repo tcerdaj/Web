@@ -5678,10 +5678,19 @@ body.modal-open,
   filter: alpha(opacity=50);
 }
 
-.modal-header {
+/*.modal-header {
   min-height: 16.428571429px;
   padding: 15px;
   border-bottom: 1px solid #e5e5e5;
+}*/
+
+.modal-header {
+	min-height: 16.428571429px;
+	padding: 120px;
+}
+
+.modal-header h1 {
+	color: darkgray;
 }
 
 .modal-header .close {
@@ -6220,8 +6229,12 @@ body.modal-open,
   float: left !important;
 }
 
-.hide {
+/*.hide {
   display: none !important;
+}*/
+
+.hide {
+	display: none;
 }
 
 .show {

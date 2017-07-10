@@ -42,6 +42,11 @@ namespace JehovaJireh.Data.Mappings
 			Map(x => x.ChurchPastor);
 			Map(x => x.NeedToBeVisited);
 			Map(x => x.Comments);
+			Map(x => x.CreatedOn);
+			Map(x => x.ModifiedOn);
+			Map(x => x.CreatedBy);
+			Map(x => x.ModifiedBy);
+
 		}
 	}
 }

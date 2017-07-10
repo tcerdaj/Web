@@ -18,8 +18,8 @@ namespace JehovaJireh.Core.Entities
 			set { _id = value; }
 		}
 
-		public virtual DateTime CreatedOnUTC {get;set;}
-		public virtual DateTime ModifiedOnUTC { get; set; }
+		public virtual DateTime CreatedOn {get;set;}
+		public virtual DateTime ModifiedOn { get; set; }
 		public virtual string CreatedBy { get; set; }
 		public virtual string ModifiedBy { get; set; }
 

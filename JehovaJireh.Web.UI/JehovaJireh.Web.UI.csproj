@@ -229,6 +229,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Img\ajax_loader_blue_64.gif" />
     <Content Include="Img\no-photo.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -301,6 +302,7 @@
     <Content Include="Views\Errors\E401.cshtml" />
     <Content Include="Views\Errors\E403.cshtml" />
     <Content Include="Views\Errors\E404.cshtml" />
+    <Content Include="Views\Shared\_PleaseWaitPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

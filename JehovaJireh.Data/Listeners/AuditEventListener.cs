@@ -13,8 +13,8 @@ namespace JehovaJireh.Data.Listeners
 {
 	public class AuditEventListener : IPreUpdateEventListener, IPreInsertEventListener
 	{
-		private static readonly string ModifiedOnPropertyName = GetPropertyName<IEntityTimestamp>(val => val.ModifiedOnUTC),
-									   createdOnPropertyName = GetPropertyName<IEntityTimestamp>(val => val.CreatedOnUTC);
+		private static readonly string ModifiedOnPropertyName = GetPropertyName<IEntityTimestamp>(val => val.ModifiedOn),
+									   createdOnPropertyName = GetPropertyName<IEntityTimestamp>(val => val.CreatedOn);
 
 		public bool OnPreUpdate(PreUpdateEvent @event)
 		{
@@ -23,7 +23,7 @@ namespace JehovaJireh.Data.Listeners
 				return false;
 
 			var currentDate = DateTime.UtcNow;
-			audit.ModifiedOnUTC = currentDate;
+			audit.ModifiedOn = currentDate;
 			SetState(@event.Persister, @event.State, ModifiedOnPropertyName, currentDate);
 
 			return false;
@@ -36,7 +36,7 @@ namespace JehovaJireh.Data.Listeners
 				return false;
 
 			var currentDate = DateTime.UtcNow;
-			audit.CreatedOnUTC = audit.ModifiedOnUTC = currentDate;
+			audit.CreatedOn = audit.ModifiedOn = currentDate;
 			SetState(@event.Persister, @event.State, ModifiedOnPropertyName, currentDate);
 			SetState(@event.Persister, @event.State, createdOnPropertyName, currentDate);
 			

@@ -345,4 +345,7 @@
   <data name="ZipLong" xml:space="preserve">
     <value>Must be lest than 15 characters</value>
   </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Please Wait...</value>
+  </data>
 </root>

@@ -261,7 +261,7 @@ namespace JehovaJireh.Web.UI.Controllers
 			user.ChurchAddress = model.ChurchAddress;
 			user.ChurchPhone = model.ChurchPhone;
 			user.Comments = model.Comments;
-			user.ModifiedOnUTC = DateTime.UtcNow;
+			user.ModifiedOn = DateTime.UtcNow;
 
 			//user = (User)new User().InjectFrom<DeepCloneInjection>(model);
 			var imageUrl = string.Empty;

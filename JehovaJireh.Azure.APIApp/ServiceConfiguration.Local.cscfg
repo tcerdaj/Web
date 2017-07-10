@@ -5,7 +5,7 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="SQLConnectionString" value="Data Source=.\SQLEXPRESS;Initial Catalog=jehovajirehDB;Integrated Security=True" />
+      <Setting name="SQLConnectionString" value="Data Source=.\sqlexpress;Initial Catalog=jehovajirehDB;Integrated Security=True" />
       <Setting name="LogStorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" value="7a5bf869-ec98-4e6e-813f-415cd101d48b" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />

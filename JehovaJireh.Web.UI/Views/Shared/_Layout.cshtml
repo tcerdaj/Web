@@ -36,6 +36,7 @@
 		</div>
 	</div>
 	<div class="container body-content">
+		@Html.Partial("_PleaseWaitPartial")
 		@RenderBody()
 		<hr />
 		<footer>
@@ -44,6 +45,8 @@
 	</div>
 
 	<script type="text/javascript">
+		
+
 		(function ($) {
 			$("input[name = 'culture']").click(function () {
 				var cookieName = "culture";

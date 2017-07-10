@@ -99,6 +99,7 @@
 						@Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
 						<div class="col-md-10">
 							@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.Email);
 						</div>
 					</div>
 					<div class="form-group">
@@ -206,6 +207,18 @@
 		$(document).ready(function () {
 			var data = function () { return @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)); }() || {};
 			Init(data);
+
+			$.ajax({
+				beforeSend: function () {
+					// Handle the beforeSend event
+					$('#pleaseWaitDialog').modal('show');
+				},
+				complete: function () {
+					// Handle the complete event
+					$('#pleaseWaitDialog').modal('hide');
+				}
+				// ......
+			});
 
 			$('.page-register.form-horizontal').areYouSure(
 				{

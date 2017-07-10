@@ -71,11 +71,9 @@ namespace JehovaJireh.Web.UI.Models
 
 	public class RegisterViewModel
 	{
-		[Required(ErrorMessageResourceType = typeof(Resources.Resources),
-			  ErrorMessageResourceName = "EmailRequired")]
-		[EmailAddress(ErrorMessageResourceType = typeof(Resources.Resources),
-			  ErrorMessageResourceName = "EmailInvalid")]
+		[Required(ErrorMessage =null, ErrorMessageResourceName = "EmailRequired",  ErrorMessageResourceType = typeof(Resources.Resources))]
 		[Display(Name = "Email", ResourceType = typeof(Resources.Resources))]
+		[EmailAddress(ErrorMessage = null, ErrorMessageResourceName = "EmailInvalid",ErrorMessageResourceType = typeof(Resources.Resources))]
 		public string Email { get; set; }
 
 		[Required(ErrorMessageResourceType = typeof(Resources.Resources),

@@ -33,7 +33,8 @@ namespace JehovaJireh.Web.UI
 					   "~/Content/knockout-file-bindings.css"));
 
 			bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
-					 "~/Scripts/knockout-{version}.debug.js",
+				     "~/Scripts/knockout-{version}.js",
+				     "~/Scripts/knockout-{version}.debug.js",
 					 "~/Scripts/knockout.validation.debug.js",
 					 "~/Scripts/knockout-file-bindings.js"
 					 ));

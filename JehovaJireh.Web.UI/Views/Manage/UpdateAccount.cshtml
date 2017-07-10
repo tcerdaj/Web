@@ -186,6 +186,19 @@
 	@Scripts.Render("~/bundles/knockout")
 	@Scripts.Render("~/bundles/maskedinput")
 	@Scripts.Render("~/bundles/account/registerviewmodel")
+<script type="text/javascript">
+	$.ajax({
+		beforeSend: function () {
+			// Handle the beforeSend event
+			$('#pleaseWaitDialog').modal('show');
+		},
+		complete: function () {
+			// Handle the complete event
+			$('#pleaseWaitDialog').modal('hide');
+		}
+		// ......
+	});
+</script>
 
 	<script type="text/javascript">
 		var mask = "(999) 999-9999";

@@ -10,7 +10,7 @@ namespace JehovaJireh.Core.Entities
 	{
 		User CreatedBy { get; set; }
 		User ModifiedBy { get; set; }
-		DateTime? CreatedOnUTC { get; set; }
-		DateTime? ModifiedOnUTC { get; set; }
+		DateTime? CreatedOn { get; set; }
+		DateTime? ModifiedOn { get; set; }
 	}
 }
