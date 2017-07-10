@@ -9,6 +9,11 @@ namespace JehovaJireh.Core.Entities
 {
 	public class Donation: EntityBase<int>
 	{
+		public Donation()
+		{
+			this.DonationDetails = (ICollection<DonationDetails>)new List<DonationDetails>();
+		}
+
 		public virtual User RequestedBy { get; set; }
 		public virtual string Title { get; set; }
 		public virtual string Description { get; set; }
@@ -16,7 +21,7 @@ namespace JehovaJireh.Core.Entities
 		public virtual DateTime ExpireOn { get; set; }
 		public virtual DonationStatus DonationStatus { get; set; }
 
-		public virtual DonationDetails DonationDetails { get; set; }
+		public virtual ICollection<DonationDetails> DonationDetails { get; set; }
 
 		public virtual Donation ToObject(string json)
 		{
