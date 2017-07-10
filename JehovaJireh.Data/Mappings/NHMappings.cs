@@ -49,4 +49,27 @@ namespace JehovaJireh.Data.Mappings
 
 		}
 	}
+
+	public class DonationMap : ClassMap<Donation>
+	{
+		public DonationMap()
+		{
+			Table("Donations");
+			Id(x => x.Id)
+				.Column("DonationId")
+				.GeneratedBy.Increment();
+			References(x => x.RequestedBy)
+				.Column("RequestedBy")
+				.ForeignKey();
+			Map(x => x.Title);
+			Map(x => x.Description);
+			Map(x => x.Amount);
+			Map(x => x.ExpireOn);
+			Map(x => x.DonationStatus);
+			Map(x => x.CreatedOn);
+			Map(x => x.ModifiedOn);
+			Map(x => x.CreatedBy);
+			Map(x => x.ModifiedBy);
+		}
+	}
 }

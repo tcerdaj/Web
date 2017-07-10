@@ -99,7 +99,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntitiesDto\DonationDetails.cs" />
+    <Compile Include="EntitiesDto\DonationDto.cs" />
     <Compile Include="EntitiesDto\UserDto.cs" />
+    <Compile Include="Entities\DonationDetails.cs" />
     <Compile Include="Entities\Donattion.cs" />
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\Enum.cs" />
