@@ -142,6 +142,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amount.
+        /// </summary>
+        internal static string Amount {
+            get {
+                return ResourceManager.GetString("Amount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Iglesia Jehova Churh.
         /// </summary>
         internal static string ApplicationName {
@@ -156,6 +165,24 @@ namespace Resources {
         internal static string Biography {
             get {
                 return ResourceManager.GetString("Biography", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be lest than 180 characteres.
+        /// </summary>
+        internal static string C180Long {
+            get {
+                return ResourceManager.GetString("C180Long", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be lest than 50 characteres.
+        /// </summary>
+        internal static string C50Long {
+            get {
+                return ResourceManager.GetString("C50Long", resourceCulture);
             }
         }
         
@@ -331,6 +358,42 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date Invalid.
+        /// </summary>
+        internal static string DateInvalid {
+            get {
+                return ResourceManager.GetString("DateInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Donation Details.
+        /// </summary>
+        internal static string DonationDetails {
+            get {
+                return ResourceManager.GetString("DonationDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Donation Status.
+        /// </summary>
+        internal static string DonationStatus {
+            get {
+                return ResourceManager.GetString("DonationStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Drag file here.
         /// </summary>
         internal static string DragFileHere {
@@ -372,6 +435,15 @@ namespace Resources {
         internal static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expire On.
+        /// </summary>
+        internal static string ExpireOn {
+            get {
+                return ResourceManager.GetString("ExpireOn", resourceCulture);
             }
         }
         
@@ -457,11 +529,47 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Photo.
+        /// </summary>
+        internal static string ImageUrl {
+            get {
+                return ResourceManager.GetString("ImageUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Amount.
+        /// </summary>
+        internal static string InvalidAmount {
+            get {
+                return ResourceManager.GetString("InvalidAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is Church Member?.
         /// </summary>
         internal static string IsChurchMember {
             get {
                 return ResourceManager.GetString("IsChurchMember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is the donation in Money?.
+        /// </summary>
+        internal static string IsMoney {
+            get {
+                return ResourceManager.GetString("IsMoney", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Donation Type.
+        /// </summary>
+        internal static string ItemType {
+            get {
+                return ResourceManager.GetString("ItemType", resourceCulture);
             }
         }
         
@@ -664,6 +772,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scheduler Donation.
+        /// </summary>
+        internal static string SchedulerDonation {
+            get {
+                return ResourceManager.GetString("SchedulerDonation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to State.
         /// </summary>
         internal static string State {
@@ -687,6 +804,24 @@ namespace Resources {
         internal static string Support {
             get {
                 return ResourceManager.GetString("Support", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        internal static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title is required.
+        /// </summary>
+        internal static string TitleRequired {
+            get {
+                return ResourceManager.GetString("TitleRequired", resourceCulture);
             }
         }
         

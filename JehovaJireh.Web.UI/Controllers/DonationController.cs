@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using JehovaJireh.Web.UI.Models;
+
+namespace JehovaJireh.Web.UI.Controllers
+{
+    public class DonationController : Controller
+    {
+        // GET: Donation list
+        public ActionResult Index()
+        {
+			//TODO: 
+			//Query donations
+			//Inject in donations list model
+			//return list to the view.
+
+			return View();
+        }
+
+		public ActionResult MakeADonation()
+		{
+			//TODO: Maybe show the last 5 donations list
+			return View();
+		}
+
+		public ActionResult MakeADonation(DonationViewModels model)
+		{
+			return View();
+		}
+
+		public ActionResult MakeNewRequest()
+		{
+			return View();
+		}
+
+		public ActionResult MakeNewRequest(RequestViewModels model)
+		{
+			return View();
+		}
+
+		public ActionResult SchedulerDonation()
+		{
+			return View();
+		}
+	}
+}

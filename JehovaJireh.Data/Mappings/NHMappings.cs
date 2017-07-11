@@ -71,6 +71,11 @@ namespace JehovaJireh.Data.Mappings
 			Map(x => x.DonationStatus);
 			Map(x => x.CreatedOn);
 			Map(x => x.ModifiedOn);
+			HasMany(x => x.DonationDetails)
+				.Not.Inverse()
+				.Not.KeyNullable()
+				.Not.KeyUpdate()
+				.Cascade.All();
 			References(x => x.CreatedBy)
 				.Column("CreatedBy")
 				.ForeignKey();
