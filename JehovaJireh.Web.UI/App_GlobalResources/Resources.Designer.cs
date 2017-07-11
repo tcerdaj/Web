@@ -520,6 +520,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Make a Donation.
+        /// </summary>
+        internal static string MakeADonation {
+            get {
+                return ResourceManager.GetString("MakeADonation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make new Request.
+        /// </summary>
+        internal static string MakeNewRequest {
+            get {
+                return ResourceManager.GetString("MakeNewRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage.
         /// </summary>
         internal static string Manage {
@@ -705,6 +723,15 @@ namespace Resources {
         internal static string UserNameRequired {
             get {
                 return ResourceManager.GetString("UserNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VIew Donations.
+        /// </summary>
+        internal static string ViewDonations {
+            get {
+                return ResourceManager.GetString("ViewDonations", resourceCulture);
             }
         }
         

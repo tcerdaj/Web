@@ -348,4 +348,13 @@
   <data name="PleaseWait" xml:space="preserve">
     <value>Por favor espere...</value>
   </data>
+  <data name="MakeADonation" xml:space="preserve">
+    <value>Hacer una Donacion</value>
+  </data>
+  <data name="MakeNewRequest" xml:space="preserve">
+    <value>Requerir un articulo o servicio</value>
+  </data>
+  <data name="ViewDonations" xml:space="preserve">
+    <value>Ver Donaciones</value>
+  </data>
 </root>
