@@ -32,7 +32,7 @@ namespace JehovaJireh.Web.UI.Helpers
 		}
 
 
-		internal static GravatarOptions GetDefaults()
+		public static GravatarOptions GetDefaults()
 		{
 			return new GravatarOptions
 			{

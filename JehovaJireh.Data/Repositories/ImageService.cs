@@ -18,10 +18,10 @@ namespace JehovaJireh.Data.Repositories
 {
 	public class ImageService : IImageService
 	{
-		internal CloudBlobClient cloudBlobClient;
-		internal CloudBlobContainer cloudBlobContainer;
-		internal CloudStorageAccount cloudStorageAccount;
-		internal ILogger log;
+		public CloudBlobClient cloudBlobClient;
+		public CloudBlobContainer cloudBlobContainer;
+		public CloudStorageAccount cloudStorageAccount;
+		public ILogger log;
 
 		public ImageService(ILogger log)
 		{

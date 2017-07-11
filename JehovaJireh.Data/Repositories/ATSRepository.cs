@@ -16,11 +16,11 @@ namespace JehovaJireh.Data.Repositories
 		private string partitionKey;
 		private string tableName;
 
-		internal CloudTableClient tableClient;
-		internal CloudTable table;
-		internal CloudBlobClient cloudBlobClient;
-		internal CloudBlobContainer cloudBlobContainer;
-		internal CloudStorageAccount account;
+		public CloudTableClient tableClient;
+		public CloudTable table;
+		public CloudBlobClient cloudBlobClient;
+		public CloudBlobContainer cloudBlobContainer;
+		public CloudStorageAccount account;
 
 		public ATSRepository(CloudTableClient tableClient, string tableName)
 		{

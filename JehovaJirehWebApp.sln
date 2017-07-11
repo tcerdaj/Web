@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Data", "JehovaJireh.Data\JehovaJireh.Data.csproj", "{F9D19667-CA5F-4799-85BB-65EB973649F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}"
-EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "JehovaJireh.Azure.PortalApp", "JehovaJireh.Azure.PortalApp\JehovaJireh.Azure.PortalApp.ccproj", "{1E01DB24-7836-4252-A944-A4B9498B8661}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Web.UI", "JehovaJireh.Web.UI\JehovaJireh.Web.UI.csproj", "{6525FBD4-1CD7-4883-8811-6CD5DBE89894}"
@@ -36,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tables", "Tables", "{2F65B0
 		Scheduler.txt = Scheduler.txt
 		Users.txt = Users.txt
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocatorResources", "LocatorResources\LocatorResources.csproj", "{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,10 +71,6 @@ Global
 		{F9D19667-CA5F-4799-85BB-65EB973649F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9D19667-CA5F-4799-85BB-65EB973649F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9D19667-CA5F-4799-85BB-65EB973649F2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1E01DB24-7836-4252-A944-A4B9498B8661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1E01DB24-7836-4252-A944-A4B9498B8661}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E01DB24-7836-4252-A944-A4B9498B8661}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -83,6 +79,10 @@ Global
 		{6525FBD4-1CD7-4883-8811-6CD5DBE89894}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6525FBD4-1CD7-4883-8811-6CD5DBE89894}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6525FBD4-1CD7-4883-8811-6CD5DBE89894}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A25DC68-DC8E-423E-BDEF-B88EFA6CEA59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

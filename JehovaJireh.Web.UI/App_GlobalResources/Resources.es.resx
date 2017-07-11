@@ -402,4 +402,7 @@
   <data name="TitleRequired" xml:space="preserve">
     <value>El Titulo es requerido</value>
   </data>
+  <data name="Donations" xml:space="preserve">
+    <value>Donaciones</value>
+  </data>
 </root>

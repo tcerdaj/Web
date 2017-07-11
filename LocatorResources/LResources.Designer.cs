@@ -22,14 +22,14 @@ namespace Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    public class LResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal LResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Resources.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Resources.LResources", typeof(LResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -142,6 +142,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amount.
+        /// </summary>
+        public static string Amount {
+            get {
+                return ResourceManager.GetString("Amount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Iglesia Jehova Churh.
         /// </summary>
         public static string ApplicationName {
@@ -156,6 +165,24 @@ namespace Resources {
         public static string Biography {
             get {
                 return ResourceManager.GetString("Biography", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be lest than 180 charactes.
+        /// </summary>
+        public static string C180Long {
+            get {
+                return ResourceManager.GetString("C180Long", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be lest than 50 charactes.
+        /// </summary>
+        public static string C50Long {
+            get {
+                return ResourceManager.GetString("C50Long", resourceCulture);
             }
         }
         
@@ -331,6 +358,42 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date invalid.
+        /// </summary>
+        public static string DateInvalid {
+            get {
+                return ResourceManager.GetString("DateInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Donation Details.
+        /// </summary>
+        public static string DonationDetails {
+            get {
+                return ResourceManager.GetString("DonationDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Donation status.
+        /// </summary>
+        public static string DonationStatus {
+            get {
+                return ResourceManager.GetString("DonationStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Drag file here.
         /// </summary>
         public static string DragFileHere {
@@ -372,6 +435,15 @@ namespace Resources {
         public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expire On.
+        /// </summary>
+        public static string ExpireOn {
+            get {
+                return ResourceManager.GetString("ExpireOn", resourceCulture);
             }
         }
         
@@ -457,11 +529,47 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Photo.
+        /// </summary>
+        public static string ImageUrl {
+            get {
+                return ResourceManager.GetString("ImageUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amount invalid.
+        /// </summary>
+        public static string InvalidAmount {
+            get {
+                return ResourceManager.GetString("InvalidAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is Church Member?.
         /// </summary>
         public static string IsChurchMember {
             get {
                 return ResourceManager.GetString("IsChurchMember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is donation in money?.
+        /// </summary>
+        public static string IsMoney {
+            get {
+                return ResourceManager.GetString("IsMoney", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Donation type.
+        /// </summary>
+        public static string ItemType {
+            get {
+                return ResourceManager.GetString("ItemType", resourceCulture);
             }
         }
         
@@ -646,6 +754,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scheduler donation.
+        /// </summary>
+        public static string SchedulerDonation {
+            get {
+                return ResourceManager.GetString("SchedulerDonation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to State.
         /// </summary>
         public static string State {
@@ -669,6 +786,24 @@ namespace Resources {
         public static string Support {
             get {
                 return ResourceManager.GetString("Support", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title is required.
+        /// </summary>
+        public static string TitleRequired {
+            get {
+                return ResourceManager.GetString("TitleRequired", resourceCulture);
             }
         }
         

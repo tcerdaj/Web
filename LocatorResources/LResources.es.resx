@@ -348,4 +348,49 @@
   <data name="PleaseWait" xml:space="preserve">
     <value>Por favor espere...</value>
   </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Cantidad a donar</value>
+  </data>
+  <data name="C180Long" xml:space="preserve">
+    <value>Debe ser menos de 180 caracteres</value>
+  </data>
+  <data name="C50Long" xml:space="preserve">
+    <value>Debe ser menos de 50 caracteres</value>
+  </data>
+  <data name="DateInvalid" xml:space="preserve">
+    <value>Fecha invalida</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Descripcion</value>
+  </data>
+  <data name="DonationDetails" xml:space="preserve">
+    <value>Detalles de la donacion</value>
+  </data>
+  <data name="DonationStatus" xml:space="preserve">
+    <value>Estatus de la donacion</value>
+  </data>
+  <data name="ExpireOn" xml:space="preserve">
+    <value>Fecha cuando expira la donacion </value>
+  </data>
+  <data name="ImageUrl" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="InvalidAmount" xml:space="preserve">
+    <value>Cantidad invalida</value>
+  </data>
+  <data name="IsMoney" xml:space="preserve">
+    <value>Es la donacion en dinero?</value>
+  </data>
+  <data name="ItemType" xml:space="preserve">
+    <value>Tipo de donacion</value>
+  </data>
+  <data name="SchedulerDonation" xml:space="preserve">
+    <value>Agendar una donacion</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titulo</value>
+  </data>
+  <data name="TitleRequired" xml:space="preserve">
+    <value>El Titulo es requerido</value>
+  </data>
 </root>

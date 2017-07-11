@@ -13,7 +13,7 @@ using JehovaJireh.Core.Entities;
 using JehovaJireh.Data.Mappings;
 using JehovaJireh.Logging;
 using Omu.ValueInjecter;
-
+using JehovaJireh.Web.UI.App_GlobalResources;
 
 namespace JehovaJireh.Web.UI.Controllers
 {
@@ -70,13 +70,13 @@ namespace JehovaJireh.Web.UI.Controllers
 				//SetCulture(culture);
 
 			ViewBag.StatusMessage =
-				message == ManageMessageId.ChangePasswordSuccess ? Resources.Resources.YourPasswordHaschanged
-				: message == ManageMessageId.SetPasswordSuccess ? Resources.Resources.YourPasswordHasSet
+				message == ManageMessageId.ChangePasswordSuccess ? Resources.YourPasswordHaschanged
+				: message == ManageMessageId.SetPasswordSuccess ? Resources.YourPasswordHasSet
 				: message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-				: message == ManageMessageId.Error ? Resources.Resources.Error
+				: message == ManageMessageId.Error ? Resources.Error
 				: message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
 				: message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-				: message == ManageMessageId.UpdateAccountSuccess? Resources.Resources.YourAccoutHasUpdated
+				: message == ManageMessageId.UpdateAccountSuccess? Resources.YourAccoutHasUpdated
 				: "";
 
 			var userId = User.Identity.GetUserId();

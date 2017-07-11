@@ -1002,7 +1002,7 @@
         kv.registerExtenders();
     }());
     ;// The core binding handler
-    // this allows us to setup any value binding that internally always
+    // this allows us to setup any value binding that publicly always
     // performs the same functionality
     ko.bindingHandlers['validationCore'] = (function () {
 

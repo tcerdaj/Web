@@ -16,10 +16,11 @@ namespace JehovaJireh.Web.UI.Controllers
 			//Query donations
 			//Inject in donations list model
 			//return list to the view.
-
-			return View();
+			var model = new List<DonationViewModels>();
+			return View(model);
         }
 
+		[Authorize]
 		public ActionResult MakeADonation()
 		{
 			//TODO: Maybe show the last 5 donations list
@@ -31,6 +32,7 @@ namespace JehovaJireh.Web.UI.Controllers
 			return View();
 		}
 
+		[Authorize]
 		public ActionResult MakeNewRequest()
 		{
 			return View();
@@ -41,6 +43,7 @@ namespace JehovaJireh.Web.UI.Controllers
 			return View();
 		}
 
+		[Authorize]
 		public ActionResult SchedulerDonation()
 		{
 			return View();

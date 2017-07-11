@@ -27,7 +27,7 @@ var DEBUG=true;
         factory(window['ko'] = {});
     }
 }(function(koExports, amdRequire){
-// Internally, all KO objects are attached to koExports (even the non-exported ones whose names will be minified by the closure compiler).
+// publicly, all KO objects are attached to koExports (even the non-exported ones whose names will be minified by the closure compiler).
 // In the future, the following "ko" variable may be made distinct from "koExports" so that private objects are not externally reachable.
 var ko = typeof koExports !== 'undefined' ? koExports : {};
 // Google Closure Compiler helpers (used only to make the minified file smaller)
@@ -909,7 +909,7 @@ ko.exportSymbol('utils.domNodeDisposal.removeDisposeCallback', ko.utils.domNodeD
         if (jQueryInstance['parseHTML']) {
             return jQueryInstance['parseHTML'](html, documentContext) || []; // Ensure we always return an array and never null
         } else {
-            // For jQuery < 1.8.0, we fall back on the undocumented internal "clean" function.
+            // For jQuery < 1.8.0, we fall back on the undocumented public "clean" function.
             var elems = jQueryInstance['clean']([html], documentContext);
 
             // As of jQuery 1.7.1, jQuery parses the HTML by appending it to some dummy parent nodes held in an in-memory document fragment.
@@ -1952,7 +1952,7 @@ ko.computed = ko.dependentObservable = function (evaluatorFunctionOrOptions, eva
 
         // disposeWhenNodeIsRemoved: true can be used to opt into the "only dispose after first false result"
         // behaviour even if there's no specific node to watch. In that case, clear the option so we don't try
-        // to watch for a non-node's disposal. This technique is intended for KO's internal use only and shouldn't
+        // to watch for a non-node's disposal. This technique is intended for KO's public use only and shouldn't
         // be documented or used by application code, as it's likely to change in a future version of KO.
         if (!state.disposeWhenNodeIsRemoved.nodeType) {
             state.disposeWhenNodeIsRemoved = null;
@@ -2687,7 +2687,7 @@ ko.expressionRewriting = (function () {
             return false;
         },
 
-        // Internal, private KO utility for updating model properties from within bindings
+        // public, private KO utility for updating model properties from within bindings
         // property:            If the property being updated is (or might be) an observable, pass it here
         //                      If it turns out to be a writable observable, it will be written to directly
         // allBindings:         An object with a get method to retrieve bindings in the current execution context.
@@ -2716,7 +2716,7 @@ ko.exportSymbol('expressionRewriting.preProcessBindings', ko.expressionRewriting
 // Making bindings explicitly declare themselves as "two way" isn't ideal in the long term (it would be better if
 // all bindings could use an official 'property writer' API without needing to declare that they might). However,
 // since this is not, and has never been, a public API (_ko_property_writers was never documented), it's acceptable
-// as an internal implementation detail in the short term.
+// as an public implementation detail in the short term.
 // For those developers who rely on _ko_property_writers in their custom bindings, we expose _twoWayBindings as an
 // undocumented feature that makes it relatively easy to upgrade to KO 3.0. However, this is still not an official
 // public API, and we reserve the right to remove it at any time if we create a real public property writers API.
@@ -2952,7 +2952,7 @@ ko.exportSymbol('virtualElements.setDomNodeChildren', ko.virtualElements.setDomN
             return ko.components.addBindingsForCustomElement(parsedBindings, node, bindingContext, /* valueAccessors */ true);
         },
 
-        // The following function is only used internally by this default provider.
+        // The following function is only used publicly by this default provider.
         // It's not part of the interface definition for a general binding provider.
         'getBindingsString': function(node, bindingContext) {
             switch (node.nodeType) {
@@ -2962,7 +2962,7 @@ ko.exportSymbol('virtualElements.setDomNodeChildren', ko.virtualElements.setDomN
             }
         },
 
-        // The following function is only used internally by this default provider.
+        // The following function is only used publicly by this default provider.
         // It's not part of the interface definition for a general binding provider.
         'parseBindingsString': function(bindingsString, bindingContext, node, options) {
             try {
@@ -3190,7 +3190,7 @@ ko.exportSymbol('bindingProvider', ko.bindingProvider);
             throw new Error("The binding '" + bindingName + "' cannot be used with virtual elements")
     }
 
-    function applyBindingsToDescendantsInternal (bindingContext, elementOrVirtualElement, bindingContextsMayDifferFromDomParentElement) {
+    function applyBindingsToDescendantspublic (bindingContext, elementOrVirtualElement, bindingContextsMayDifferFromDomParentElement) {
         var currentChild,
             nextInQueue = ko.virtualElements.firstChild(elementOrVirtualElement),
             provider = ko.bindingProvider['instance'],
@@ -3212,11 +3212,11 @@ ko.exportSymbol('bindingProvider', ko.bindingProvider);
         while (currentChild = nextInQueue) {
             // Keep a record of the next child *before* applying bindings, in case the binding removes the current child from its position
             nextInQueue = ko.virtualElements.nextSibling(currentChild);
-            applyBindingsToNodeAndDescendantsInternal(bindingContext, currentChild, bindingContextsMayDifferFromDomParentElement);
+            applyBindingsToNodeAndDescendantspublic(bindingContext, currentChild, bindingContextsMayDifferFromDomParentElement);
         }
     }
 
-    function applyBindingsToNodeAndDescendantsInternal (bindingContext, nodeVerified, bindingContextMayDifferFromDomParentElement) {
+    function applyBindingsToNodeAndDescendantspublic (bindingContext, nodeVerified, bindingContextMayDifferFromDomParentElement) {
         var shouldBindDescendants = true;
 
         // Perf optimisation: Apply bindings only if...
@@ -3230,7 +3230,7 @@ ko.exportSymbol('bindingProvider', ko.bindingProvider);
         var shouldApplyBindings = (isElement && bindingContextMayDifferFromDomParentElement)             // Case (1)
                                || ko.bindingProvider['instance']['nodeHasBindings'](nodeVerified);       // Case (2)
         if (shouldApplyBindings)
-            shouldBindDescendants = applyBindingsToNodeInternal(nodeVerified, null, bindingContext, bindingContextMayDifferFromDomParentElement)['shouldBindDescendants'];
+            shouldBindDescendants = applyBindingsToNodepublic(nodeVerified, null, bindingContext, bindingContextMayDifferFromDomParentElement)['shouldBindDescendants'];
 
         if (shouldBindDescendants && !bindingDoesNotRecurseIntoElementTypes[ko.utils.tagNameLower(nodeVerified)]) {
             // We're recursing automatically into (real or virtual) child nodes without changing binding contexts. So,
@@ -3239,7 +3239,7 @@ ko.exportSymbol('bindingProvider', ko.bindingProvider);
             //  * For children of a *virtual* element, we can't be sure. Evaluating .parentNode on those children may
             //    skip over any number of intermediate virtual elements, any of which might define a custom binding context,
             //    hence bindingContextsMayDifferFromDomParentElement is true
-            applyBindingsToDescendantsInternal(bindingContext, nodeVerified, /* bindingContextsMayDifferFromDomParentElement: */ !isElement);
+            applyBindingsToDescendantspublic(bindingContext, nodeVerified, /* bindingContextsMayDifferFromDomParentElement: */ !isElement);
         }
     }
 
@@ -3279,7 +3279,7 @@ ko.exportSymbol('bindingProvider', ko.bindingProvider);
         return result;
     }
 
-    function applyBindingsToNodeInternal(node, sourceBindings, bindingContext, bindingContextMayDifferFromDomParentElement) {
+    function applyBindingsToNodepublic(node, sourceBindings, bindingContext, bindingContextMayDifferFromDomParentElement) {
         // Prevent multiple applyBindings calls for the same node, except when a binding value is specified
         var alreadyBound = ko.utils.domData.get(node, boundElementDomDataKey);
         if (!sourceBindings) {
@@ -3418,7 +3418,7 @@ ko.exportSymbol('bindingProvider', ko.bindingProvider);
     ko.applyBindingAccessorsToNode = function (node, bindings, viewModelOrBindingContext) {
         if (node.nodeType === 1) // If it's an element, workaround IE <= 8 HTML parsing weirdness
             ko.virtualElements.normaliseVirtualElementDomStructure(node);
-        return applyBindingsToNodeInternal(node, bindings, getBindingContext(viewModelOrBindingContext), true);
+        return applyBindingsToNodepublic(node, bindings, getBindingContext(viewModelOrBindingContext), true);
     };
 
     ko.applyBindingsToNode = function (node, bindings, viewModelOrBindingContext) {
@@ -3428,7 +3428,7 @@ ko.exportSymbol('bindingProvider', ko.bindingProvider);
 
     ko.applyBindingsToDescendants = function(viewModelOrBindingContext, rootNode) {
         if (rootNode.nodeType === 1 || rootNode.nodeType === 8)
-            applyBindingsToDescendantsInternal(getBindingContext(viewModelOrBindingContext), rootNode, true);
+            applyBindingsToDescendantspublic(getBindingContext(viewModelOrBindingContext), rootNode, true);
     };
 
     ko.applyBindings = function (viewModelOrBindingContext, rootNode) {
@@ -3441,7 +3441,7 @@ ko.exportSymbol('bindingProvider', ko.bindingProvider);
             throw new Error("ko.applyBindings: first parameter should be your view model; second parameter should be a DOM node");
         rootNode = rootNode || window.document.body; // Make "rootNode" parameter optional
 
-        applyBindingsToNodeAndDescendantsInternal(getBindingContext(viewModelOrBindingContext), rootNode, true);
+        applyBindingsToNodeAndDescendantspublic(getBindingContext(viewModelOrBindingContext), rootNode, true);
     };
 
     // Retrieving binding context from arbitrary nodes
@@ -5850,7 +5850,7 @@ ko.exportSymbol('nativeTemplateEngine', ko.nativeTemplateEngine);
         // Detect which version of jquery-tmpl you're using. Unfortunately jquery-tmpl
         // doesn't expose a version number, so we have to infer it.
         // Note that as of Knockout 1.3, we only support jQuery.tmpl 1.0.0pre and later,
-        // which KO internally refers to as version "2", so older versions are no longer detected.
+        // which KO publicly refers to as version "2", so older versions are no longer detected.
         var jQueryTmplVersion = this.jQueryTmplVersion = (function() {
             if (!jQueryInstance || !(jQueryInstance['tmpl']))
                 return 0;
