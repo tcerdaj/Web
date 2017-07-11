@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JehovaJireh.Core.Entities
 {
-	public class DonationDetails: EntityBase<int>
+	public class DonationDetails: EntityBase<Guid>
 	{
 		public virtual int Index { get; set; }
 		public virtual Donation Donation { get; set; }

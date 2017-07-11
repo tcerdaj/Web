@@ -37,6 +37,7 @@ namespace JehovaJireh.Core.EntitiesDto
 		public virtual bool NeedToBeVisited { get; set; }
 		public virtual string Comments { get; set; }
 		public virtual DateTimeOffset LockoutEndDate { get; set; }
+
 		#endregion
 	}
 }

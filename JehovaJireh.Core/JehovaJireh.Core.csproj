@@ -109,6 +109,7 @@
     <Compile Include="Entities\IEntityTimestamp.cs" />
     <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="IRepositories\IDonationRepository.cs" />
     <Compile Include="IRepositories\IImageService.cs" />
     <Compile Include="IRepositories\IRepository.cs" />
     <Compile Include="IRepositories\IUnitOfWork.cs" />

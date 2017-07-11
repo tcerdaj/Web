@@ -44,9 +44,12 @@ namespace JehovaJireh.Data.Mappings
 			Map(x => x.Comments);
 			Map(x => x.CreatedOn);
 			Map(x => x.ModifiedOn);
-			Map(x => x.CreatedBy);
-			Map(x => x.ModifiedBy);
-
+			References(x => x.CreatedBy)
+				.Column("CreatedBy")
+				.ForeignKey();
+			References(x => x.ModifiedBy)
+				.Column("ModifiedBy")
+				.ForeignKey();
 		}
 	}
 
@@ -68,8 +71,31 @@ namespace JehovaJireh.Data.Mappings
 			Map(x => x.DonationStatus);
 			Map(x => x.CreatedOn);
 			Map(x => x.ModifiedOn);
-			Map(x => x.CreatedBy);
-			Map(x => x.ModifiedBy);
+			References(x => x.CreatedBy)
+				.Column("CreatedBy")
+				.ForeignKey();
+			References(x => x.ModifiedBy)
+				.Column("ModifiedBy")
+				.ForeignKey();
+		}
+	}
+
+	public class DonationDetailMap : ClassMap<DonationDetails>
+	{
+		public DonationDetailMap()
+		{
+			Table("DonationDetails");
+			Id(x => x.Id)
+				.Column("ItemId")
+				.GeneratedBy.Guid();
+			References(x => x.Donation)
+				.Column("DonationId")
+				.ForeignKey();
+			Map(x => x.Index);
+			Map(x => x.ItemType);
+			Map(x => x.ItemName);
+			Map(x => x.ImageUrl);
+			Map(x => x.DonationStatus);
 		}
 	}
 }

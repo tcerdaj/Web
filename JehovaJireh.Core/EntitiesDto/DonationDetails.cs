@@ -7,7 +7,7 @@ using JehovaJireh.Core.Entities;
 
 namespace JehovaJireh.Core.EntitiesDto
 {
-	public class DonationDetailsDto : EntityBase<int>
+	public class DonationDetailsDto : EntityBase<Guid>
 	{
 		public virtual int Index { get; set; }
 		public virtual DonationDto Donation { get; set; }

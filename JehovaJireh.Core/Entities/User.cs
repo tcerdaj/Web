@@ -47,6 +47,7 @@ namespace JehovaJireh.Core.Entities
 		public virtual DateTimeOffset LockoutEndDate { get; set; }
 		public virtual IQueryable<Role> Roles { get; set; }
 
+
 		string IUser<string>.Id
 		{
 			get { return this.Id.ToString(); }
