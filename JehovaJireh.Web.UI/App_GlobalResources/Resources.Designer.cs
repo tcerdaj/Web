@@ -358,6 +358,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Created On.
+        /// </summary>
+        public static string CreatedOn {
+            get {
+                return ResourceManager.GetString("CreatedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date Invalid.
         /// </summary>
         public static string DateInvalid {
@@ -570,6 +579,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         public static string IsMoney {
             get {
                 return ResourceManager.GetString("IsMoney", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Name.
+        /// </summary>
+        public static string ItemName {
+            get {
+                return ResourceManager.GetString("ItemName", resourceCulture);
             }
         }
         
@@ -844,6 +862,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Welcome!!! Use a local account to log in..
+        /// </summary>
+        public static string UserAlreadyExists {
+            get {
+                return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User Name.
         /// </summary>
         public static string UserName {
@@ -871,11 +898,29 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not a member yet? You can register here..
+        /// </summary>
+        public static string UserNoRegisterYet {
+            get {
+                return ResourceManager.GetString("UserNoRegisterYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to VIew Donations.
         /// </summary>
         public static string ViewDonations {
             get {
                 return ResourceManager.GetString("ViewDonations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Want this.
+        /// </summary>
+        public static string WantThis {
+            get {
+                return ResourceManager.GetString("WantThis", resourceCulture);
             }
         }
         

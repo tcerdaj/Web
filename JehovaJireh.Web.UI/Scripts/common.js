@@ -31,3 +31,6 @@ function eraseCookie(name) {
 		createCookie(name, "", -1);
 }
 
+function getBaseUrl() {
+	return window.location.host === "localhost" ? "http://localhost:58095/" : "http://jehovajirehwebapi.cloudapp.net/";
+}

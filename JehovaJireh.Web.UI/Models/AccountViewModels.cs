@@ -50,20 +50,24 @@ namespace JehovaJireh.Web.UI.Models
 
     public class LoginViewModel
     {
-        
-        [Display(Name = "Email")]
-        [EmailAddress]
+
+		[Display(Name = "Email", ResourceType = typeof(Resources))]
+		[EmailAddress]
         public string Email { get; set; }
 
-		[Required]
-		[Display(Name = "User Name")]
+		[Required(ErrorMessageResourceType = typeof(Resources),
+			  ErrorMessageResourceName = "UserNameRequired")]
+		[Display(Name = "UserName", ResourceType = typeof(Resources))]
 		public string UserName { get; set; }
 
-
-		[Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
+		[Required(ErrorMessageResourceType = typeof(Resources),
+			  ErrorMessageResourceName = "PasswordRequired")]
+		[StringLength(100, ErrorMessageResourceType = typeof(Resources),
+			  ErrorMessageResourceName = "PasswordLong", MinimumLength = 6)]
+		[DataType(DataType.Password, ErrorMessageResourceType = typeof(Resources),
+			  ErrorMessageResourceName = "PasswordInvalid")]
+		[Display(Name = "PasswordHash", ResourceType = typeof(Resources))]
+		public string Password { get; set; }
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }

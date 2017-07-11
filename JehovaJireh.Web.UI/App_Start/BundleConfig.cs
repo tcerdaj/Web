@@ -53,6 +53,22 @@ namespace JehovaJireh.Web.UI
 					"~/Scripts/KOViewModel/AccountViewModel/RegisterInit.js"
 			   ));
 
+			bundles.Add(new StyleBundle("~/bundles/kendo-css").Include(
+					 "~/styles/kendo.common.min.css",
+					 "~/styles/kendo.default.min.css",
+					 "~/styles/kendo.mobile.all.min.css"
+					 ));
+
+			bundles.Add(new ScriptBundle("~/bundles/kendo").Include(
+						"~/js/kendo.all.min.js",
+						"~/js/kendo.timezones.min.js",
+						"~/js/pako_deflate.min.js"
+						));
+
+			bundles.Add(new ScriptBundle("~/bundles/moment").Include(
+					  "~/Scripts/moment.js",
+					  "~/Scripts/moment-timezone.min.js"
+					  ));
 		}
 	}
 }

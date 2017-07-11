@@ -9,8 +9,10 @@ namespace JehovaJireh.Web.UI.Controllers
 {
     public class DonationController : Controller
     {
-        // GET: Donation list
-        public ActionResult Index()
+		// GET: Donation list
+		
+
+		public ActionResult Index()
         {
 			//TODO: 
 			//Query donations
@@ -27,6 +29,7 @@ namespace JehovaJireh.Web.UI.Controllers
 			return View();
 		}
 
+		[HttpPost]
 		public ActionResult MakeADonation(DonationViewModels model)
 		{
 			return View();
@@ -38,6 +41,7 @@ namespace JehovaJireh.Web.UI.Controllers
 			return View();
 		}
 
+		[HttpPost]
 		public ActionResult MakeNewRequest(RequestViewModels model)
 		{
 			return View();

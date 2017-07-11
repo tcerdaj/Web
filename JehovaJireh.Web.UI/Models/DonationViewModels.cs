@@ -35,6 +35,9 @@ namespace JehovaJireh.Web.UI.Models
 		[DataType(DataType.Date, ErrorMessage = null, ErrorMessageResourceName = "DateInvalid", ErrorMessageResourceType = typeof(Resources))]
 		public DateTime ExpireOn { get; set; }
 
+		[Display(Name = "CreatedOn", ResourceType = typeof(Resources))]
+		public DateTime CreatedOn { get; set; }
+
 		[Display(Name = "DonationStatus", ResourceType = typeof(Resources))]
 		public DonationStatus DonationStatus { get; set; }
 
@@ -62,6 +65,9 @@ namespace JehovaJireh.Web.UI.Models
 
 		[Display(Name = "DonationStatus", ResourceType = typeof(Resources))]
 		public  DonationStatus DonationStatus { get; set; }
+
+		[Display(Name = "WantThis", ResourceType = typeof(Resources))]
+		public bool WantThis { get; set; }
 	}
 
 	public class RequestViewModels

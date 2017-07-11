@@ -405,4 +405,19 @@
   <data name="Donations" xml:space="preserve">
     <value>Donaciones</value>
   </data>
+  <data name="CreatedOn" xml:space="preserve">
+    <value>Fecha Creacion</value>
+  </data>
+  <data name="ItemName" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="WantThis" xml:space="preserve">
+    <value>Necesito este</value>
+  </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>Bienvenido!! Si ya tienes una cuenta solo tienes que poner tu usuario y contraseña debajo.</value>
+  </data>
+  <data name="UserNoRegisterYet" xml:space="preserve">
+    <value>No eres un usuario aun? puedes registrarte aqui.</value>
+  </data>
 </root>
