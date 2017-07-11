@@ -17,7 +17,9 @@ namespace JehovaJireh.Infrastructure.Installers
 		{
 			container.Register(
 						        Component.For<IUserRepository>()
-								.ImplementedBy<UserRepository>()
+								.ImplementedBy<UserRepository>(),
+								Component.For<IDonationRepository>()
+								.ImplementedBy<DonationRepository>()
 							);
 		}
 	}

@@ -378,8 +378,8 @@ namespace JehovaJireh.Web.Services.Areas.HelpPage
             try
             {
                 object parsedJson = JsonConvert.DeserializeObject(str);
-                return JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
-            }
+				return JsonConvert.SerializeObject(parsedJson, Formatting.Indented, new JsonSerializerSettings{	PreserveReferencesHandling = PreserveReferencesHandling.Objects});
+			}
             catch
             {
                 // can't parse JSON, return the original string

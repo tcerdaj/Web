@@ -84,7 +84,7 @@ namespace JehovaJireh.Core.Entities
 
 		public virtual string ToJson()
 		{
-			return JsonConvert.SerializeObject(this);
+			return JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects });
 		}
 		#endregion
 	}

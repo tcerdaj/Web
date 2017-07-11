@@ -29,6 +29,12 @@ namespace JehovaJireh.Web.Services
 			//Unhandled exceptions per controller
 			config.Filters.Add(new ValidationExceptionFilterAttribute());
 
+			//config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+			config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = 
+				Newtonsoft.Json.ReferenceLoopHandling.Serialize;
+			config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = 
+				Newtonsoft.Json.PreserveReferencesHandling.Objects;
+
 			//Remove Existing Handler and add custom
 			config.Services.Replace(typeof(IExceptionHandler), new OopsExceptionHandler());
 
