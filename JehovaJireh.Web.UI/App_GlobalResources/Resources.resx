@@ -420,4 +420,25 @@
   <data name="UserNoRegisterYet" xml:space="preserve">
     <value>Not a member yet? You can register here.</value>
   </data>
+  <data name="AddImagesPopup" xml:space="preserve">
+    <value>Add Images</value>
+  </data>
+  <data name="ClickHereToAddImages" xml:space="preserve">
+    <value>Add images</value>
+  </data>
+  <data name="ItemLine" xml:space="preserve">
+    <value>Line</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="AddImage" xml:space="preserve">
+    <value>Add Image</value>
+  </data>
+  <data name="AddImageInstructions" xml:space="preserve">
+    <value>Please click in the green button to add your images.</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>Add item</value>
+  </data>
 </root>

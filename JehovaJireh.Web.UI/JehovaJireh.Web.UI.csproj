@@ -1921,6 +1921,8 @@
     <Content Include="Scripts\knockstrap.min.js" />
     <Content Include="Scripts\KOViewModel\AccountViewModel\RegisterInit.js" />
     <Content Include="Scripts\KOViewModel\AccountViewModel\RegisterViewModel.js" />
+    <Content Include="Scripts\KOViewModel\DonationVIewModel\MakeDonationInit.js" />
+    <Content Include="Scripts\KOViewModel\DonationVIewModel\MakeDonationViewModel.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment-timezone.min.js" />
     <Content Include="Scripts\moment.js" />

@@ -6,6 +6,7 @@ using System.Web;
 using JehovaJireh.Core.Entities;
 using JehovaJireh.Web.UI.App_GlobalResources;
 
+
 namespace JehovaJireh.Web.UI.Models
 {
 	public class DonationViewModels
@@ -43,7 +44,16 @@ namespace JehovaJireh.Web.UI.Models
 
 		[Display(Name = "DonationDetails", ResourceType = typeof(Resources))]
 		public ICollection<DonationDetailsViewModels> DonationDetails { get; set; }
-
+		public List<string> ItemTypes
+		{
+			get
+			{
+				return Enum.GetValues(typeof(DonationType))
+					.Cast<DonationType>()
+					.Select(x => x.ToString())
+					.ToList();
+			}
+		}
 	}
 
 	public class DonationDetailsViewModels
@@ -55,6 +65,8 @@ namespace JehovaJireh.Web.UI.Models
 		[Display(Name = "ItemType", ResourceType = typeof(Resources))]
 		public  DonationType ItemType { get; set; }
 
+	
+
 		[Display(Name = "ItemName", ResourceType = typeof(Resources))]
 		[StringLength(50, ErrorMessageResourceType = typeof(Resources),
 			  ErrorMessageResourceName = "C50Long")]
@@ -63,11 +75,17 @@ namespace JehovaJireh.Web.UI.Models
 		[Display(Name = "ImageUrl", ResourceType = typeof(Resources))]
 		public  string ImageUrl { get; set; }
 
+		public HttpPostedFileBase FileData { get; set; }
+
+		public IEnumerable<HttpPostedFileBase> MultiFileData { get; set; }
+
 		[Display(Name = "DonationStatus", ResourceType = typeof(Resources))]
 		public  DonationStatus DonationStatus { get; set; }
 
 		[Display(Name = "WantThis", ResourceType = typeof(Resources))]
 		public bool WantThis { get; set; }
+
+
 	}
 
 	public class RequestViewModels

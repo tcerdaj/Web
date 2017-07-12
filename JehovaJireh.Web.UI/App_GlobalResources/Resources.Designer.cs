@@ -88,6 +88,42 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Image.
+        /// </summary>
+        public static string AddImage {
+            get {
+                return ResourceManager.GetString("AddImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please click in the green button to add your images..
+        /// </summary>
+        public static string AddImageInstructions {
+            get {
+                return ResourceManager.GetString("AddImageInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Images.
+        /// </summary>
+        public static string AddImagesPopup {
+            get {
+                return ResourceManager.GetString("AddImagesPopup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add item.
+        /// </summary>
+        public static string AddItem {
+            get {
+                return ResourceManager.GetString("AddItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Additional Info.
         /// </summary>
         public static string AdditionalInfo {
@@ -300,6 +336,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         public static string CityLong {
             get {
                 return ResourceManager.GetString("CityLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add images.
+        /// </summary>
+        public static string ClickHereToAddImages {
+            get {
+                return ResourceManager.GetString("ClickHereToAddImages", resourceCulture);
             }
         }
         
@@ -583,6 +628,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Line.
+        /// </summary>
+        public static string ItemLine {
+            get {
+                return ResourceManager.GetString("ItemLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Item Name.
         /// </summary>
         public static string ItemName {
@@ -795,6 +849,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         public static string Register {
             get {
                 return ResourceManager.GetString("Register", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
             }
         }
         

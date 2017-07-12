@@ -3,10 +3,10 @@
 @{
     ViewBag.Title = Resources.Resources.MakeADonation;
 }
+<div id="window" style="display:none"></div>
+<h2>@ViewBag.Title</h2>
 
-<h2>MakeADonation</h2>
-
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("MakeADonation", "Donation", FormMethod.Post, new { @class = "page-make-donation form-horizontal", role = "form", @enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     
@@ -56,9 +56,74 @@
             </div>
         </div>
 
+		<div class="donation-details">
+			<h2>@Resources.Resources.DonationDetails</h2>
+			<table width='100%'>
+				<thead>
+					<tr>
+						<th width='10%'>@Resources.Resources.ItemLine</th>
+						<th width='15%'>@Resources.Resources.ItemType</th>
+						<th width='20%'>@Resources.Resources.ItemName</th>
+						<th width='10%'> </th>
+					</tr>
+				</thead>
+				<tbody data-bind='foreach: DonationDetails'>
+					<tr>
+						<td>
+							<span data-bind="text: ($index() + 1)"> </span>
+						</td>
+						<td>
+							<select class="form-control" data-bind='options: ItemTypes, optionsCaption: "Select...", value: ItemType'> </select>
+						</td>
+						<td>
+							<input class="form-control text-box single-line" data-bind='visible: ItemType, value: ItemName, valueUpdate: "afterkeydown"' />
+						</td>
+						<td>
+							<a href='#' data-bind='click: $parent.removeLine'>@Resources.Resources.Remove</a>
+						</td>
+					</tr>
+					<tr data-bind='visible: ItemType'>
+						<td colspan="4">
+							<h2>@Resources.Resources.AddImage</h2>
+							<p>@Resources.Resources.AddImageInstructions</p>
+							<div class="well" data-bind="fileDrag: MultiFileData">
+								<div class="form-group row">
+									<div class="col-md-6">
+										<!-- ko foreach: {data: MultiFileData().dataURLArray, as: 'dataURL'} -->
+										<img style="height: 100px; margin: 5px;" class="img-rounded  thumb" data-bind="attr: { src: dataURL }, visible: dataURL">
+										<!-- /ko -->
+										<div data-bind="ifnot: fileData().dataURL">
+											<label class="drag-label">@Resources.Resources.DragFileHere</label>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<input type="file" name="MultiFileData" multiple data-bind="fileInput: MultiFileData, customFileInput: {
+																				  buttonClass: 'btn btn-success',
+																				  fileNameClass: 'disabled form-control',
+																				  onClear: onClear,
+																				}" accept="image/*">
+									</div>
+								</div>
+							</div>
+
+
+							@*<div class="slideshows-placeholder">
+								<!-- slideshows will be inserted here -->
+							</div>
+							<div class="categorybuttons-placeholder">
+								<!-- category buttons will be inserted here -->
+							</div>
+							<span data-bind='visible: ItemType' id="undo" class="k-button">@Resources.Resources.ClickHereToAddImages</span>*@
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<button style="margin-top: 10px;" class="btn btn-default dropdown-toggle" data-bind='click: addLine'>@Resources.Resources.AddItem</button>
+		</div>
+		<hr />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="@Resources.Resources.Create" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -67,3 +132,77 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/areYouSure")
+	@Scripts.Render("~/bundles/knockout")
+	@Scripts.Render("~/bundles/donation/donationviewmodel")
+    @Styles.Render("~/bundles/kendo-css")
+    @Scripts.Render("~/bundles/kendo")
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			var data = function () { return @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)); }() || {};
+			Init(data);
+
+			var myWindow = $("#window"), undo = $("#undo");
+
+			function onClose() {
+				undo.fadeIn();
+			}
+
+			myWindow.kendoWindow({
+				width: "615px",
+				title: "@Resources.Resources.AddImagesPopup",
+				//content: "../content/web/window/ajax/ajaxContent.html",
+				close: onClose
+			});
+
+			undo.click(function () {
+				myWindow.data("kendoWindow").open();
+				undo.fadeOut();
+			});
+
+			$('.page-register.form-horizontal').areYouSure(
+				{
+					message: "Los cambios realizados aun no se han guardado."
+				}
+			);
+
+			$("input[name = 'culture']").click(function () {
+				$(this).parents("form").submit(); // post form
+			});
+
+        });
+	</script>
+	<style>
+		#undo {
+			text-align: center;
+			white-space: nowrap;
+			border-width: 1px;
+			border-style: solid;
+			padding: 2em;
+			cursor: pointer;
+		}
+		 
+		@@media screen and (max-width: 1023px) {
+                    div.k-window {
+                        display: none !important;
+                    }
+           }
+
+		tr:nth-child(even) {
+			background: #CCC
+		}
+
+		tr:nth-child(odd) {
+			background: #FFF
+		}
+		.donation-details {
+			border: 1px solid #cbcbd2;
+			padding:20px;
+			border-radius:20px;
+		}
+	</style>
+}

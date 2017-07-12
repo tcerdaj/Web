@@ -24,16 +24,8 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				@Html.MvcSiteMap().Menu("MenuHelperModel")
-				@*<ul class="nav navbar-nav">
-					<li>@Html.ActionLink(Resources.Home, "Index", "Home")</li>
-					<li>@Html.ActionLink(Resources.About, "About", "Home")</li>
-					<li>@Html.ActionLink(Resources.Contact, "Index", "Donations")</li>
-					<li>@Html.ActionLink(Resources.Contact, "Contact", "Home")</li>
-				</ul>*@
 				@Html.Partial("_LoginPartial")
-				
 				@Html.Partial("_CulturePartial")
-				
 			</div>
 		</div>
 	</div>

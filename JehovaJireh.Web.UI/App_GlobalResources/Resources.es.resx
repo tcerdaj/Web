@@ -420,4 +420,25 @@
   <data name="UserNoRegisterYet" xml:space="preserve">
     <value>No eres un usuario aun? puedes registrarte aqui.</value>
   </data>
+  <data name="AddImagesPopup" xml:space="preserve">
+    <value>Agregar Images/Fotos para este item o articulo.</value>
+  </data>
+  <data name="ClickHereToAddImages" xml:space="preserve">
+    <value>Agregar Imagenes</value>
+  </data>
+  <data name="ItemLine" xml:space="preserve">
+    <value>Linea</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remover</value>
+  </data>
+  <data name="AddImage" xml:space="preserve">
+    <value>Agregar Imagen</value>
+  </data>
+  <data name="AddImageInstructions" xml:space="preserve">
+    <value>Por favor haga click in el boton verde para agregar sus imagenes.</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>Agregar Item</value>
+  </data>
 </root>

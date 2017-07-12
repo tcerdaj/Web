@@ -26,7 +26,7 @@ namespace JehovaJireh.Web.UI.Controllers
 		public ActionResult MakeADonation()
 		{
 			//TODO: Maybe show the last 5 donations list
-			return View();
+			return View(new DonationViewModels());
 		}
 
 		[HttpPost]
@@ -38,7 +38,7 @@ namespace JehovaJireh.Web.UI.Controllers
 		[Authorize]
 		public ActionResult MakeNewRequest()
 		{
-			return View();
+			return View(new RequestViewModels());
 		}
 
 		[HttpPost]

@@ -45,13 +45,6 @@ namespace JehovaJireh.Web.UI
 			bundles.Add(new ScriptBundle("~/bundles/areYouSure").Include(
 			   "~/Scripts/jquery.are-you-sure.js"
 			   ));
-			
-			//Account/Register
-			bundles.Add(new ScriptBundle("~/bundles/account/registerviewmodel")
-			   .Include(
-					"~/Scripts/KOViewModel/AccountViewModel/RegisterViewModel.js",
-					"~/Scripts/KOViewModel/AccountViewModel/RegisterInit.js"
-			   ));
 
 			bundles.Add(new StyleBundle("~/bundles/kendo-css").Include(
 					 "~/styles/kendo.common.min.css",
@@ -69,6 +62,23 @@ namespace JehovaJireh.Web.UI
 					  "~/Scripts/moment.js",
 					  "~/Scripts/moment-timezone.min.js"
 					  ));
+
+			#region ViewModels
+			
+			//Account/Register
+			bundles.Add(new ScriptBundle("~/bundles/account/registerviewmodel")
+			   .Include(
+					"~/Scripts/KOViewModel/AccountViewModel/RegisterViewModel.js",
+					"~/Scripts/KOViewModel/AccountViewModel/RegisterInit.js"
+			   ));
+			
+			//Donation/MakeDonation
+			bundles.Add(new ScriptBundle("~/bundles/donation/donationviewmodel")
+			   .Include(
+					"~/Scripts/KOViewModel/DonationVIewModel/MakeDonationViewModel.js",
+					"~/Scripts/KOViewModel/DonationVIewModel/MakeDonationInit.js"
+			   ));
+			#endregion
 		}
 	}
 }
