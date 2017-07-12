@@ -11,11 +11,12 @@ var itemTypes = [];
 var DonationLine = function () {
 	var self = this;
 	self.Index = ko.observable();
-	self.ItemType = ko.observable();
-	self.ItemName = ko.observable();
+	self.ItemType = ko.observable().extend({ required: {message: 'Donation Type is required' } });;
+	self.ItemName = ko.observable().extend({ required: { message: 'Item Name is required' } });
 	self.ImageUrl = ko.observable();
 	self.DonationStatus = ko.observable(0);
 	self.WantThis = ko.observable(false);
+	
 	self.fileData = ko.observable({
 		dataURL: ko.observable(),
 		// base64String: ko.observable(),
@@ -30,6 +31,10 @@ var DonationLine = function () {
 			imageFile.clear && imageFile.clear();
 		}
 	};
+
+	self.errors = ko.validation.group(self);
+
+	
 }
 
 
@@ -57,6 +62,7 @@ var MakeDonationViewModel = function (data) {
 		self.ExpireOn = ko.observable(data.ExpireOn || '');
 		self.ItemTypes = ko.observableArray(data.ItemTypes);
 		self.DonationDetails = ko.observableArray([new DonationLine()]);
+		self.errors = ko.validation.group(self);
 		//========**Computed properties**=============
 
 
@@ -70,11 +76,27 @@ var MakeDonationViewModel = function (data) {
 
 		//========** Events **=============
 		// Operations
-		self.addLine = function () { self.DonationDetails.push(new DonationLine()) };
+		self.addLine = function () {
+
+			if (this.errors().length === 0) {
+				self.DonationDetails.push(new DonationLine())
+			}
+			else {
+				alert('Please check your submission.');
+
+				if (this.errors().length > 0)
+					this.errors.showAllMessages(true);
+
+				this.errors().forEach(function (data) {
+					alert(data.error);
+				});
+			}
+		};
 		self.removeLine = function (line) { self.DonationDetails.remove(line) };
+
+		
 	}
 
-	self.errors = ko.validation.group(this),
 
 		self.submit = function () {
 			//Ajax call to Insert the Employee
