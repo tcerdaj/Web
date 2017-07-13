@@ -1895,6 +1895,13 @@
     <Content Include="Kendo\kendo.silver.mobile.min.css.map" />
     <Content Include="Kendo\kendo.uniform.min.css.map" />
     <Content Include="Kendo\kendo.uniform.mobile.min.css.map" />
+    <Content Include="webcam\jquery-webcam.js" />
+    <Content Include="webcam\jquery-webcam.min.js" />
+    <Content Include="webcam\jquery.webcam.js" />
+    <Content Include="webcam\jquery.webcam.min.js" />
+    <Content Include="webcam\jscam.swf" />
+    <Content Include="webcam\jscam_canvas_only.swf" />
+    <Content Include="webcam\src\jscam.xml" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -2420,6 +2427,13 @@
     <Content Include="styles\kendo.silver.mobile.min.css.map" />
     <Content Include="styles\kendo.uniform.min.css.map" />
     <Content Include="styles\kendo.uniform.mobile.min.css.map" />
+    <Content Include="webcam\bower.json" />
+    <Content Include="webcam\Makefile" />
+    <Content Include="webcam\README.md" />
+    <Content Include="webcam\src\BitString.as" />
+    <Content Include="webcam\src\JPGEncoder.as" />
+    <Content Include="webcam\src\jscam.as" />
+    <Content Include="webcam\webcam.jquery.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
