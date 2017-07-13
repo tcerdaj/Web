@@ -430,6 +430,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Descripcion is required.
+        /// </summary>
+        public static string DescriptionRequired {
+            get {
+                return ResourceManager.GetString("DescriptionRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Donation Details.
         /// </summary>
         public static string DonationDetails {

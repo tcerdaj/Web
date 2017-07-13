@@ -441,4 +441,7 @@
   <data name="AddItem" xml:space="preserve">
     <value>Agregar Item</value>
   </data>
+  <data name="DescriptionRequired" xml:space="preserve">
+    <value>Descripcion es requerido</value>
+  </data>
 </root>

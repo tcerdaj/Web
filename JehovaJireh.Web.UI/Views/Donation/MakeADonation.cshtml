@@ -17,7 +17,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @data_bind ="value:Title"} })
                 @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -25,15 +25,15 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @data_bind = "value:Description" } })
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" data-bind="if:IsMoney()">
             @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @type = "number", min = "0.00", max = "10000.00", step = "0.01", @data_bind="value:Amount" } })
                 @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -42,7 +42,7 @@
             @Html.LabelFor(model => model.IsMoney, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="checkbox">
-                    @Html.EditorFor(model => model.IsMoney)
+                    @Html.CheckBoxFor(model => model.IsMoney,new { @data_bind= "checked:IsMoney,event: { click: onIsMoneyChange($data) }" })
                     @Html.ValidationMessageFor(model => model.IsMoney, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -51,12 +51,12 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ExpireOn, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ExpireOn, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.ExpireOn, new { htmlAttributes = new { @class = "form-control",@type="date",@data_bind= "date:ExpireOn,value:ExpireOn,text:ExpireOn" } })
                 @Html.ValidationMessageFor(model => model.ExpireOn, "", new { @class = "text-danger" })
             </div>
         </div>
 
-		<div class="donation-details">
+		<div class="donation-details" data-bind="visible:Title() && Description()">
 			<h2>@Resources.Resources.DonationDetails</h2>
 			<table width='100%'>
 				<thead>
@@ -64,7 +64,7 @@
 						<th width='10%'><label class="control-label col-md-2">@Resources.Resources.ItemLine</label></th>
 						<th width='15%'><label class="control-label col-md-2">@Resources.Resources.ItemType</label></th>
 						<th width='20%'><label class="control-label col-md-2">@Resources.Resources.ItemName</label></th>
-						<th width='10%'> </th>
+						<th width='20%'> </th>
 					</tr>
 				</thead>
 				<tbody data-bind='foreach: DonationDetails'>
@@ -78,12 +78,14 @@
 						<td>
 							<input class="form-control text-box single-line" data-bind='visible: ItemType, value: ItemName, valueUpdate: "afterkeydown"' />
 						</td>
-						<td>
-							<a href='#' style="margin-top: 10px;" class="btn btn-default dropdown-toggle" data-bind='click: $parent.addLine'>@Resources.Resources.AddItem</a>
-							<a href='#' data-bind='click: $parent.removeLine'>@Resources.Resources.Remove</a>
+						<td >
+							<div data-bind='if:ItemName() && ItemType()'>
+								<a role="button" class="k-button k-button-icontext k-grid-add" href='#' data-bind='click: $parent.addLine,visible:ShowAddButton'><span class="k-icon k-i-plus"></span>@Resources.Resources.AddItem</a>
+								<a role="button" style="margin-left:10px;" class="k-button k-button-icontext k-grid-delete" href='#' data-bind='click: $parent.removeLine,visible:!ShowAddButton()'><span class="k-icon k-i-close"></span>@Resources.Resources.Remove</a>
+							</div>
 						</td>
 					</tr>
-					<tr style="display:none" data-bind='visible: ItemType'>
+					<tr style="display:none" data-bind='visible:ItemName() && ItemType()'>
 						<td colspan="4">
 							<h3>@Resources.Resources.AddImage</h3>
 							<p>@Resources.Resources.AddImageInstructions</p>
@@ -129,6 +131,7 @@
 	@Scripts.Render("~/bundles/jqueryval")
 	@Scripts.Render("~/bundles/areYouSure")
 	@Scripts.Render("~/bundles/knockout")
+	@Scripts.Render("~/bundles/moment")
 	@Scripts.Render("~/bundles/donation/donationviewmodel")
     @Styles.Render("~/bundles/kendo-css")
     @Scripts.Render("~/bundles/kendo")
@@ -169,15 +172,7 @@
         });
 	</script>
 	<style>
-		#undo {
-			text-align: center;
-			white-space: nowrap;
-			border-width: 1px;
-			border-style: solid;
-			padding: 2em;
-			cursor: pointer;
-		}
-		 
+				 
 		@@media screen and (max-width: 1023px) {
                     div.k-window {
                         display: none !important;
@@ -201,8 +196,10 @@
 		   padding:15px;
 		}
 
-			.donation-details .col-md-2 {
-				width: initial;
-			}
+		.donation-details .col-md-2 {
+			width: initial;
+		}
+
+
 	</style>
 }

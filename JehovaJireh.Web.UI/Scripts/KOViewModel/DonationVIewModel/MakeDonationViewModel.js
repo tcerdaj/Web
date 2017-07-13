@@ -16,7 +16,7 @@ var DonationLine = function () {
 	self.ImageUrl = ko.observable();
 	self.DonationStatus = ko.observable(0);
 	self.WantThis = ko.observable(false);
-	
+	self.ShowAddButton = ko.observable(true);
 	self.fileData = ko.observable({
 		dataURL: ko.observable(),
 		// base64String: ko.observable(),
@@ -33,8 +33,6 @@ var DonationLine = function () {
 	};
 
 	self.errors = ko.validation.group(self);
-
-	
 }
 
 
@@ -57,12 +55,17 @@ var MakeDonationViewModel = function (data) {
 		});
 
 		itemTypes = data.ItemTypes;
-		self.Amount = ko.observable(data.Amount || '');
+		self.Amount = ko.observable(data.Amount || 0.0).extend({ numeric: 2 });
 		self.IsMoney = ko.observable(data.IsMoney || false);
-		self.ExpireOn = ko.observable(data.ExpireOn || '');
+		self.ExpireOn = ko.observable(moment().add(3, 'M').format('YYYY-MM-DD'));
 		self.ItemTypes = ko.observableArray(data.ItemTypes);
 		self.DonationDetails = ko.observableArray([new DonationLine()]);
 		self.errors = ko.validation.group(self);
+		self.onIsMoneyChange = function () {
+			if (!this.IsMoney())
+				this.Amount('');
+		};
+		
 		//========**Computed properties**=============
 
 
@@ -79,6 +82,11 @@ var MakeDonationViewModel = function (data) {
 		self.addLine = function () {
 
 			if (this.errors().length === 0) {
+				var list = self.DonationDetails();
+				var index = list.length - 1;
+				var line = list[index];
+				line.Index(index);
+				line.ShowAddButton(false);
 				self.DonationDetails.push(new DonationLine())
 			}
 			else {

@@ -20,6 +20,9 @@ namespace JehovaJireh.Web.UI.Models
 			  ErrorMessageResourceName = "C50Long")]
 		public string Title { get; set; }
 
+
+		[Required(ErrorMessageResourceType = typeof(Resources),
+			  ErrorMessageResourceName = "DescriptionRequired")]
 		[Display(Name = "Description", ResourceType = typeof(Resources))]
 		[StringLength(180, ErrorMessageResourceType = typeof(Resources),
 			  ErrorMessageResourceName = "C180Long")]
@@ -32,15 +35,19 @@ namespace JehovaJireh.Web.UI.Models
 		[Display(Name = "IsMoney", ResourceType = typeof(Resources))]
 		public bool IsMoney { get; set; }
 
+
 		[Display(Name = "ExpireOn", ResourceType = typeof(Resources))]
 		[DataType(DataType.Date, ErrorMessage = null, ErrorMessageResourceName = "DateInvalid", ErrorMessageResourceType = typeof(Resources))]
-		public DateTime ExpireOn { get; set; }
+		public string ExpireOn { get; set; }
+
 
 		[Display(Name = "CreatedOn", ResourceType = typeof(Resources))]
 		public DateTime CreatedOn { get; set; }
 
+
 		[Display(Name = "DonationStatus", ResourceType = typeof(Resources))]
 		public DonationStatus DonationStatus { get; set; }
+
 
 		[Display(Name = "DonationDetails", ResourceType = typeof(Resources))]
 		public ICollection<DonationDetailsViewModels> DonationDetails { get; set; }
