@@ -20,6 +20,16 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="imagemodal-carousel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<div class="carousel-list"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div id="grid"></div>
 </div>
 
@@ -99,8 +109,8 @@
 
 <script>
 	$(document).ready(function () {
-		
-		
+
+
 
 		var element = $("#grid").kendoGrid({
 			dataSource: {
@@ -183,10 +193,62 @@
 			]
 		});
 
-		$('a[class="pop"]').on('click', function () {
-			$('.imagepreview').attr('src', $(this).find('img').attr('src'));
-			$('#imagemodal').modal('show');
-		});		
+		$('a[class="pop"]').on('click', function (e) {
+
+			var detailsGrid = $(".donation-details").data('kendoGrid');
+			var selectedItem = detailsGrid.dataItem(e.currentTarget.parentElement.closest('tr'));
+			if (selectedItem !== undefined) {
+				//	I need to add this CarouselOptions
+				var images = selectedItem.Images;
+
+				var htmlstring = '<div id= "myCarousel" class="carousel slide" data-ride="carousel" >'
+					+ '	<ol class="carousel-indicators">';
+				for (var i = 0; i < images.length; i++) {
+					if (i === 0)
+						htmlstring += '<li data-target="#myCarousel" data-slide-to="' + i + '" class="active"></li>';
+					else
+						htmlstring += '<li data-target="#myCarousel" data-slide-to="' + i + '"></li>';
+				}
+
+				htmlstring += '	</ol>';
+
+				htmlstring += '<div class="carousel-inner">';
+				for (var i = 0; i < images.length; i++) {
+					var image = images[i];
+
+					if (i === 0) {
+
+						htmlstring += '<div class="item active">';
+						htmlstring += '<img src="' + image.ImageUrl + '" alt="Image' + i + '">';
+					}
+					else {
+						htmlstring += '<div class="item">';
+						htmlstring += '<img class="imagepreview" style="width: 100%;" src="' + image.ImageUrl + '" alt="Image' + i + '">';
+					}
+
+					htmlstring += '</div>';
+				}
+
+				htmlstring += '	</div>';
+				htmlstring += '	  <a class="left carousel-control" href="#myCarousel" data-slide="prev">';
+				htmlstring += '		<span class="glyphicon glyphicon-chevron-left"></span>';
+				htmlstring += '		<span class="sr-only">Previous</span>';
+				htmlstring += '	</a>';
+				htmlstring += '	<a class="right carousel-control" href="#myCarousel" data-slide="next">';
+				htmlstring += '		<span class="glyphicon glyphicon-chevron-right"></span>';
+				htmlstring += '		<span class="sr-only">Next</span>';
+				htmlstring += '	</a>';
+				htmlstring += '</div>';
+				$('.carousel-list').empty();
+				$(htmlstring).appendTo($('.carousel-list'));
+				$('#imagemodal-carousel').modal('show');
+			}
+			else
+			{
+				$('.imagepreview').attr('src', $(this).find('img').attr('src'));
+				$('#imagemodal').modal('show');
+			}
+		});
 	}
 
 	function selectThisDonation() {
