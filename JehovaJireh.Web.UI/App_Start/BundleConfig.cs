@@ -36,7 +36,9 @@ namespace JehovaJireh.Web.UI
 				     "~/Scripts/knockout-{version}.js",
 				     "~/Scripts/knockout-{version}.debug.js",
 					 "~/Scripts/knockout.validation.debug.js",
-					 "~/Scripts/knockout-file-bindings.js"
+					 "~/Scripts/knockout-file-bindings.js",
+					 "~/Scripts/knockout.mapping-latest.debug.js",
+					 "~/Scripts/knockout.mapping-latest.js"
 					 ));
 
 			bundles.Add(new ScriptBundle("~/bundles/maskedinput").Include(

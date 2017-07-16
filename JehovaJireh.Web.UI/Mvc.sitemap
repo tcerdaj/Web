@@ -4,11 +4,11 @@
             xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
 
   <mvcSiteMapNode title="$resources:Resources,Home" controller="Home" action="Index">
-	  <mvcSiteMapNode title="$resources:Resources,Donations" controller="Donation" action="Index" clickable="true">
-		  <mvcSiteMapNode title="$resources:Resources,MakeADonation" controller="Donation" action="MakeADonation"  />
-		  <mvcSiteMapNode title="$resources:Resources,ViewDonations" controller="Donation" action="Index"  />
-		  <mvcSiteMapNode title="$resources:Resources,MakeNewRequest" controller="Donation" action="MakeNewRequest"  />
-		  <mvcSiteMapNode title="$resources:Resources,SchedulerDonation" controller="Donation" action="SchedulerDonation"  />
+	  <mvcSiteMapNode title="$resources:Resources,Donations" controller="Donations" action="Index" clickable="true">
+		  <mvcSiteMapNode title="$resources:Resources,MakeADonation" controller="Donations" action="MakeADonation"  />
+		  <mvcSiteMapNode title="$resources:Resources,ViewDonations" controller="Donations" action="Index"  />
+		  <mvcSiteMapNode title="$resources:Resources,MakeNewRequest" controller="Donations" action="MakeNewRequest"  />
+		  <mvcSiteMapNode title="$resources:Resources,SchedulerDonation" controller="Donations" action="SchedulerDonation"  />
 	  </mvcSiteMapNode>
 	  <mvcSiteMapNode title="$resources:Resources,Contact" controller="Home" action="Contact"/>
 	  <mvcSiteMapNode title="$resources:Resources,About" controller="Home" action="About"/>

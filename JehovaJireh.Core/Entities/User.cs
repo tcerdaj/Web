@@ -53,7 +53,6 @@ namespace JehovaJireh.Core.Entities
 			get { return this.Id.ToString(); }
 		}
 		#endregion
-
 		#region Methods
 		public virtual async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager)
 		{

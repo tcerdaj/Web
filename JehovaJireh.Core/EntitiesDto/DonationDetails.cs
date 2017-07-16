@@ -9,11 +9,16 @@ namespace JehovaJireh.Core.EntitiesDto
 {
 	public class DonationDetailsDto : EntityBase<Guid>
 	{
+		public DonationDetailsDto()
+		{
+			this.Images = new List<DonationImageDto>();
+		}
+
 		public virtual int Index { get; set; }
 		public virtual DonationDto Donation { get; set; }
 		public virtual DonationType ItemType { get; set; }
 		public virtual string ItemName { get; set; }
-		public virtual string ImageUrl { get; set; }
 		public virtual DonationStatus DonationStatus { get; set; }
+		public virtual ICollection<DonationImageDto> Images { get; set; }
 	}
 }

@@ -115,7 +115,7 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add item.
+        ///   Looks up a localized string similar to Add new item.
         /// </summary>
         public static string AddItem {
             get {
@@ -1002,6 +1002,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         public static string YourAccoutHasUpdated {
             get {
                 return ResourceManager.GetString("YourAccoutHasUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your Donation has ben created successfully..
+        /// </summary>
+        public static string YourDonationHasBenCreated {
+            get {
+                return ResourceManager.GetString("YourDonationHasBenCreated", resourceCulture);
             }
         }
         

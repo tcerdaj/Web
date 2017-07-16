@@ -439,9 +439,12 @@
     <value>Please click in the green button to add your images.</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add item</value>
+    <value>Add new item</value>
   </data>
   <data name="DescriptionRequired" xml:space="preserve">
     <value>Descripcion is required</value>
+  </data>
+  <data name="YourDonationHasBenCreated" xml:space="preserve">
+    <value>Your Donation has ben created successfully.</value>
   </data>
 </root>

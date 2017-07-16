@@ -439,9 +439,12 @@
     <value>Por favor haga click in el boton verde para agregar sus imagenes.</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Agregar Item</value>
+    <value>Agregar nuevo Item</value>
   </data>
   <data name="DescriptionRequired" xml:space="preserve">
     <value>Descripcion es requerido</value>
+  </data>
+  <data name="YourDonationHasBenCreated" xml:space="preserve">
+    <value>Su Donacion ha sido creada exitosamente.</value>
   </data>
 </root>

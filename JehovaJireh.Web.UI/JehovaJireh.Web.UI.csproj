@@ -219,12 +219,13 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\DonationController.cs" />
+    <Compile Include="Controllers\DonationsController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="CustomFilters\CultureFilter.cs" />
     <Compile Include="CustomIAttribute\CultureAwareControllerActivator.cs" />
+    <Compile Include="Extentions\FIleExptentions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -232,6 +233,7 @@
     <Compile Include="Helpers\CultureHelper.cs" />
     <Compile Include="Helpers\GravatarHelper.cs" />
     <Compile Include="Helpers\GravatarOptions.cs" />
+    <Compile Include="Helpers\MemoryFile.cs" />
     <Compile Include="Installers\ControllersInstaller.cs" />
     <Compile Include="Installers\ServicesInstaller.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -1895,6 +1897,12 @@
     <Content Include="Kendo\kendo.silver.mobile.min.css.map" />
     <Content Include="Kendo\kendo.uniform.min.css.map" />
     <Content Include="Kendo\kendo.uniform.mobile.min.css.map" />
+    <Content Include="Scripts\knockout-2.2.1.debug.js" />
+    <Content Include="Scripts\knockout-2.2.1.js" />
+    <Content Include="Scripts\knockout.mapping-latest.debug.js" />
+    <Content Include="Scripts\knockout.mapping-latest.js" />
+    <Content Include="Scripts\knockout.viewmodel.2.0.3.js" />
+    <Content Include="Scripts\knockout.viewmodel.2.0.3.min.js" />
     <Content Include="webcam\jquery-webcam.js" />
     <Content Include="webcam\jquery-webcam.min.js" />
     <Content Include="webcam\jquery.webcam.js" />
@@ -2325,10 +2333,10 @@
     <Content Include="Views\Shared\DisplayTemplates\MetaRobotsHelperModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MenuHelperModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\CanonicalHelperModel.cshtml" />
-    <Content Include="Views\Donation\Index.cshtml" />
-    <Content Include="Views\Donation\MakeADonation.cshtml" />
-    <Content Include="Views\Donation\MakeNewRequest.cshtml" />
-    <Content Include="Views\Donation\SchedulerDonation.cshtml" />
+    <Content Include="Views\Donations\Index.cshtml" />
+    <Content Include="Views\Donations\MakeADonation.cshtml" />
+    <Content Include="Views\Donations\MakeNewRequest.cshtml" />
+    <Content Include="Views\Donations\SchedulerDonation.cshtml" />
     <Content Include="styles\fonts\DejaVu\DejaVuSans-Bold.ttf" />
     <Content Include="styles\fonts\DejaVu\DejaVuSans-BoldOblique.ttf" />
     <Content Include="styles\fonts\DejaVu\DejaVuSans-ExtraLight.ttf" />

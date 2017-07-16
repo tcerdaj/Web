@@ -5,6 +5,7 @@
 }
 <div id="window" style="display:none"></div>
 <h2>@ViewBag.Title</h2>
+<p class="text-danger">@ViewBag.StatusMessage</p>
 
 @using (Html.BeginForm("MakeADonation", "Donation", FormMethod.Post, new { @class = "page-make-donation form-horizontal", role = "form", @enctype = "multipart/form-data" }))
 {
@@ -30,7 +31,7 @@
             </div>
         </div>
 
-        <div class="form-group" data-bind="if:IsMoney()">
+        <div class="form-group" data-bind="if:IsMoney()" style="display:none;">
             @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @type = "number", min = "0.00", max = "10000.00", step = "0.01", @data_bind="value:Amount" } })
@@ -56,9 +57,9 @@
             </div>
         </div>
 
-		<div class="donation-details" data-bind="visible:Title() && Description()">
+		<div class="donation-details" style="display:none;" data-bind="visible:Title() && Description()">
 			<h2>@Resources.Resources.DonationDetails</h2>
-			<table width='100%'>
+			<table width='100%' name="DonationDetails">
 				<thead>
 					<tr>
 						<th width='10%'><label class="control-label col-md-2">@Resources.Resources.ItemLine</label></th>
@@ -70,30 +71,30 @@
 				<tbody data-bind='foreach: DonationDetails'>
 					<tr>
 						<td>
-							<span data-bind="text: ($index() + 1)"> </span>
+							<span name="Index" data-bind="text: ($index() + 1)"> </span>
 						</td>
 						<td>
-							<select class="form-control" data-bind='options: ItemTypes, optionsCaption: "Select...", value: ItemType'> </select>
+							<select name="ItemType" class="form-control" data-bind='options: ItemTypes, optionsCaption: "Select...", value: ItemType, optionsText:"Text", optionsValue:"Value"'> </select>
 						</td>
 						<td>
-							<input class="form-control text-box single-line" data-bind='visible: ItemType, value: ItemName, valueUpdate: "afterkeydown"' />
+							<input name="ItemName" class="form-control text-box single-line" data-bind='visible: ItemType, value: ItemName, valueUpdate: "afterkeydown"' />
 						</td>
-						<td >
+						<td>
 							<div data-bind='if:ItemName() && ItemType()'>
-								<a role="button" class="k-button k-button-icontext k-grid-add" href='#' data-bind='click: $parent.addLine,visible:ShowAddButton'><span class="k-icon k-i-plus"></span>@Resources.Resources.AddItem</a>
-								<a role="button" style="margin-left:10px;" class="k-button k-button-icontext k-grid-delete" href='#' data-bind='click: $parent.removeLine,visible:!ShowAddButton()'><span class="k-icon k-i-close"></span>@Resources.Resources.Remove</a>
+								
+								<a role="button" style="margin-left:10px;" class="k-button k-button-icontext k-grid-delete" href='#' data-bind='click: $parent.removeLine,visible:!$parent.ShowAddButton()'><span class="k-icon k-i-close"></span>@Resources.Resources.Remove</a>
 							</div>
 						</td>
 					</tr>
 					<tr style="display:none" data-bind='visible:ItemName() && ItemType()'>
 						<td colspan="4">
-							<h3>@Resources.Resources.AddImage</h3>
+							<h3><span>@Resources.Resources.AddImage&#160;</span><span data-bind="text:ItemName"></span> </h3>
 							<p>@Resources.Resources.AddImageInstructions</p>
 							<div class="well" data-bind="fileDrag: MultiFileData">
 								<div class="form-group row">
 									<div class="col-md-6">
 										<!-- ko foreach: {data: MultiFileData().dataURLArray, as: 'dataURL'} -->
-										<img style="height: 100px; margin: 5px;" class="img-rounded  thumb" data-bind="attr: { src: dataURL }, visible: dataURL">
+										<img name="images" style="height: 100px; margin: 5px;" class="img-rounded  thumb" data-bind="attr: { src: dataURL }, visible: dataURL">
 										<!-- /ko -->
 										<div data-bind="ifnot: fileData().dataURL">
 											<label class="drag-label">@Resources.Resources.DragFileHere</label>
@@ -112,12 +113,12 @@
 					</tr>
 				</tbody>
 			</table>
-			
 		</div>
 		<hr />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="@Resources.Resources.Create" class="btn btn-default" />
+				<a style="display:none" role="button" class="k-button k-button-icontext k-grid-add" href='#' data-bind='click: addLine,visible:Title() && Description()'><span class="k-icon k-i-plus"></span>@Resources.Resources.AddItem</a>
+                <input style="display:none" data-bind="click:submit,visible:Title() && Description()" value="@Resources.Resources.Create" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -159,7 +160,7 @@
 				undo.fadeOut();
 			});
 
-			$('.page-register.form-horizontal').areYouSure(
+			$('.page-make-donation.form-horizontal').areYouSure(
 				{
 					message: "Los cambios realizados aun no se han guardado."
 				}
@@ -199,6 +200,40 @@
 		.donation-details .col-md-2 {
 			width: initial;
 		}
+
+		.progressBarContainer {
+			background: #5E5C57;
+			color: #ffffff;
+			width: 90%;
+			margin: 0 auto;
+			text-align: center;
+			font-family: 'Oswald', sans-serif;
+		}
+
+		.progressBar {
+			position: relative;
+			width: 95%;
+			height: 50px;
+			margin: 20px auto;
+			border: 3px solid #fab617;
+			border-radius: 5px;
+			overflow: hidden;
+		}
+
+			.progressBar div {
+				position: relative;
+				height: 100%;
+				background-color: #fab617;
+			}
+
+			.progressBar .progressText {
+				position: absolute;
+				margin: 0 auto;
+				top: 12px;
+				left: 0;
+				right: 0;
+				background-color: transparent;
+			}
 
 
 	</style>
