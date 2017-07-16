@@ -32,5 +32,5 @@ function eraseCookie(name) {
 }
 
 function getBaseUrl() {
-	return window.location.host === "localhost" ? "http://localhost:58095/" : "http://jehovajirehwebapi.cloudapp.net/";
+	return window.location.host.indexOf('localhost') > -1 ? "http://localhost:58095/" : "http://jehovajirehwebapi.cloudapp.net/";
 }

@@ -7,15 +7,16 @@ using JehovaJireh.Core.Entities;
 
 namespace JehovaJireh.Core.EntitiesDto
 {
-	public class DonationDetailsDto : EntityBase<Guid>
+	public class DonationDetailsDto : EntityBaseDto<Guid>
 	{
 		public DonationDetailsDto()
 		{
 			this.Images = new List<DonationImageDto>();
 		}
 
-		public virtual int Index { get; set; }
+		public virtual int Line { get; set; }
 		public virtual DonationDto Donation { get; set; }
+		public virtual User RequestedBy { get; set; }
 		public virtual DonationType ItemType { get; set; }
 		public virtual string ItemName { get; set; }
 		public virtual DonationStatus DonationStatus { get; set; }

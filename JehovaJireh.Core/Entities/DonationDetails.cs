@@ -12,9 +12,10 @@ namespace JehovaJireh.Core.Entities
 		{
 			this.Images = new List<DonationImage>();
 		}
-		public virtual int Index { get; set; }
+		public virtual int Line { get; set; }
 		public virtual Donation Donation { get; set; }
 		public virtual DonationType ItemType { get; set; }
+		public virtual User RequestedBy { get; set; }
 		public virtual string ItemName { get; set; }
 		public virtual DonationStatus DonationStatus { get; set; }
 		public virtual ICollection<DonationImage> Images { get; set; }

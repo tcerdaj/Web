@@ -10,6 +10,16 @@
     @Html.ActionLink(Resources.Resources.MakeADonation, "MakeADonation")
 </p>
 <div id="donationlist">
+	<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<img src="" class="imagepreview" style="width: 100%;">
+				</div>
+			</div>
+		</div>
+	</div>
 	<div id="grid"></div>
 </div>
 
@@ -36,8 +46,8 @@
 		<div>
 			<div class='user-info'>
 				<ul>
-					<li><label>Name:</label>#= FirstName #</li>
-					<li><label>Home Phone:</label>#= PhoneNumber #</li>
+					<li><label>Name:</label>#= CreatedBy.FirstName # <a class="pop" href="\\#"><img style="height: 50px;" class="img-rounded  thumb" src="#= CreatedBy.ImageUrl #" /></a></li>
+					<li><label>Home Phone:</label>#= CreatedBy.PhoneNumber #</li>
 				</ul>
 			</div>
 		</div>
@@ -46,41 +56,52 @@
 </script>
 <script id="rowTemplate" type="text/x-kendo-tmpl">
 	<tr data-uid="#: uid #">
-		<td class="photo">
-			<img src="../content/web/Employees/#:data.EmployeeID#.jpg" alt="#: data.EmployeeID #" />
-		</td>
-		<td class="details">
-			<span class="name">#: FirstName# #: LastName# </span>
-			<span class="title">Title: #: Title #</span>
-		</td>
+		@*<td class="details">
+			<span class="title">Line: #: Line #</span>
+		</td>*@
 		<td class="country">
-			#: Country #
+			<span class="title"> #: Line #</span>
 		</td>
-		<td class="employeeID">
-			#: EmployeeID #
+		<td class="itemType">
+			#: ItemType	 #
 		</td>
-	</tr>
+		<td class="itemName">
+			#: ItemName	 #
+		</td>
+		<td class="status">
+			#: DonationStatus #
+		</td>
+		<td class="photo">
+			<a class="pop" href="\\#"><img src="#:Images[0].ImageUrl#" alt="#: ItemName #" /></a>
+		</td>
+		<td class="command">
+			<a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="selectThisDonation();"><span class="k-icon k-edit"></span>@Resources.Resources.WantThis</a>
+		</td>
+</tr>
 </script>
 <script id="altRowTemplate" type="text/x-kendo-tmpl">
 	<tr class="k-alt" data-uid="#: uid #">
 		<td class="photo">
-			<img src="../content/web/Employees/#:data.EmployeeID#.jpg" alt="#: data.EmployeeID #" />
+			<img class="pop" src="../content/web/Employees/#:data.EmployeeID#.jpg" alt="#: data.EmployeeID #" />
 		</td>
 		<td class="details">
-			<span class="name">#: FirstName# #: LastName# </span>
-			<span class="title">Title: #: Title #</span>
+			<span class="name">#: CreatedBy.FirstName# #: CreatedBy.LastName# </span>
+			<span class="title">Line: #: Line #</span>
 		</td>
 		<td class="country">
-			#: Country #
+			#: CreatedBy.Country #
 		</td>
 		<td class="employeeID">
-			#: EmployeeID #
+			#: CreatedBy.PhoneNumer #
 		</td>
 	</tr>
 </script>
 
 <script>
 	$(document).ready(function () {
+		
+		
+
 		var element = $("#grid").kendoGrid({
 			dataSource: {
 				type: "GET",
@@ -104,33 +125,34 @@
 			columns: [
 				{
 					field: "CreatedOn",
-					title: @Resources.Resources.CreatedOn,
+					title: "@Resources.Resources.CreatedOn",
 					width: "100px",
 					format: "{0: MM-dd-yyyy}"
 				},
 				{
 					field: "Title",
-					title: @Resources.Resources.Title,
+					title: "@Resources.Resources.Title",
 					width: "100px"
 				},
 				{
 					field: "Description",
-					title: @Resources.Resources.Description,
+					title: "@Resources.Resources.Description",
 					width: "150px"
 				},
 				{
 					field: "ExpireOn",
-					title: @Resources.Resources.ExpireOn,
+					title: "@Resources.Resources.ExpireOn",
 					width: "120px"
 				},
 				{
 					field: "DonationStatus",
-					title: @Resources.Resources.DonationStatus,
+					title: "@Resources.Resources.DonationStatus",
 					width: "120px"
 				}
 			]
 		});
 	});
+
 
 	function detailInit(e) {
 		var detailRow = e.detailRow;
@@ -150,8 +172,26 @@
 			pageable: true,
 			rowTemplate: kendo.template($("#rowTemplate").html()),
 			altRowTemplate: kendo.template($("#altRowTemplate").html()),
-			height: 550
-		}
+			height: 550,
+			columns: [
+				{ field: "Line", title: "Line", width: "80px" },
+				{ field: "ItemType", title: "Type", width: "110px" },
+				{ field: "ItemName", title: "Name", width: "110px" },
+				{ field: "DonationStatus", title: "Status", width: "110px" },
+				{ field: "Images", title: "Image", width: "100px" },
+				{ command: { text: "@Resources.Resources.WantThis", click: selectThisDonation }, title: " ", width: "180px" }
+			]
+		});
+
+		$('a[class="pop"]').on('click', function () {
+			$('.imagepreview').attr('src', $(this).find('img').attr('src'));
+			$('#imagemodal').modal('show');
+		});		
+	}
+
+	function selectThisDonation() {
+		alert('put some code here...');
+	}
 </script>
 <style>
 

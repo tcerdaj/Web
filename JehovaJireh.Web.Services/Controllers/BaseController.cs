@@ -28,7 +28,7 @@ namespace JehovaJireh.Web.Services.Controllers
 		}
 
 		// GET api/baseapi      
-		public IEnumerable<DTO> Get()
+		public virtual IEnumerable<DTO> Get()
 		{
 			IEnumerable<DTO> dto;
 			try

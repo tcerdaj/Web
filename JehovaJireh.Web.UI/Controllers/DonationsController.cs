@@ -120,7 +120,7 @@ namespace JehovaJireh.Web.UI.Controllers
 						CreatedOn = DateTime.Now,
 						ItemName = item.ItemName,
 						ItemType = item.ItemType,
-						Index = item.Index,
+						Line = item.Index,
 						DonationStatus = item.DonationStatus,
 						ModifiedOn = (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue
 					};

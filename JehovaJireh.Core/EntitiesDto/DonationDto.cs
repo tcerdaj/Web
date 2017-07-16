@@ -7,11 +7,11 @@ using JehovaJireh.Core.Entities;
 
 namespace JehovaJireh.Core.EntitiesDto
 {
-	public class DonationDto: EntityBase<int>
+	public class DonationDto: EntityBaseDto<int>
 	{
 		public DonationDto()
 		{
-			this.DonationDetails = (ICollection<DonationDetails>)new List<DonationDetails>();
+			this.DonationDetails = new List<DonationDetailsDto>();
 		}
 
 		public virtual User RequestedBy { get; set; }
@@ -22,6 +22,6 @@ namespace JehovaJireh.Core.EntitiesDto
 		public virtual DateTime DonatedOn { get; set; }
 		public virtual DonationStatus DonationStatus { get; set; }
 
-		public virtual ICollection<DonationDetails> DonationDetails { get; set; }
+		public virtual ICollection<DonationDetailsDto> DonationDetails { get; set; }
 	}
 }

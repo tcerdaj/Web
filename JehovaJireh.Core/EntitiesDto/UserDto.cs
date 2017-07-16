@@ -7,7 +7,7 @@ using JehovaJireh.Core.Entities;
 
 namespace JehovaJireh.Core.EntitiesDto
 {
-	public class UserDto: EntityBase<int>
+	public class UserDto: EntityBaseDto<int>
 	{
 		#region Properties
 		public virtual string ImageUrl { get; set; }

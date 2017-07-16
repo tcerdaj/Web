@@ -39,7 +39,7 @@ namespace JehovaJireh.Web.Services
 			config.Services.Replace(typeof(IExceptionHandler), new OopsExceptionHandler());
 
 			// Setting Cors
-			var cors = new EnableCorsAttribute(origins: "http://localhost:58095/, http://jehovajirehwebservices.azurewebsites.net", headers: "*", methods: "GET,POST,DELETE,PUT");
+			var cors = new EnableCorsAttribute(origins: "http://jehovajirehwebservices.azurewebsites.net", headers: "*", methods: "GET,POST,DELETE,PUT");
 			cors.SupportsCredentials = true;
 			config.EnableCors(cors);
 
