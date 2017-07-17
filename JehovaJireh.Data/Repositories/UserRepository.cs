@@ -38,17 +38,17 @@ namespace JehovaJireh.Data.Repositories
 		
 		public User GetByUserName(string userName)
 		{
-			return (from u in this.Query() where u.UserName == userName select u).SingleOrDefault();
+			return (from u in Query() where u.UserName == userName select u).SingleOrDefault();
 		}
 
 		public User GetByEmail(string email)
 		{
-			return (from u in this.Query() where u.Email == email select u).SingleOrDefault();
+			return (from u in Query() where u.Email == email select u).SingleOrDefault();
 		}
 
 		public User GetByConfirmationToken(string token)
 		{
-			return (from u in this.Query() where u.ConfirmationToken == token select u).SingleOrDefault();
+			return (from u in Query() where u.ConfirmationToken == token select u).SingleOrDefault();
 		}
 
 		public IQueryable<User> Users

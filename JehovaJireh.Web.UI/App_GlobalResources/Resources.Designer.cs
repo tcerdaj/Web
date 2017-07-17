@@ -511,6 +511,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exclude my Donations.
+        /// </summary>
+        public static string ExcludeMyDonations {
+            get {
+                return ResourceManager.GetString("ExcludeMyDonations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expire On.
         /// </summary>
         public static string ExpireOn {
@@ -745,6 +754,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to My Donations.
+        /// </summary>
+        public static string MyDonations {
+            get {
+                return ResourceManager.GetString("MyDonations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {
@@ -840,6 +858,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         public static string PhoneLong {
             get {
                 return ResourceManager.GetString("PhoneLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Photos.
+        /// </summary>
+        public static string Photos {
+            get {
+                return ResourceManager.GetString("Photos", resourceCulture);
             }
         }
         

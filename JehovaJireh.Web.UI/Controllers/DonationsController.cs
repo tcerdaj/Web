@@ -104,7 +104,7 @@ namespace JehovaJireh.Web.UI.Controllers
 					DonationStatus = (Core.Entities.DonationStatus)model.DonationStatus,
 					ExpireOn= model.ExpireOn,
 					Title = model.Title,
-					ModifiedOn = (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue
+					ModifiedOn = null
 				};
 
 				donation.DonationDetails = new List<DonationDetails>();
@@ -122,7 +122,7 @@ namespace JehovaJireh.Web.UI.Controllers
 						ItemType = (Core.Entities.DonationType)item.ItemType,
 						Line = item.Index,
 						DonationStatus = (Core.Entities.DonationStatus)item.DonationStatus,
-						ModifiedOn = (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue
+						ModifiedOn = null
 					};
 
 					foreach (var image in item.Images)
@@ -134,7 +134,7 @@ namespace JehovaJireh.Web.UI.Controllers
 								Item = itemLine,
 								ImageUrl = image.ImageUrl,
 								CreatedOn = DateTime.Now,
-								ModifiedOn = (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue
+								ModifiedOn = null
 					});
 					}
 

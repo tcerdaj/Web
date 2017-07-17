@@ -447,4 +447,13 @@
   <data name="YourDonationHasBenCreated" xml:space="preserve">
     <value>Su Donacion ha sido creada exitosamente.</value>
   </data>
+  <data name="MyDonations" xml:space="preserve">
+    <value>Mis Donaciones</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>Fotos</value>
+  </data>
+  <data name="ExcludeMyDonations" xml:space="preserve">
+    <value>Mostrar todas menos mis donaciones.</value>
+  </data>
 </root>

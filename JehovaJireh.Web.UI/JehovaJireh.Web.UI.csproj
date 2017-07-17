@@ -95,6 +95,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Reflection.Context" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -233,8 +234,11 @@
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ServicesController.cs" />
+    <Compile Include="CustomAttributes\LocalizedDescriptionAttribute.cs" />
     <Compile Include="CustomFilters\CultureFilter.cs" />
-    <Compile Include="CustomIAttribute\CultureAwareControllerActivator.cs" />
+    <Compile Include="CustomAttributes\CultureAwareControllerActivator.cs" />
+    <Compile Include="Extentions\EnumExtensions.cs" />
     <Compile Include="Extentions\FIleExptentions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -2462,6 +2466,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="styles\fontawesome\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

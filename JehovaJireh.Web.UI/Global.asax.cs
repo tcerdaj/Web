@@ -10,7 +10,7 @@ using System.Web.Routing;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using JehovaJireh.Logging;
-using JehovaJireh.Web.UI.CustomIAttribute;
+using JehovaJireh.Web.UI.CustomAttributes;
 using JehovaJireh.Web.UI.Helpers;
 using JehovaJireh.Web.UI.Plumbing;
 

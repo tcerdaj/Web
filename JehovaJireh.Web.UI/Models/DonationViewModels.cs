@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using JehovaJireh.Web.UI.App_GlobalResources;
-
+using JehovaJireh.Web.UI.CustomAttributes;
 
 namespace JehovaJireh.Web.UI.Models
 {
@@ -161,33 +161,57 @@ namespace JehovaJireh.Web.UI.Models
 
 	public enum DonationStatus
 	{
+		[LocalizedDescription("Created", typeof(EnumResources))]
 		Created = 0,
+		[LocalizedDescription("PartialRequested", typeof(EnumResources))]
 		PartialRequested = 1,
+		[LocalizedDescription("Requested", typeof(EnumResources))]
 		Requested = 2,
+		[LocalizedDescription("Canceled", typeof(EnumResources))]
 		Canceled = 3,
+		[LocalizedDescription("Scheduled", typeof(EnumResources))]
 		Scheduled = 4,
+		[LocalizedDescription("Delivery", typeof(EnumResources))]
 		Delivery = 5,
+		[LocalizedDescription("Matched", typeof(EnumResources))]
 		Matched = 6,
 	}
 
 	public enum DonationType
 	{
+		[LocalizedDescription("Vehicles", typeof(EnumResources))]
 		Vehicles = 0,
+		[LocalizedDescription("Clothing", typeof(EnumResources))]
 		Clothing = 1,
+		[LocalizedDescription("Books", typeof(EnumResources))]
 		Books = 2,
+		[LocalizedDescription("Furniture", typeof(EnumResources))]
 		Furniture = 3,
+		[LocalizedDescription("ShoesAndAccessories", typeof(EnumResources))]
 		ShoesAndAccessories = 4,
+		[LocalizedDescription("HouseholdItems", typeof(EnumResources))]
 		HouseholdItems = 5,
+		[LocalizedDescription("Linens", typeof(EnumResources))]
 		Linens = 6,
+		[LocalizedDescription("SmallElectricalItems", typeof(EnumResources))]
 		SmallElectricalItems = 7,
+		[LocalizedDescription("PianosAndOrgans", typeof(EnumResources))]
 		PianosAndOrgans = 8,
+		[LocalizedDescription("ElectronicItems", typeof(EnumResources))]
 		ElectronicItems = 9,
+		[LocalizedDescription("HouseholdAppliances", typeof(EnumResources))]
 		HouseholdAppliances = 10,
+		[LocalizedDescription("Mattresses", typeof(EnumResources))]
 		Mattresses = 11,
+		[LocalizedDescription("Tools", typeof(EnumResources))]
 		Tools = 12,
+		[LocalizedDescription("Garden", typeof(EnumResources))]
 		Garden = 13,
+		[LocalizedDescription("SchoolSupplies", typeof(EnumResources))]
 		SchoolSupplies = 14,
+		[LocalizedDescription("Money", typeof(EnumResources))]
 		Money = 15,
+		[LocalizedDescription("Other", typeof(EnumResources))]
 		Other = 16
 	}
 }

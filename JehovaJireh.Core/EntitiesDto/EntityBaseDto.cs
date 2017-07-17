@@ -19,7 +19,7 @@ namespace JehovaJireh.Core.EntitiesDto
 		}
 
 		public virtual DateTime CreatedOn { get; set; }
-		public virtual DateTime ModifiedOn { get; set; }
+		public virtual DateTime? ModifiedOn { get; set; }
 		public virtual UserDto CreatedBy { get; set; }
 		public virtual UserDto ModifiedBy { get; set; }
 

@@ -178,8 +178,9 @@ namespace JehovaJireh.Web.UI.Controllers
 					log.RegisterStarted<User>(user);
 
 					user.ImageUrl = await imageService.CreateUploadedImageAsync(model.FileData, Guid.NewGuid().ToString(),true, 100,100);
-					user.CreatedOn = DateTime.UtcNow;
+					user.CreatedOn = DateTime.Now;
 					user.Active = true;
+					user.ModifiedOn = null;
 
 					var result = await UserManager.CreateAsync(user, model.PasswordHash);
 					timespan.Stop();

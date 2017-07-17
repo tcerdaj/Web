@@ -8,7 +8,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using JehovaJireh.Web.UI.Helpers;
 
-namespace JehovaJireh.Web.UI.CustomIAttribute
+namespace JehovaJireh.Web.UI.CustomAttributes
 {
 	public class CultureAwareControllerActivator : IControllerActivator
 	{
