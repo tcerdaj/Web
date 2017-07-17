@@ -101,7 +101,7 @@ namespace JehovaJireh.Web.UI.Controllers
 					CreatedOn = DateTime.Now,
 					DonatedOn = DateTime.Now,
 					Description = model.Description,
-					DonationStatus = model.DonationStatus,
+					DonationStatus = (Core.Entities.DonationStatus)model.DonationStatus,
 					ExpireOn= model.ExpireOn,
 					Title = model.Title,
 					ModifiedOn = (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue
@@ -119,9 +119,9 @@ namespace JehovaJireh.Web.UI.Controllers
 						Donation = donation,
 						CreatedOn = DateTime.Now,
 						ItemName = item.ItemName,
-						ItemType = item.ItemType,
+						ItemType = (Core.Entities.DonationType)item.ItemType,
 						Line = item.Index,
-						DonationStatus = item.DonationStatus,
+						DonationStatus = (Core.Entities.DonationStatus)item.DonationStatus,
 						ModifiedOn = (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue
 					};
 

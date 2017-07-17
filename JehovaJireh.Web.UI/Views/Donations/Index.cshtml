@@ -66,9 +66,6 @@
 </script>
 <script id="rowTemplate" type="text/x-kendo-tmpl">
 	<tr data-uid="#: uid #">
-		@*<td class="details">
-			<span class="title">Line: #: Line #</span>
-		</td>*@
 		<td class="country">
 			<span class="title"> #: Line #</span>
 		</td>
@@ -79,13 +76,15 @@
 			#: ItemName	 #
 		</td>
 		<td class="status">
-			#: DonationStatus #
+			#: displayFieldTextByArray(DonationStatus, donationStatus)	 #
 		</td>
 		<td class="photo">
 			<a class="pop" href="\\#"><img src="#:Images[0].ImageUrl#" alt="#: ItemName #" /></a>
 		</td>
 		<td class="command">
-			<a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="selectThisDonation();"><span class="k-icon k-edit"></span>@Resources.Resources.WantThis</a>
+			#if("@User.Identity.IsAuthenticated" &&  CreatedBy.UserName !== "@User.Identity.Name" && DonationStatus === 0){#
+			   <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="selectThisDonation();"><span class="k-icon k-edit"></span>@Resources.Resources.WantThis</a>
+			#}#
 		</td>
 </tr>
 </script>
@@ -184,11 +183,11 @@
 			altRowTemplate: kendo.template($("#altRowTemplate").html()),
 			height: 550,
 			columns: [
-				{ field: "Line", title: "Line", width: "80px" },
-				{ field: "ItemType", title: "Type", width: "110px" },
-				{ field: "ItemName", title: "Name", width: "110px" },
-				{ field: "DonationStatus", title: "Status", width: "110px" },
-				{ field: "Images", title: "Image", width: "100px" },
+				{ field: "Line", title: "@Resources.Resources.ItemLine", width: "80px" },
+				{ field: "ItemType", title: "@Resources.Resources.ItemType", width: "110px" },
+				{ field: "ItemName", title: "@Resources.Resources.ItemName", width: "110px" },
+				{ field: "DonationStatus", title: "@Resources.Resources.DonationStatus", width: "110px"},
+				{ field: "Images", title: "@Resources.Resources.ImageUrl", width: "100px" },
 				{ command: { text: "@Resources.Resources.WantThis", click: selectThisDonation }, title: " ", width: "180px" }
 			]
 		});

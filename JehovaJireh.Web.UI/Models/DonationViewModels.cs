@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using JehovaJireh.Core.Entities;
 using JehovaJireh.Web.UI.App_GlobalResources;
 
 
@@ -81,7 +80,7 @@ namespace JehovaJireh.Web.UI.Models
 		}
 		public Guid Id { get; set; }
 		public int Index { get; set; }
-		public Donation Donation { get; set; }
+		public DonationViewModels Donation { get; set; }
 
 		[Display(Name = "ItemType", ResourceType = typeof(Resources))]
 		public DonationType ItemType { get; set; }
@@ -152,5 +151,43 @@ namespace JehovaJireh.Web.UI.Models
 
 		[Display(Name = "DonationDetails", ResourceType = typeof(Resources))]
 		public ICollection<DonationDetailsViewModels> DonationDetails { get; set; }
+	}
+
+	public enum Gender
+	{
+		Male = 0,
+		Female = 1
+	}
+
+	public enum DonationStatus
+	{
+		Created = 0,
+		PartialRequested = 1,
+		Requested = 2,
+		Canceled = 3,
+		Scheduled = 4,
+		Delivery = 5,
+		Matched = 6,
+	}
+
+	public enum DonationType
+	{
+		Vehicles = 0,
+		Clothing = 1,
+		Books = 2,
+		Furniture = 3,
+		ShoesAndAccessories = 4,
+		HouseholdItems = 5,
+		Linens = 6,
+		SmallElectricalItems = 7,
+		PianosAndOrgans = 8,
+		ElectronicItems = 9,
+		HouseholdAppliances = 10,
+		Mattresses = 11,
+		Tools = 12,
+		Garden = 13,
+		SchoolSupplies = 14,
+		Money = 15,
+		Other = 16
 	}
 }
