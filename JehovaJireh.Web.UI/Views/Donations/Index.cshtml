@@ -263,13 +263,14 @@
 
 		detailRow.find(".donation-details").kendoGrid({
 			dataSource: new kendo.data.DataSource({
-				data: e.data.DonationDetails
+				data: e.data.DonationDetails,
+				pageSize: 10
 			}),
 			scrollable: false,
+			
 			sortable: true,
 			pageable: true,
 			rowTemplate: kendo.template($("#rowTemplate").html()),
-			altRowTemplate: kendo.template($("#altRowTemplate").html()),
 			selectable: "singe",
 			columns: [
 				{ field: "Line", title: "@Resources.ItemLine", width: "80px" },
