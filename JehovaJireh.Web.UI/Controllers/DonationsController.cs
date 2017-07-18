@@ -14,10 +14,11 @@ using JehovaJireh.Core.IRepositories;
 using JehovaJireh.Core.Entities;
 using Omu.ValueInjecter;
 using JehovaJireh.Data.Mappings;
+using MvcSiteMapProvider;
 
 namespace JehovaJireh.Web.UI.Controllers
 {
-    public class DonationsController : Controller
+    public class DonationsController : BaseController
     {
 		// GET: Donation list
 		private ILogger log;
@@ -32,6 +33,7 @@ namespace JehovaJireh.Web.UI.Controllers
 			donationRepository = container.Resolve<IDonationRepository>();
 			userRepository = container.Resolve<IUserRepository>();
 		}
+
 		public ActionResult Index(DonationMessageId? message)
         {
 			ViewBag.StatusMessage =
