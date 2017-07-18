@@ -1,6 +1,6 @@
 ﻿@using JehovaJireh.Web.UI.Helpers
 @using Microsoft.AspNet.Identity
-@using  Resources
+@using JehovaJireh.Web.UI.App_GlobalResources
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
