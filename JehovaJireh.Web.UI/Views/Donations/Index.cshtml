@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<JehovaJireh.Web.UI.Models.DonationViewModels>
+@using JehovaJireh.Web.UI.App_GlobalResources
 
 @{
-    ViewBag.Title = Resources.Resources.Donations;
+    ViewBag.Title = Resources.Donations;
 }
 
 <h2>@ViewBag.Title</h2>
 <p class="text-success">@ViewBag.StatusMessage</p>
 <p>
-    @Html.ActionLink(Resources.Resources.MakeADonation, "MakeADonation")
+    @Html.ActionLink(Resources.MakeADonation, "MakeADonation")
 </p>
 <div id="donationlist">
 	<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -53,10 +54,10 @@
 	<div class="tabstrip">
 		<ul>
 			<li class="k-state-active">
-				@Resources.Resources.DonationDetails
+				@Resources.DonationDetails
 			</li>
 			<li>
-				@Resources.Resources.ContactInfo
+				@Resources.ContactInfo
 			</li>
 		</ul>
 		<div>
@@ -92,7 +93,7 @@
 		</td>
 		<td class="command">
 			#if("@User.Identity.IsAuthenticated" &&  CreatedBy.UserName !== "@User.Identity.Name" && DonationStatus === 0){#
-			   <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="selectThisDonation();"><span class="k-icon k-edit"></span>@Resources.Resources.WantThis</a>
+			   <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="selectThisDonation();"><span class="k-icon k-edit"></span>@Resources.WantThis</a>
 			#}#
 		</td>
 </tr>
@@ -119,8 +120,8 @@
 		<a href="\\#" class="k-pager-refresh k-link k-button" title="Refresh"><span class="k-icon k-i-reload"></span></a>
 	</div>
 	<div class="toolbar">
-		<a id="miDonations" role="button" class="k-button k-button-icontext k-grid-save-changes" href="\\#"><span class="k-icon k-i-tri-state-null"></span>@Resources.Resources.MyDonations</a>
-		<a id="excludeMine" role="button" class="k-button k-button-icontext k-grid-save-changes" href="\\#"><span class="k-icon k-i-tri-state-null"></span>@Resources.Resources.ExcludeMyDonations</a>
+		<a id="miDonations" role="button" class="k-button k-button-icontext k-grid-save-changes" href="\\#"><span class="k-icon k-i-tri-state-null"></span>@Resources.MyDonations</a>
+		<a id="excludeMine" role="button" class="k-button k-button-icontext k-grid-save-changes" href="\\#"><span class="k-icon k-i-tri-state-null"></span>@Resources.ExcludeMyDonations</a>
 	</div>
 </script>
 
@@ -168,29 +169,29 @@
 				columns: [
 					{
 						field: "CreatedOn",
-						title: "@Resources.Resources.CreatedOn",
+						title: "@Resources.CreatedOn",
 						width: "100px",
 						format: "{0:MM-dd-yyyy}"
 					},
 					{
 						field: "Title",
-						title: "@Resources.Resources.Title",
+						title: "@Resources.Title",
 						width: "100px"
 					},
 					{
 						field: "Description",
-						title: "@Resources.Resources.Description",
+						title: "@Resources.Description",
 						width: "150px"
 					},
 					{
 						field: "ExpireOn",
-						title: "@Resources.Resources.ExpireOn",
+						title: "@Resources.ExpireOn",
 						width: "120px",
 						format: "{0:MM-dd-yyyy}"
 					},
 					{
 						field: "DonationStatus",
-						title: "@Resources.Resources.DonationStatus",
+						title: "@Resources.DonationStatus",
 						width: "120px",
 						template:"#: displayFieldTextByArray(DonationStatus, donationStatusArray)	 #"
 					}
@@ -271,12 +272,12 @@
 			altRowTemplate: kendo.template($("#altRowTemplate").html()),
 			selectable: "singe",
 			columns: [
-				{ field: "Line", title: "@Resources.Resources.ItemLine", width: "80px" },
-				{ field: "ItemType", title: "@Resources.Resources.ItemType", width: "110px" },
-				{ field: "ItemName", title: "@Resources.Resources.ItemName", width: "110px" },
-				{ field: "DonationStatus", title: "@Resources.Resources.DonationStatus", width: "110px"},
-				{ field: "Images", title: "@Resources.Resources.ImageUrl", width: "100px" },
-				{ command: { text: "@Resources.Resources.WantThis", click: selectThisDonation }, title: " ", width: "180px" }
+				{ field: "Line", title: "@Resources.ItemLine", width: "80px" },
+				{ field: "ItemType", title: "@Resources.ItemType", width: "110px" },
+				{ field: "ItemName", title: "@Resources.ItemName", width: "110px" },
+				{ field: "DonationStatus", title: "@Resources.DonationStatus", width: "110px"},
+				{ field: "Images", title: "@Resources.ImageUrl", width: "100px" },
+				{ command: { text: "@Resources.WantThis", click: selectThisDonation }, title: " ", width: "180px" }
 			]
 		});
 
@@ -340,9 +341,9 @@
 
 				$('.modal.modal-dialog').css('width','60%');
 				if (images.length === 1)
-					$(".modal-header h1").text("@Resources.Resources.ImageUrl")
+					$(".modal-header h1").text("@Resources.ImageUrl")
 				else
-					$(".modal-header h1").text("@Resources.Resources.Photos")
+					$(".modal-header h1").text("@Resources.Photos")
 				$('.carousel-list').empty();
 				$(htmlstring).appendTo($('.carousel-list'));
 				$('#imagemodal-carousel').modal('show');
@@ -350,7 +351,7 @@
 			else
 			{
 				$('.modal.modal-dialog').css('width','20% !important');
-				$(".modal-header h1").text("@Resources.Resources.ImageUrl")
+				$(".modal-header h1").text("@Resources.ImageUrl")
 				$('.imagepreview').attr('src', $(this).find('img').attr('src'));
 				$('#imagemodal').modal('show');
 			}

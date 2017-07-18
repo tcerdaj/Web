@@ -1,10 +1,10 @@
 ﻿@model JehovaJireh.Web.UI.Models.RequestViewModels
-
+@using JehovaJireh.Web.UI.App_GlobalResources
 @{
-    ViewBag.Title = "MakeNewRequest";
+    ViewBag.Title = Resources.MakeNewRequest;
 }
 
-<h2>MakeNewRequest</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm()) 
 {

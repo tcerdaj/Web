@@ -1,7 +1,7 @@
 ﻿@model JehovaJireh.Web.UI.Models.DonationViewModels
-
+@using JehovaJireh.Web.UI.App_GlobalResources
 @{
-    ViewBag.Title = Resources.Resources.MakeADonation;
+    ViewBag.Title = Resources.MakeADonation;
 }
 <div id="window" style="display:none"></div>
 <h2>@ViewBag.Title</h2>
@@ -58,13 +58,13 @@
         </div>
 
 		<div class="donation-details" style="display:none;" data-bind="visible:Title() && Description()">
-			<h2>@Resources.Resources.DonationDetails</h2>
+			<h2>@Resources.DonationDetails</h2>
 			<table width='100%' name="DonationDetails">
 				<thead>
 					<tr>
-						<th width='10%'><label class="control-label col-md-2">@Resources.Resources.ItemLine</label></th>
-						<th width='15%'><label class="control-label col-md-2">@Resources.Resources.ItemType</label></th>
-						<th width='20%'><label class="control-label col-md-2">@Resources.Resources.ItemName</label></th>
+						<th width='10%'><label class="control-label col-md-2">@Resources.ItemLine</label></th>
+						<th width='15%'><label class="control-label col-md-2">@Resources.ItemType</label></th>
+						<th width='20%'><label class="control-label col-md-2">@Resources.ItemName</label></th>
 						<th width='20%'> </th>
 					</tr>
 				</thead>
@@ -82,14 +82,14 @@
 						<td>
 							<div data-bind='if:ItemName() && ItemType()'>
 								
-								<a role="button" style="margin-left:10px;" class="k-button k-button-icontext k-grid-delete" href='#' data-bind='click: $parent.removeLine,visible:!$parent.ShowAddButton()'><span class="k-icon k-i-close"></span>@Resources.Resources.Remove</a>
+								<a role="button" style="margin-left:10px;" class="k-button k-button-icontext k-grid-delete" href='#' data-bind='click: $parent.removeLine,visible:!$parent.ShowAddButton()'><span class="k-icon k-i-close"></span>@Resources.Remove</a>
 							</div>
 						</td>
 					</tr>
 					<tr style="display:none" data-bind='visible:ItemName() && ItemType()'>
 						<td colspan="4">
-							<h3><span>@Resources.Resources.AddImage&#160;</span><span data-bind="text:ItemName"></span> </h3>
-							<p>@Resources.Resources.AddImageInstructions</p>
+							<h3><span>@Resources.AddImage&#160;</span><span data-bind="text:ItemName"></span> </h3>
+							<p>@Resources.AddImageInstructions</p>
 							<div class="well" data-bind="fileDrag: MultiFileData">
 								<div class="form-group row">
 									<div class="col-md-6">
@@ -97,7 +97,7 @@
 										<img name="images" style="height: 100px; margin: 5px;" class="img-rounded  thumb" data-bind="attr: { src: dataURL }, visible: dataURL">
 										<!-- /ko -->
 										<div data-bind="ifnot: fileData().dataURL">
-											<label class="drag-label">@Resources.Resources.DragFileHere</label>
+											<label class="drag-label">@Resources.DragFileHere</label>
 										</div>
 									</div>
 									<div class="col-md-6">
@@ -117,8 +117,8 @@
 		<hr />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-				<a style="display:none" role="button" class="k-button k-button-icontext k-grid-add" href='#' data-bind='click: addLine,visible:Title() && Description()'><span class="k-icon k-i-plus"></span>@Resources.Resources.AddItem</a>
-                <input style="display:none" data-bind="click:submit,visible:Title() && Description()" value="@Resources.Resources.Create" class="btn btn-default" />
+				<a style="display:none" role="button" class="k-button k-button-icontext k-grid-add" href='#' data-bind='click: addLine,visible:Title() && Description()'><span class="k-icon k-i-plus"></span>@Resources.AddItem</a>
+                <input style="display:none" data-bind="click:submit,visible:Title() && Description()" value="@Resources.Create" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -150,7 +150,7 @@
 
 			myWindow.kendoWindow({
 				width: "615px",
-				title: "@Resources.Resources.AddImagesPopup",
+				title: "@Resources.AddImagesPopup",
 				//content: "../content/web/window/ajax/ajaxContent.html",
 				close: onClose
 			});
