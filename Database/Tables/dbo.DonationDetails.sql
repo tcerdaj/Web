@@ -1,11 +1,10 @@
 CREATE TABLE [dbo].[DonationDetails]
 (
 [ItemId] [uniqueidentifier] NOT NULL,
-[Line] [smallint] NOT NULL,
+[Line] [int] NOT NULL,
 [DonationId] [int] NOT NULL,
 [ItemType] [smallint] NOT NULL,
 [ItemName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ImageUrl] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RequestedBy] [int] NULL,
 [DonationStatus] [smallint] NOT NULL,
 [CreatedOn] [datetime] NOT NULL,

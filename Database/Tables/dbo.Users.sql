@@ -27,8 +27,8 @@ CREATE TABLE [dbo].[Users]
 [ChurchPastor] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [NeedToBeVisited] [bit] NULL,
 [Comments] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[CreatedOn] [datetime2] NULL,
-[ModifiedOn] [datetime2] NULL,
+[CreatedOn] [datetime] NULL,
+[ModifiedOn] [datetime] NULL,
 [CreatedBy] [int] NULL,
 [ModifiedBy] [int] NULL
 )
@@ -38,4 +38,8 @@ GO
 ALTER TABLE [dbo].[Users] ADD CONSTRAINT [UQ_Users_Email] UNIQUE NONCLUSTERED  ([Email])
 GO
 ALTER TABLE [dbo].[Users] ADD CONSTRAINT [UQ_Users_UserName] UNIQUE NONCLUSTERED  ([UserName])
+GO
+ALTER TABLE [dbo].[Users] WITH NOCHECK ADD CONSTRAINT [FK_Users_Users_CreatedBy] FOREIGN KEY ([CreatedBy]) REFERENCES [dbo].[Users] ([UserId])
+GO
+ALTER TABLE [dbo].[Users] WITH NOCHECK ADD CONSTRAINT [FK_Users_Users_ModifiedBy] FOREIGN KEY ([ModifiedBy]) REFERENCES [dbo].[Users] ([UserId])
 GO
