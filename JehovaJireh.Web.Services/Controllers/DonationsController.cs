@@ -139,7 +139,6 @@ namespace JehovaJireh.Web.Services.Controllers
 							ModifiedOn = line.ModifiedOn
 						};
 
-
 						foreach (var image in line.Images)
 						{
 							donationItem.Images.Add(new DonationImageDto
@@ -210,6 +209,7 @@ namespace JehovaJireh.Web.Services.Controllers
 						donation.DonationDetails.Add(donationItem);
 					}
 
+                    donation.DonationDetails.OrderBy(x => x.Line);
 					dto.Add(donation);
 				}
 			}

@@ -33,6 +33,7 @@ namespace JehovaJireh.Web.UI.Models
 			  ErrorMessageResourceName = "C180Long")]
 		public string Description { get; set; }
 
+        [DisplayFormat(DataFormatString ="{0:C0}", ApplyFormatInEditMode =true)]
 		[Display(Name = "Amount", ResourceType = typeof(Resources))]
 		[DataType(DataType.Currency, ErrorMessage = null, ErrorMessageResourceName = "AmountInvalid", ErrorMessageResourceType = typeof(Resources))]
 		public decimal Amount { get; set; }
@@ -126,7 +127,15 @@ namespace JehovaJireh.Web.UI.Models
 	{
 		public int Id { get; set; }
 
-		[Display(Name = "Title", ResourceType = typeof(Resources))]
+        [Display(Name = "ImageUpload", ResourceType = typeof(Resources))]
+        [DataType(DataType.Upload)]
+        public HttpPostedFileBase ImageUpload { get; set; }
+
+        [Display(Name = "ImageUrl", ResourceType = typeof(Resources))]
+        [DataType(DataType.ImageUrl)]
+        public string ImageUrl { get; set; }
+
+        [Display(Name = "Title", ResourceType = typeof(Resources))]
 		[Required(ErrorMessageResourceType = typeof(Resources),
 			  ErrorMessageResourceName = "TitleRequired")]
 		[StringLength(50, ErrorMessageResourceType = typeof(Resources),
@@ -149,9 +158,22 @@ namespace JehovaJireh.Web.UI.Models
 		[Display(Name = "DonationStatus", ResourceType = typeof(Resources))]
 		public DonationStatus DonationStatus { get; set; }
 
-		[Display(Name = "DonationDetails", ResourceType = typeof(Resources))]
-		public ICollection<DonationDetailsViewModels> DonationDetails { get; set; }
-	}
+        [Display(Name = "ItemType", ResourceType = typeof(Resources))]
+        public DonationType ItemType { get; set; }
+
+        public IEnumerable<SelectListItem> ItemTypes
+        {
+            get
+            {
+                return Enum.GetValues(typeof(DonationType))
+                    .Cast<DonationType>()
+                    .Select(
+                         enu => new SelectListItem() { Text = enu.ToString(), Value = ((int)enu).ToString() }
+                     )
+                    .ToList();
+            }
+        }
+    }
 
 	public enum Gender
 	{

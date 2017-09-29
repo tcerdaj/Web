@@ -456,4 +456,7 @@
   <data name="ExcludeMyDonations" xml:space="preserve">
     <value>Mostrar todas menos mis donaciones.</value>
   </data>
+  <data name="ImageUpload" xml:space="preserve">
+    <value>Cargar Image </value>
+  </data>
 </root>

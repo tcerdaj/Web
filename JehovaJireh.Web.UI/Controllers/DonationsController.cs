@@ -69,10 +69,17 @@ namespace JehovaJireh.Web.UI.Controllers
 			try
 			{
 				var donationDetailsJson = Request.Params["details"];
-			var donationDetails = JsonConvert.DeserializeObject<List<DonationDetailsViewModels>>(donationDetailsJson);
-			model.DonationDetails = donationDetails;
-			var imageService = new ImageService(log);
-			ViewBag.StatusMessage = "";
+				var donationDetails = JsonConvert.DeserializeObject<List<DonationDetailsViewModels>>(donationDetailsJson);
+				model.DonationDetails = donationDetails;
+				var imageService = new ImageService(log);
+				ViewBag.StatusMessage = "";
+
+                //Amount validation if money is on
+                if (model.IsMoney && model.Amount <= 0)
+                {
+                    ViewBag.StatusMessage = Resources.InvalidAmount;
+                    return View(model);
+                }
 
 				foreach (var line in model.DonationDetails)
 				{
@@ -87,7 +94,7 @@ namespace JehovaJireh.Web.UI.Controllers
 							var fileToUpload = file.GetFile(Request.Files);
 							if (fileToUpload != null)
 							{
-								var imageUrl = await imageService.CreateUploadedImageAsync(fileToUpload, Guid.NewGuid().ToString(), true, 200, 200);
+								var imageUrl = await imageService.CreateUploadedImageAsync(fileToUpload, Guid.NewGuid().ToString(), true, 500, 500);
 								line.Images.Add(new ImageViewModel() { Item = line, ImageUrl = imageUrl });
 								filesAdded.Add(file.Name);
 							}
@@ -110,38 +117,40 @@ namespace JehovaJireh.Web.UI.Controllers
 				};
 
 				donation.DonationDetails = new List<DonationDetails>();
+                if (!model.IsMoney)
+                {
+                    foreach (var item in model.DonationDetails)
+                    {
 
-				foreach (var item in model.DonationDetails)
-				{
 
+                        var itemLine = new DonationDetails
+                        {
+                            CreatedBy = user,
+                            Donation = donation,
+                            CreatedOn = DateTime.Now,
+                            ItemName = item.ItemName,
+                            ItemType = (Core.Entities.DonationType)item.ItemType,
+                            Line = item.Index,
+                            DonationStatus = (Core.Entities.DonationStatus)item.DonationStatus,
+                            ModifiedOn = null
+                        };
 
-					var itemLine = new DonationDetails
-					{
-						CreatedBy = user,
-						Donation = donation,
-						CreatedOn = DateTime.Now,
-						ItemName = item.ItemName,
-						ItemType = (Core.Entities.DonationType)item.ItemType,
-						Line = item.Index,
-						DonationStatus = (Core.Entities.DonationStatus)item.DonationStatus,
-						ModifiedOn = null
-					};
+                        foreach (var image in item.Images)
+                        {
+                            itemLine.Images.Add(
+                                new DonationImage
+                                {
+                                    CreatedBy = user,
+                                    Item = itemLine,
+                                    ImageUrl = image.ImageUrl,
+                                    CreatedOn = DateTime.Now,
+                                    ModifiedOn = null
+                                });
+                        }
 
-					foreach (var image in item.Images)
-					{
-						itemLine.Images.Add(
-							new DonationImage
-							{
-								CreatedBy = user,
-								Item = itemLine,
-								ImageUrl = image.ImageUrl,
-								CreatedOn = DateTime.Now,
-								ModifiedOn = null
-					});
-					}
-
-					donation.DonationDetails.Add(itemLine);
-				}
+                        donation.DonationDetails.Add(itemLine);
+                    }
+                }
 
 				//save to database
 				donationRepository.Create(donation);
@@ -164,8 +173,10 @@ namespace JehovaJireh.Web.UI.Controllers
 			return View(new RequestViewModels());
 		}
 
-		[HttpPost]
-		public ActionResult MakeNewRequest(RequestViewModels model)
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MakeNewRequest(RequestViewModels model)
 		{
 			return View();
 		}

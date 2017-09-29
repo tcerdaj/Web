@@ -456,4 +456,7 @@
   <data name="ExcludeMyDonations" xml:space="preserve">
     <value>Exclude my Donations</value>
   </data>
+  <data name="ImageUpload" xml:space="preserve">
+    <value>Image to Upload</value>
+  </data>
 </root>

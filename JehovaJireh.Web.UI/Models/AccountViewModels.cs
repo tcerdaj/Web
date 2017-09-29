@@ -215,6 +215,8 @@ namespace JehovaJireh.Web.UI.Models
 			  ErrorMessageResourceName = "GenderLong")]
 		public string Gender { get; set; }
 
+        public bool ShareMyAddress { get; set; }
+
 		[Display(Name = "Address", ResourceType = typeof(Resources))]
 		[StringLength(80, ErrorMessageResourceType = typeof(Resources),
 			  ErrorMessageResourceName = "AddressLong")]
