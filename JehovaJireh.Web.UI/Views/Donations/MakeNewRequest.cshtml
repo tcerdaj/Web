@@ -28,33 +28,26 @@
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
-            @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ItemType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ExpireOn, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ExpireOn, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ExpireOn, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(m=>m.ItemType, Model.ItemTypes, string.Format("-- Select {0} --", Resources.ItemType), new { @class = "form-control"  })
+                @Html.ValidationMessageFor(model => model.ItemType, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.ImageUpload, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.ImageUpload, new { type = "file", accept = "image/*", htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ExpireOn, "", new { @class = "text-danger" })
+                <span class="btn btn-default btn-file" style="display:none">
+                    Browse @Html.TextBoxFor(model => model.ImageUpload, new { type = "file", accept = "image/*",  @class = "form-control"  })
+                    @Html.ValidationMessageFor(model => model.ImageUpload, "", new { @class = "text-danger" })
+                 </span>
             </div>
         </div>
         <div class="form-group" style="display:none">
             @Html.LabelFor(model => model.ImageUrl, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <div class="img-wrap">
+                <div class="img-wrap" style="width:290px;">
                     <span class="close" style="display:none">&times;</span>
                     <img id="imageUrl" src="@Model.ImageUrl" alt="" class="image"/>
                  </div>
@@ -78,13 +71,19 @@
     @Styles.Render("~/bundles/kendo-css")
     @Scripts.Render("~/bundles/kendo")	
     <script>
+        $(document).ready(function () {
+            $('.btn.btn-default.btn-file').show();
+            $('#ItemType').val('');
+        });
+
         $("#ImageUpload").change(function () {
             readURL(this);
         });
 
         $(".close").click(function () {
+            $('#ImageUpload').val('');
             $('#imageUrl').attr('src', '');
-            $('.img-wrap').parent().parent().show();
+            $('.img-wrap').parent().parent().hide();
         });
 
         function readURL(input) {
@@ -108,10 +107,12 @@
     <style>
         
 
-        .img-wrap { position: relative}
+        .img-wrap { position: relative;}
         .img-wrap .close {position: absolute;top: 2px;right: 6px;z-index: 100;}
         .img-wrap:hover .close{opacity:1;}
         .img-wrap .image {opacity: 1;display: block;width: 100%;height: auto;transition: .5s ease;backface-visibility: hidden;}
         .img-wrap:hover .image {opacity: 0.3;}
+        .btn-file { position: relative; overflow: hidden;}
+        .btn-file input[type=file] {position: absolute;top: 0;right: 0;min-width: 100%;min-height: 100%;font-size: 100px;text-align: right;filter: alpha(opacity=0);opacity: 0;outline: none;background: white;cursor: inherit;display: block;}
     </style>
 }

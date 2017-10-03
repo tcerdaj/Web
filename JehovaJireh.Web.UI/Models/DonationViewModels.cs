@@ -147,13 +147,6 @@ namespace JehovaJireh.Web.UI.Models
 			  ErrorMessageResourceName = "C180Long")]
 		public string Description { get; set; }
 
-		[Display(Name = "Amount", ResourceType = typeof(Resources))]
-		[DataType(DataType.Currency, ErrorMessage = null, ErrorMessageResourceName = "AmountInvalid", ErrorMessageResourceType = typeof(Resources))]
-		public string Amount { get; set; }
-
-		[Display(Name = "ExpireOn", ResourceType = typeof(Resources))]
-		[DataType(DataType.Date, ErrorMessage = null, ErrorMessageResourceName = "DateInvalid", ErrorMessageResourceType = typeof(Resources))]
-		public DateTime ExpireOn { get; set; }
 
 		[Display(Name = "DonationStatus", ResourceType = typeof(Resources))]
 		public DonationStatus DonationStatus { get; set; }
