@@ -19,8 +19,10 @@ namespace JehovaJireh.Infrastructure.Installers
 						        Component.For<IUserRepository>()
 								.ImplementedBy<UserRepository>(),
 								Component.For<IDonationRepository>()
-								.ImplementedBy<DonationRepository>()
-							);
+								.ImplementedBy<DonationRepository>(),
+                                Component.For<IRequestRepository>()
+                                .ImplementedBy<RequestRepository>()
+                            );
 		}
 	}
 }

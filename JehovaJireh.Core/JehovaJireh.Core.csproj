@@ -103,6 +103,7 @@
     <Compile Include="EntitiesDto\DonationDto.cs" />
     <Compile Include="EntitiesDto\DonationImageDto.cs" />
     <Compile Include="EntitiesDto\EntityBaseDto.cs" />
+    <Compile Include="EntitiesDto\RequestDto.cs" />
     <Compile Include="EntitiesDto\UserDto.cs" />
     <Compile Include="Entities\DonationDetails.cs" />
     <Compile Include="Entities\DonationImage.cs" />
@@ -110,11 +111,13 @@
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\Enum.cs" />
     <Compile Include="Entities\IEntityTimestamp.cs" />
+    <Compile Include="Entities\Request.cs" />
     <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="IRepositories\IDonationRepository.cs" />
     <Compile Include="IRepositories\IImageService.cs" />
     <Compile Include="IRepositories\IRepository.cs" />
+    <Compile Include="IRepositories\IRequestRepository.cs" />
     <Compile Include="IRepositories\IUnitOfWork.cs" />
     <Compile Include="IRepositories\IUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

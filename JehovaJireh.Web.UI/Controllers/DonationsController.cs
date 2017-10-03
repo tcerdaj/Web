@@ -25,14 +25,16 @@ namespace JehovaJireh.Web.UI.Controllers
 		private static IWindsorContainer container;
 		private IDonationRepository donationRepository;
 		private IUserRepository userRepository;
+        private IRequestRepository requestRepository;
 
-		public DonationsController()
+        public DonationsController()
 		{
 			container = MvcApplication.BootstrapContainer();
 			log = container.Resolve<ILogger>();
 			donationRepository = container.Resolve<IDonationRepository>();
 			userRepository = container.Resolve<IUserRepository>();
-		}
+            requestRepository = container.Resolve<IRequestRepository>();
+        }
 
 		public ActionResult Index(DonationMessageId? message)
         {
@@ -63,9 +65,11 @@ namespace JehovaJireh.Web.UI.Controllers
 		[HttpPost]
 		public async System.Threading.Tasks.Task<ActionResult> MakeADonation(DonationViewModels model)
 		{
-			//Setting donation details from formData
-			//TODO:
-			//Save to database
+            //Setting donation details from formData
+            //TODO:
+            //Save to database
+            if (!ModelState.IsValid) return View(model);
+
 			try
 			{
 				var donationDetailsJson = Request.Params["details"];
@@ -167,6 +171,11 @@ namespace JehovaJireh.Web.UI.Controllers
 			return View(model);
 		}
 
+        public ActionResult RequestList()
+        {
+            return View();
+        }
+
 		[Authorize]
 		public ActionResult MakeNewRequest()
 		{
@@ -178,7 +187,21 @@ namespace JehovaJireh.Web.UI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MakeNewRequest(RequestViewModels model)
 		{
-			return View();
+            if (!ModelState.IsValid) return View(model);
+
+            try
+            {
+                Request data = new Request();
+                data.InjectFrom<DeepCloneInjection>(model);
+                requestRepository.Create(data);
+                return RedirectToAction("RequestList");
+            }
+            catch (System.Exception ex)
+            {
+                ModelState.AddModelError("error", ex.Message);
+            }
+
+            return View(model);
 		}
 
 		[Authorize]

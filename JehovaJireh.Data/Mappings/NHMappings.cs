@@ -67,7 +67,8 @@ namespace JehovaJireh.Data.Mappings
 			Map(x => x.Amount);
 			Map(x => x.ExpireOn);
 			Map(x => x.DonationStatus).CustomType<DonationStatus>();
-			Map(x => x.CreatedOn);
+            Map(x => x.RequestId);
+            Map(x => x.CreatedOn);
 			Map(x => x.ModifiedOn);
 			Map(x => x.DonatedOn);
 			HasMany(x => x.DonationDetails)
@@ -89,7 +90,32 @@ namespace JehovaJireh.Data.Mappings
 		}
 	}
 
-	public class DonationDetailMap : ClassMap<DonationDetails>
+    public class RequestMap : ClassMap<Request>
+    {
+        public RequestMap()
+        {
+            Table("Request");
+            Id(x => x.Id)
+                .Column("RequestId")
+                .GeneratedBy.Increment();
+            Map(x => x.Title);
+            Map(x => x.Description);
+            Map(x => x.DonationStatus).CustomType<DonationStatus>();
+            Map(x => x.ImageUrl);
+            Map(x => x.CreatedOn);
+            Map(x => x.ModifiedOn);
+            References(x => x.CreatedBy)
+                .Column("CreatedBy")
+                .Not.Nullable()
+                .ForeignKey();
+            References(x => x.ModifiedBy)
+                .Column("ModifiedBy")
+                .Nullable()
+                .ForeignKey();
+        }
+    }
+
+    public class DonationDetailMap : ClassMap<DonationDetails>
 	{
 		public DonationDetailMap()
 		{

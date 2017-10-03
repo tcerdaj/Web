@@ -23,8 +23,9 @@ namespace JehovaJireh.Core.Entities
 		public virtual DonationStatus DonationStatus { get; set; }
 
 		public virtual ICollection<DonationDetails> DonationDetails { get; set; }
+        public virtual int RequestId { get; set; }
 
-		public virtual Donation ToObject(string json)
+        public virtual Donation ToObject(string json)
 		{
 			try
 			{

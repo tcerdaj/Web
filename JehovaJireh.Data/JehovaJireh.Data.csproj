@@ -159,6 +159,7 @@
     <Compile Include="Repositories\DonationRepository.cs" />
     <Compile Include="Repositories\ImageService.cs" />
     <Compile Include="Repositories\NHRepository.cs" />
+    <Compile Include="Repositories\RequestRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
