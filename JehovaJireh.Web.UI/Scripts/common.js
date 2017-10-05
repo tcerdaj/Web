@@ -32,7 +32,8 @@ function eraseCookie(name) {
 }
 
 function getBaseUrl() {
-	return window.location.host.indexOf('localhost') > -1 ? "http://localhost:58095/" : "http://jehovajirehwebapi.cloudapp.net/";
+    //return window.location.host.indexOf('localhost') > -1 ? "http://localhost:58095/" : "http://jehovajireh.web.service/";
+    return window.location.host.indexOf('localhost') > -1 ? "http://jehovajireh.web.service/" : "http://jehovajireh.web.service/";
 }
 
 var donationStatus = function () {
@@ -65,8 +66,6 @@ var donationTypes = function () {
 	});
 };
 
-
-
 function displayFieldTextByArray(id, array) {
 	var result = null;
 	if (!(id === undefined || id === "" || id === null || id === "00000000-0000-0000-0000-000000000000") && !(array === undefined || array === "" || array === null)) {
@@ -77,3 +76,21 @@ function displayFieldTextByArray(id, array) {
 	return result !== null ? (result.length > 0?  result[0].Text !== undefined ? result[0].Text : "": "") : "";
 }
 
+function convertDictionaryToObject(dictionary) {
+    var result = {};
+    $.each(dictionary, function (index, value) {
+        result[value["Key"]] = value["Value"];
+    });
+
+    return result;
+}
+
+var getInitials = function (string) {
+    var names = string.split(' '),
+        initials = names[0].substring(0, 1).toUpperCase();
+
+    if (names.length > 1) {
+        initials += names[names.length - 1].substring(0, 1).toUpperCase();
+    }
+    return initials;
+};

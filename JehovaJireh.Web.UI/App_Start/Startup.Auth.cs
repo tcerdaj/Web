@@ -20,9 +20,10 @@ namespace JehovaJireh.Web.UI
 			//app.CreatePerOwinContext(ApplicationDbContext.Create);
 			app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
 			app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
+            app.MapSignalR();
 
-			// Check to see if we are running local and if we are set the cookie domain to nothing so authentication works correctly.
-			string cookieDomain = ".jehovajireh.com";
+            // Check to see if we are running local and if we are set the cookie domain to nothing so authentication works correctly.
+            string cookieDomain = ".jehovajireh.com";
 			bool isLocal = HttpContext.Current.Request.IsLocal;
 			if (isLocal)
 			{

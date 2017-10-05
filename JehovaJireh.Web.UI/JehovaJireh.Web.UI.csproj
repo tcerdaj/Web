@@ -56,6 +56,12 @@
     <Reference Include="JehovaJireh.Infrastructure">
       <HintPath>..\JehovaJireh.Infrastructure\bin\Debug\JehovaJireh.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.1.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.1.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.1.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.1.2\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
@@ -291,6 +297,7 @@
     <Compile Include="Helpers\GravatarHelper.cs" />
     <Compile Include="Helpers\GravatarOptions.cs" />
     <Compile Include="Helpers\MemoryFile.cs" />
+    <Compile Include="Hubs\ChatHub..cs" />
     <Compile Include="Installers\ControllersInstaller.cs" />
     <Compile Include="Installers\ServicesInstaller.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -1954,6 +1961,8 @@
     <Content Include="Kendo\kendo.silver.mobile.min.css.map" />
     <Content Include="Kendo\kendo.uniform.min.css.map" />
     <Content Include="Kendo\kendo.uniform.mobile.min.css.map" />
+    <Content Include="Scripts\jquery.signalR-2.1.2.js" />
+    <Content Include="Scripts\jquery.signalR-2.1.2.min.js" />
     <Content Include="Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
@@ -2505,6 +2514,7 @@
     <Content Include="webcam\src\jscam.as" />
     <Content Include="webcam\webcam.jquery.json" />
     <Content Include="Views\Donations\RequestList.cshtml" />
+    <Content Include="Views\Home\Chat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

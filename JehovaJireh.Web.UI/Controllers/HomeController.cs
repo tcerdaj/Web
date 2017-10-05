@@ -6,13 +6,14 @@ using System.Web.Mvc;
 using JehovaJireh.Web.UI.App_GlobalResources;
 using MvcSiteMapProvider;
 using MvcSiteMapProvider.Web.Mvc.Filters;
+using JehovaJireh.Core.IRepositories;
 
 namespace JehovaJireh.Web.UI.Controllers
 {
 
 	public class HomeController : BaseController
 	{
-		public ActionResult Index()
+        public ActionResult Index()
 		{
 			return View();
 		}
@@ -30,5 +31,18 @@ namespace JehovaJireh.Web.UI.Controllers
 
 			return View();
 		}
-	}
+        [Authorize]
+        public ActionResult Chat()
+        {
+            var container = MvcApplication.BootstrapContainer();
+            IUserRepository userRepository = container.Resolve<IUserRepository>();
+            var user = userRepository.GetByUserName(User.Identity.Name);
+            dynamic me = new System.Dynamic.ExpandoObject();
+            me.Name = user.FirstName;
+            me.LastName = user.LastName;
+            me.Avatar = user.ImageUrl;
+            ViewBag.Me = me;
+            return View();
+        }
+    }
 }
