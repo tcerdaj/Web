@@ -100,7 +100,11 @@ namespace JehovaJireh.Data.Mappings
                 .GeneratedBy.Increment();
             Map(x => x.Title);
             Map(x => x.Description);
-            Map(x => x.DonationStatus).CustomType<DonationStatus>();
+            Map(x => x.DonationStatus)
+                .CustomType<DonationStatus>()
+                .Column("RequestStatus");
+            Map(x => x.ItemType)
+                .CustomType<DonationType>();
             Map(x => x.ImageUrl);
             Map(x => x.CreatedOn);
             Map(x => x.ModifiedOn);
@@ -130,7 +134,7 @@ namespace JehovaJireh.Data.Mappings
 				.Cascade.All();
 			Map(x => x.Line).Column("Line");
 			Map(x => x.ItemType)
-				.CustomType<DonationType>(); ;
+				.CustomType<DonationType>(); 
 			Map(x => x.ItemName);
 			Map(x => x.DonationStatus)
 				.CustomType<DonationStatus>();

@@ -65,7 +65,8 @@ namespace JehovaJireh.Data.Repositories
 			{
 				var _fileName = file.FileName;
 				var imageName = fileName + Path.GetExtension(_fileName);
-				CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(imageName);
+                CloudBlockBlob originalcloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(_fileName);
+                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(imageName);
 				cloudBlockBlob.Properties.ContentType = file.ContentType;
 
 				if (resizeImage)
@@ -112,7 +113,8 @@ namespace JehovaJireh.Data.Repositories
 					byte[] data = ImageToByte(img);
 
 					cloudBlockBlob.UploadFromByteArray(data, 0, data.Length);
-				}
+                    await originalcloudBlockBlob.DeleteIfExistsAsync(); //remove old if exist.
+                }
 				else
 				{
 					await cloudBlockBlob.UploadFromStreamAsync(file.InputStream);

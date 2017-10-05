@@ -1,0 +1,233 @@
+﻿@using JehovaJireh.Web.UI.App_GlobalResources
+@{
+    ViewBag.Title = "My Request";
+}
+
+<h2>My Request</h2>
+<p>
+    @Html.ActionLink(Resources.MakeNewRequest, "MakeNewRequest")
+</p>
+<div id="grid"></div>
+<div id="details" reference=".k-button.k-button-icontext.k-grid-ViewDetails"></div>
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/areYouSure")
+    @Scripts.Render("~/bundles/knockout")
+    @Styles.Render("~/bundles/kendo-css")
+    @Scripts.Render("~/bundles/kendo")
+
+<script type="text/x-kendo-template" id="mydonationtemplate">
+	<div class="refreshBtnContainer">
+		<a href="\\#" class="k-pager-refresh k-link k-button" title="Refresh"><span class="k-icon k-i-reload"></span></a>
+	</div>
+	#if("@User.Identity.IsAuthenticated" ==="True"){#
+	<div class="toolbar">
+		<a id="miDonations" role="button" class="k-button k-button-icontext k-grid-save-changes" href="\\#"><span class="k-icon k-i-tri-state-null"></span>@Resources.MyRequest</a>
+		<a id="excludeMine" role="button" class="k-button k-button-icontext k-grid-save-changes" href="\\#"><span class="k-icon k-i-tri-state-null"></span>@Resources.ExcludeMyRequest</a>
+	</div>
+	#}#
+</script>
+<script type="text/x-kendo-template" id="template">
+    <div id="details-container">
+        <h2>#= CreatedBy.FirstName # #= CreatedBy.LastName #</h2>
+        <em>#= Title #</em>
+        <dl>
+            <dt>
+                <span class="img-wrap" style="width:350px;">
+                    <img id="imageUrl" src="#= ImageUrl #" alt="Image" class="image"/>
+                 </span>
+             </dt>
+        </dl>
+    </div>
+</script>
+
+<script>
+    var donationTypesArray = [], donationStatusArray = [];
+    var wnd,
+        detailsTemplate;
+
+    $(document).ready(function () {
+        $.when(donationStatus(), donationTypes()).done(function (ds, dt) {
+            donationTypesArray = dt[0]; donationStatusArray = ds[0];
+            var userId = "@ViewBag.UserId";
+
+            var grid = $("#grid").kendoGrid({
+                dataSource: {
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json",
+                    transport: {
+                        read: getBaseUrl() + "request/users/" + userId
+                    },
+                    pageSize: 20,
+                    serverPaging: false,
+                    serverSorting: false,
+                    sort: { field: "Id", dir: "desc" },
+                    schema: {
+                        parse: function (response) {
+                            $.each(response, function (idx, elem) {
+                                if (elem !== null && elem.CreatedOn && typeof elem.CreatedOn == "string") {
+                                    elem.CreatedOn = kendo.parseDate(elem.CreatedOn, "yyyy-MM-ddTHH:mm:ss");
+                                }
+                            });
+
+                            return response;
+                        }
+                    }
+                },
+                toolbar: kendo.template($("#mydonationtemplate").html()),
+                height: 550,
+                sortable: true,
+                pageable: false,
+                columns: [
+                    {
+                        field: "CreatedOn",
+                        title: "@Resources.CreatedOn",
+                        width: "100px",
+                        format: "{0:MM-dd-yyyy}"
+                    },
+                    {
+                        field: "Title",
+                        title: "@Resources.Title",
+                        width: "100px"
+                    },
+                    {
+                        field: "Description",
+                        title: "@Resources.Description",
+                        width: "150px"
+                    },
+                    {
+                        field: "DonationStatus",
+                        title: "@Resources.DonationStatus",
+                        width: "120px",
+                        template: "#: displayFieldTextByArray(DonationStatus, donationStatusArray)	 #"
+                    },
+                    { command: { text: "View Details", click: showDetails }, title: " ", width: "180px" }
+                ]
+            });
+
+            wnd = $("#details")
+                .kendoWindow({
+                    title: "Request Details",
+                    modal: true,
+                    visible: false,
+                    resizable: false,
+                    width: 400
+                }).data("kendoWindow");
+
+            detailsTemplate = kendo.template($("#template").html());
+
+            grid.find(".k-grid-toolbar").on("click", ".k-pager-refresh", function (e) {
+                e.preventDefault();
+                grid.data("kendoGrid").dataSource.read();
+            });
+
+            $('#miDonations').on("click", function () {
+                if (!this.disabled) {
+                    var span = $(this).children();
+                    var checkedClass = "k-i-checkbox-checked";
+                    var uncheckedClass = "k-i-tri-state-null";
+                    grid.data("kendoGrid").dataSource.filter({});
+
+                    if ($(span).hasClass(uncheckedClass)) {
+                        grid.data("kendoGrid").dataSource.filter({ field: "CreatedBy.UserName", operator: "eq", value: "@User.Identity.Name" });
+                        $(span).removeClass(uncheckedClass);
+                        $(span).addClass(checkedClass);
+                        $('#excludeMine').attr('disabled', true);
+                        $('#excludeMine').prop('disabled', true);
+                    } else {
+                        $(span).removeClass(checkedClass);
+                        $(span).addClass(uncheckedClass);
+                        $('#excludeMine').attr('disabled', false);
+                        $('#excludeMine').prop('disabled', false);
+                    }
+                }
+            });
+
+            $('#excludeMine').on("click", function () {
+
+                if (!this.disabled) {
+                    var span = $(this).children();
+                    var checkedClass = "k-i-checkbox-checked";
+                    var uncheckedClass = "k-i-tri-state-null";
+                    grid.data("kendoGrid").dataSource.filter({});
+
+                    if ($(span).hasClass(uncheckedClass)) {
+                        grid.data("kendoGrid").dataSource.filter({ field: "CreatedBy.UserName", operator: "neq", value: "@User.Identity.Name" });
+                        $(span).removeClass(uncheckedClass);
+                        $(span).addClass(checkedClass);
+                        $('#miDonations').attr('disabled', true);
+                        $('#miDonations').prop('disabled', true);
+                    } else {
+                        $(span).removeClass(checkedClass);
+                        $(span).addClass(uncheckedClass);
+                        $('#miDonations').attr('disabled', false);
+                        $('#miDonations').prop('disabled', false);
+                    }
+                }
+            });
+
+            function showDetails(e) {
+                var pos = $(e.currentTarget).position();
+                var width = $(e.currentTarget).outerWidth();
+                e.preventDefault();
+
+                var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                wnd.content(detailsTemplate(dataItem));
+                wnd.center().open().element.closest(".k-window").css({
+                    top: pos.top + "px",
+                    left:pos.left + width + "px"
+                });
+            }
+        });
+    });
+</script>
+<style type="text/css">
+    #details-container {
+        padding: 10px;
+    }
+
+        #details-container h2 {
+            margin: 0;
+        }
+
+        #details-container em {
+            color: #8c8c8c;
+        }
+
+        #details-container dt {
+            margin: 0;
+            display: inline;
+        }
+
+    .img-wrap {
+        position: relative;
+    }
+
+        .img-wrap .close {
+            position: absolute;
+            top: 2px;
+            right: 6px;
+            z-index: 100;
+        }
+
+        .img-wrap:hover .close {
+            opacity: 1;
+        }
+
+        .img-wrap .image {
+            opacity: 1;
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: .5s ease;
+            backface-visibility: hidden;
+        }
+
+        .img-wrap:hover .image {
+            opacity: 0.3;
+        }
+</style>
+
+}
+

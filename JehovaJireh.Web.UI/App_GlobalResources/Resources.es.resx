@@ -459,4 +459,10 @@
   <data name="ImageUpload" xml:space="preserve">
     <value>Cargar Image </value>
   </data>
+  <data name="ExcludeMyRequest" xml:space="preserve">
+    <value>Excluir mis Applicaciones</value>
+  </data>
+  <data name="MyRequest" xml:space="preserve">
+    <value>Mis Applicaciones</value>
+  </data>
 </root>

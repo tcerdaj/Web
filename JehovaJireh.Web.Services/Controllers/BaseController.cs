@@ -70,7 +70,8 @@ namespace JehovaJireh.Web.Services.Controllers
 			try
 			{
 				var dta = repository.GetById(id);
-				dto = (DTO)dto.InjectFrom<DeepCloneInjection>(dta);// Mapper.Map<DTO>(dta);
+                if (dta != null)
+                    dto = (DTO)dto.InjectFrom<DeepCloneInjection>(dta);
 			}
 			catch (System.Exception ex)
 			{

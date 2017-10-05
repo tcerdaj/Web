@@ -23,6 +23,7 @@
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -2503,6 +2504,7 @@
     <Content Include="webcam\src\JPGEncoder.as" />
     <Content Include="webcam\src\jscam.as" />
     <Content Include="webcam\webcam.jquery.json" />
+    <Content Include="Views\Donations\RequestList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

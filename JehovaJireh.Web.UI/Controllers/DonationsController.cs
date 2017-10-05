@@ -26,6 +26,20 @@ namespace JehovaJireh.Web.UI.Controllers
 		private IDonationRepository donationRepository;
 		private IUserRepository userRepository;
         private IRequestRepository requestRepository;
+        User _user;
+
+        private User CurrentUser
+        {
+            get
+            {
+                if (_user == null) 
+                    return userRepository.GetByUserName(User.Identity.Name);
+                else
+                    return _user;
+            }
+
+            set { _user = value; }
+        }
 
         public DonationsController()
 		{
@@ -106,11 +120,11 @@ namespace JehovaJireh.Web.UI.Controllers
 					}
 				}
 
-				//Class Injection
-				var user = userRepository.GetByUserName(User.Identity.Name);
+                //Class Injection
+                CurrentUser = userRepository.GetByUserName(User.Identity.Name);
 				var donation = new Donation {
 					Amount = model.Amount,
-					CreatedBy = user,
+					CreatedBy = CurrentUser,
 					CreatedOn = DateTime.Now,
 					DonatedOn = DateTime.Now,
 					Description = model.Description,
@@ -129,7 +143,7 @@ namespace JehovaJireh.Web.UI.Controllers
 
                         var itemLine = new DonationDetails
                         {
-                            CreatedBy = user,
+                            CreatedBy = CurrentUser,
                             Donation = donation,
                             CreatedOn = DateTime.Now,
                             ItemName = item.ItemName,
@@ -144,7 +158,7 @@ namespace JehovaJireh.Web.UI.Controllers
                             itemLine.Images.Add(
                                 new DonationImage
                                 {
-                                    CreatedBy = user,
+                                    CreatedBy = CurrentUser,
                                     Item = itemLine,
                                     ImageUrl = image.ImageUrl,
                                     CreatedOn = DateTime.Now,
@@ -171,8 +185,11 @@ namespace JehovaJireh.Web.UI.Controllers
 			return View(model);
 		}
 
+
+
         public ActionResult RequestList()
         {
+            ViewBag.UserId = CurrentUser.Id;
             return View();
         }
 
@@ -185,14 +202,26 @@ namespace JehovaJireh.Web.UI.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult MakeNewRequest(RequestViewModels model)
+        public async System.Threading.Tasks.Task<ActionResult> MakeNewRequest(RequestViewModels model)
 		{
             if (!ModelState.IsValid) return View(model);
 
             try
             {
+                
+                //upload image to azure
+                var imageService = new ImageService(log);
+                var fileToUpload = model.ImageUpload;
+                if (fileToUpload != null)
+                {
+                    var imageUrl = await imageService.CreateUploadedImageAsync(fileToUpload, Guid.NewGuid().ToString(), true, 500, 500);
+                    model.ImageUrl = imageUrl;
+                }
+
                 Request data = new Request();
                 data.InjectFrom<DeepCloneInjection>(model);
+                data.CreatedBy = CurrentUser;
+                data.CreatedOn = DateTime.Now;
                 requestRepository.Create(data);
                 return RedirectToAction("RequestList");
             }

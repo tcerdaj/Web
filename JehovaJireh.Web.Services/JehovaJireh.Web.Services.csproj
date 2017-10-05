@@ -28,6 +28,7 @@
     <ApplicationInsightsResourceId>/subscriptions/23584846-b85c-4ccc-a9dd-91dceab6faf9/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/JehovaJireh.Web.Services</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/23584846-b85c-4ccc-a9dd-91dceab6faf9/resourceGroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/JehovaJireh.Web.Services</ApplicationInsightsAnnotationResourceId>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -377,6 +378,7 @@
     <Compile Include="Controllers\DonationsController.cs" />
     <Compile Include="Controllers\ErorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="ErrorHandler\AiHandleErrorAttribute.cs" />
