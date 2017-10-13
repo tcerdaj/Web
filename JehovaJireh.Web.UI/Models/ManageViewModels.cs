@@ -83,4 +83,10 @@ namespace JehovaJireh.Web.UI.Models
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
     }
+
+    public class UserConnection
+    {
+        public string UserObject { get; set; }
+        public string ConnectionId { get; set; }
+    }
 }

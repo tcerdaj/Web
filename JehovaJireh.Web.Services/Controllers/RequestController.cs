@@ -43,5 +43,27 @@ namespace JehovaJireh.Web.Services.Controllers
 
             return dto;
         }
+
+        [Route("Request/users")]
+        public IEnumerable<RequestDto> GetByUser()
+        {
+            IEnumerable<RequestDto> dto;
+            int thisYear = DateTime.Now.Year;
+            try
+            {
+                var dta = repository.Query().Where(x => x.CreatedOn.Year == thisYear && x.DonationStatus == Core.Entities.DonationStatus.Created).ToList();
+                dto = dta.Select(x => new RequestDto()
+                                .InjectFrom<DeepCloneInjection>(x))
+                                .Cast<RequestDto>()
+                                .ToList();
+            }
+            catch (System.Exception ex)
+            {
+                log.Error(ex);
+                throw ex;
+            }
+
+            return dto;
+        }
     }
 }

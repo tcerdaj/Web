@@ -76,6 +76,16 @@ function displayFieldTextByArray(id, array) {
 	return result !== null ? (result.length > 0?  result[0].Text !== undefined ? result[0].Text : "": "") : "";
 }
 
+function findMemberFromList(id, array) {
+    var result = null;
+    if (!(id === undefined || id === "" || id === null || id === "00000000-0000-0000-0000-000000000000") && !(array === undefined || array === "" || array === null || array.length == 0)) {
+        result = $.grep(array, function (n, i) {
+            return n.ConnectionId === id.toString();
+        });
+    }
+    return result !== null  && result.length > 0 ? result[0] : result;
+}
+
 function convertDictionaryToObject(dictionary) {
     var result = {};
     $.each(dictionary, function (index, value) {

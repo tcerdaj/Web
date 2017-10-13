@@ -44,12 +44,13 @@
 <script>
     var donationTypesArray = [], donationStatusArray = [];
     var wnd,
-        detailsTemplate;
+        detailsTemplate,
+        userId;
 
     $(document).ready(function () {
         $.when(donationStatus(), donationTypes()).done(function (ds, dt) {
             donationTypesArray = dt[0]; donationStatusArray = ds[0];
-            var userId = "@ViewBag.UserId";
+            userId = "@ViewBag.UserId";
 
             var grid = $("#grid").kendoGrid({
                 dataSource: {
@@ -79,6 +80,7 @@
                 height: 550,
                 sortable: true,
                 pageable: false,
+                dataBound: onDataBound,
                 columns: [
                     {
                         field: "CreatedOn",
@@ -102,7 +104,21 @@
                         width: "120px",
                         template: "#: displayFieldTextByArray(DonationStatus, donationStatusArray)	 #"
                     },
-                    { command: { text: "View Details", click: showDetails }, title: " ", width: "180px" }
+                    {
+                        command: [{
+                            text: "View Details",
+                            click: showDetails,
+                            iconClass: "k-icon k-i-preview k-i-eye"
+                        },
+                        {
+                            text: "I want to give you this",
+                            click: wantGiveYou,
+                            iconClass: "k-icon k-i-reset-sm"
+                        }],
+                        class:"test",
+                        title: " ",
+                        width: "180px"
+                    }
                 ]
             });
 
@@ -178,11 +194,55 @@
                     top: pos.top + "px",
                     left:pos.left + width + "px"
                 });
+
+                wnd.element
+                    .append($('<div class="k-edit-buttons k-state-default"><a role="button" class="k-button k-button-icontext close-button" href="#"><span class="k-icon k-i-close"></span>Close</a></div>'));
+
+                $(".close-button").click(function () {
+                    wnd.close();
+                });
+            }
+
+            function onDataBound(e) {
+                var grid = $("#grid").data("kendoGrid");
+                var gridData = grid.dataSource.view();
+                for (var i = 0; i < gridData.length; i++) {
+                    var currentUid = gridData[i].uid;
+                    var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                    var editButton = $($(currenRow[0]).find('a.k-button.k-button-icontext')[1]);
+
+                    if (gridData[i].CreatedBy !== null && gridData[i].CreatedBy.Id.toString() === userId) {
+                        editButton.hide();
+                    }
+                    else{
+                        editButton.show();
+                    }
+                }
+            }
+
+            function wantGiveYou() {
+                alert('Processing...');
             }
         });
     });
 </script>
 <style type="text/css">
+
+    .k-edit-buttons {
+        background-color: #fafafa;
+    }
+
+    .k-edit-buttons {
+        clear: both;
+        text-align: right;
+        border-width: 1px 0 0;
+        border-style: solid;
+        bottom: -1em;
+        padding: .6em;
+        margin-left:-8px;
+        margin-right:-8px;
+    }
+
     #details-container {
         padding: 10px;
     }

@@ -38,9 +38,11 @@ namespace JehovaJireh.Web.UI.Controllers
             IUserRepository userRepository = container.Resolve<IUserRepository>();
             var user = userRepository.GetByUserName(User.Identity.Name);
             dynamic me = new System.Dynamic.ExpandoObject();
+            me.UserName = user.UserName;
             me.Name = user.FirstName;
             me.LastName = user.LastName;
             me.Avatar = user.ImageUrl;
+            me.ConnectedDateTime = DateTime.Now;
             ViewBag.Me = me;
             return View();
         }

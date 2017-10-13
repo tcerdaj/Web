@@ -13,6 +13,7 @@ using JehovaJireh.Logging;
 using JehovaJireh.Web.UI.CustomAttributes;
 using JehovaJireh.Web.UI.Helpers;
 using JehovaJireh.Web.UI.Plumbing;
+using Microsoft.AspNet.SignalR;
 
 namespace JehovaJireh.Web.UI
 {
@@ -26,16 +27,20 @@ namespace JehovaJireh.Web.UI
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-			container = BootstrapContainer();
+            GlobalHost.Configuration.ConnectionTimeout = TimeSpan.FromSeconds(110);
+            GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromSeconds(30);
+            GlobalHost.Configuration.KeepAlive = TimeSpan.FromSeconds(10);
+
+            container = BootstrapContainer();
 			var log = container.Resolve<ILogger>();
 			log.WebApplicationStarting();
 			
 			//initialize controller situation
 			var controllerFactory = new WindsorControllerFactory(container.Kernel);
 			ControllerBuilder.Current.SetControllerFactory(controllerFactory);
-			
-			//ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new CultureAwareControllerActivator()));
-		}
+
+            //ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new CultureAwareControllerActivator()));
+        }
 
 		public static IWindsorContainer BootstrapContainer()
 		{

@@ -189,7 +189,7 @@ namespace JehovaJireh.Web.UI.Controllers
 
         public ActionResult RequestList()
         {
-            ViewBag.UserId = CurrentUser.Id;
+            ViewBag.UserId = CurrentUser?.Id;
             return View();
         }
 

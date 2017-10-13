@@ -59,8 +59,11 @@ namespace JehovaJireh.Web.UI
 						"~/js/kendo.timezones.min.js",
 						"~/js/pako_deflate.min.js"
 						));
+            bundles.Add(new ScriptBundle("~/bundles/fontawesome").Include(
+                        "~/fontawesome/css/font-awesome.min.css"
+                        ));
 
-			bundles.Add(new ScriptBundle("~/bundles/moment").Include(
+            bundles.Add(new ScriptBundle("~/bundles/moment").Include(
 					  "~/Scripts/moment.js",
 					  "~/Scripts/moment-timezone.min.js"
 					  ));
@@ -80,7 +83,13 @@ namespace JehovaJireh.Web.UI
 					"~/Scripts/KOViewModel/DonationVIewModel/MakeDonationViewModel.js",
 					"~/Scripts/KOViewModel/DonationVIewModel/MakeDonationInit.js"
 			   ));
-			#endregion
-		}
-	}
+            #endregion
+
+            #if DEBUG
+                 BundleTable.EnableOptimizations = false;
+            #else
+                 BundleTable.EnableOptimizations = true;
+            #endif
+        }
+    }
 }
