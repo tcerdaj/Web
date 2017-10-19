@@ -3,6 +3,7 @@
     ViewBag.Title = "Chat";
 }
 <div id="chatdialog" reference=".k-button.k-button-icontext.k-grid-ViewDetails"></div>
+<ul class="chat-history" style="display:none"></ul>
 @*lest make two columns*@
 <div class="main-chat-container">
     <div class="row">
@@ -41,82 +42,31 @@
     <script type="text/x-kendo-template" id="chattemplate">
         <div class="">
             <div class="">
+                <input class="chat-connectionid" type="hidden" value="#= ConnectionId #" />
+                <input class="chat-username" type="hidden" value="#= UserName #" />
+                <input class="chat-name" type="hidden" value="#= Name #" />
+                <input class="chat-fullname" type="hidden" value="#= FullName #" />
+                <input class="chat-connecteddatetime" type="hidden" value="#= ConnectedDateTime #" />
+                <input class="chat-avatar" type="hidden" value="#= Avatar #" />
                 <div class="panel panel-primary">
                     <div class="panel-body">
                         <ul class="chat">
-                            <li class="left clearfix">
-                                <span class="chat-img pull-left">
-                                    <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
-                                </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <strong class="primary-font">Jack Sparrow</strong> <small class="pull-right text-muted">
-                                            <span class="glyphicon glyphicon-time"></span>12 mins ago
-                                        </small>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                        dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="right clearfix">
-                                <span class="chat-img pull-right">
-                                    <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
-                                </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>13 mins ago</small>
-                                        <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                        dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="left clearfix">
-                                <span class="chat-img pull-left">
-                                    <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
-                                </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <strong class="primary-font">Jack Sparrow</strong> <small class="pull-right text-muted">
-                                            <span class="glyphicon glyphicon-time"></span>14 mins ago
-                                        </small>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                        dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="right clearfix">
-                                <span class="chat-img pull-right">
-                                    <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
-                                </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>15 mins ago</small>
-                                        <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-                                        dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
+                           
                         </ul>
                     </div>
                     <div class="panel-footer">
                         <div class="input-group">
-                            <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+                            <input tabindex="0" autofocus="autofocus" id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+                            
                             <span class="input-group-btn">
                                 <button class="btn btn-warning btn-sm" id="btn-chat">
                                     Send
                                 </button>
                             </span>
                         </div>
+                    </div>
+                    <div>
+                        <span id="whoistyping" class="text-muted" style="float:left;"></span>
                     </div>
                 </div>
             </div>
@@ -131,9 +81,10 @@
     <script src="~/signalr/hubs"></script>
     <!--SignalR script to update the chat page and send messages.-->
     <script>
-        var chatDialogTemplate, wnd, username, chat;
+        var chatDialogTemplate, wnd, username, fullName, chat, myConnectionId, name, avatar
+            ,refreshIntervalId;
         $(document).keypress(function (e) {
-            if (e.which == 13) {
+            if (e.which == 13 && wnd.element.is(":hidden")) {
                 $('#sendmessage').click();
             }
         });
@@ -144,43 +95,42 @@
             
             var me = convertDictionaryToObject(JSON.parse('@Html.Raw(Json.Encode(@ViewBag.Me))'));
             username = me.UserName;
+            fullName = kendo.format("{0} {1}", me.Name, me.LastName);
+            name = me.Name;
+            avatar = me.Avatar;
             me.ShowSays = false;
             // Reference the auto-generated proxy for the hub.
             chat = $.connection.chatHub;
             chat.connection.qs = { 'userobject': JSON.stringify(me) };
             // Create a function that the hub can call back to display messages.
-            chat.client.addNewMessageToPage = function (jsonobject, message) {
-                // Add the message to the page
-                var _me = JSON.parse(jsonobject);
-                var avatar = _me.Avatar === null || _me.Avatar === undefined || _me.Avatar === '' ? '<div class="avatar-circle“><span class="initials”>' + getInitials(_me.Name + ' ' + _me.LastName) + '</span></div >' : '<div class="avatar-circle"><img class="img-circle" src="' + _me.Avatar + '" /></div>';
-                var name = _me.Name;
-                var date = formatAMPM(new Date());
-                $('#discussion').append('<li><div class="talk-bubble tri-right border round btm-left-in"><div class="talktext"><p><strong>' + htmlEncode(name)
-                    + (_me.ShowSays ? ' says' : '') + '</strong>: ' + htmlEncode(message) + '<p><span class="glyphicon glyphicon-time"><small class="item-time">' + date + '</small></p></p></div></div>' + avatar + '</li>');
-                refreshMembers();
+            chat.client.addNewMessageToPage = function (jsonObject, message) {
+                addNewMessageToPage(jsonObject, message);
             };
 
-            chat.client.addChatMessage = function (who, message) {
+            chat.client.addChatMessage = function (who, jsonObject, message) {
                 // Add the message to the page
-                var element = findUserFromList(username, Array.from($('a.clearfix')));
-                
-                var _me = JSON.parse(jsonobject);
-                var avatar = _me.Avatar === null || _me.Avatar === undefined || _me.Avatar === '' ? '<div class="avatar-circle“><span class="initials”>' + getInitials(_me.Name + ' ' + _me.LastName) + '</span></div >' : '<div class="avatar-circle"><img class="img-circle" src="' + _me.Avatar + '" /></div>';
-                var name = _me.Name;
-                var date = formatAMPM(new Date());
-                $('#discussion').append('<li><div class="talk-bubble tri-right border round btm-left-in"><div class="talktext"><p><strong>' + htmlEncode(name)
-                    + (_me.ShowSays ? ' says' : '') + '</strong>: ' + htmlEncode(message) + '<p><span class="glyphicon glyphicon-time"><small class="item-time">' + date + '</small></p></p></div></div>' + avatar + '</li>');
-                refreshMembers();
+                openChatDialogFromYou(JSON.parse(jsonObject), message);
+                fixScroll();
             };
 
+            chat.client.whoIsTypingMessage = function (_message) {
+                // Add the message to the page
+                if (!wnd.element.is(":hidden")){
+                    if (_message !== '') {
+                        $('#whoistyping').text(htmlEncode(_message));
+                    } else {
+                        $('#whoistyping').text('');
+                    }
+                }
+            }
 
             // Get the user name and store it to prepend to messages.
             $('#jsonobject').val(JSON.stringify(me));
             // Set initial focus to message input box.
             $('#message').focus();
             // Start the connection.
-            $.connection.hub.start().done(function () {
-                refreshMembers(chat);
+            $.connection.hub.start().done(function (data) {
+                refreshMembers();
 
                 $('#sendmessage').click(function () {
                     me.ShowSays = true;
@@ -203,7 +153,8 @@
                     resizable: false,
                     width: 500,
                     maxHeight: 400,
-                    open: onWindowOpen
+                    open: onWindowOpen,
+                    activate: onWindowActive
                 }).data("kendoWindow");
 
             chatDialogTemplate = kendo.template($("#chattemplate").html());
@@ -213,29 +164,153 @@
             chat.server.getAllActiveConnections().done(function (data) { loadUsers(data); });
         }
 
+        function onWindowActive(e) {
+            fixScroll();
+            $('#btn-input').focus();
+        }
+
         function onWindowOpen(e) {
+            $('#btn-input').keypress(function (e) {
+                if (e.which == 13 && !wnd.element.is(":hidden")) {
+                    $('#btn-chat').click();
+                }
+            });
+
+            $('#btn-input').focus(function () {
+                var who = $('.chat-username').val();
+                var message = kendo.format("{0} is going to start typing...", name);
+                chat.server.whoIsTyping(who, message);
+            });
+
+            $('#btn-input').keydown(function () {
+                var who = $('.chat-username').val();
+                var message = kendo.format("{0} is typing...", name);
+                chat.server.whoIsTyping(who, message);
+            });
+
+            $('#btn-input').blur(function () {
+                var message = '';
+                var who = $('.chat-username').val();
+                chat.server.whoIsTyping(who, message);
+            });
 
             $('#btn-chat').click(function () {
                 var message = $('#btn-input').val();
-                alert(message);
+                if (message !== '') {
+                    var wConnectionId = $('.chat-connectionid').val();
+                    var wUserName = $('.chat-username').val();
+                    var wFullName = $('.chat-fullname').val();
+                    var wName = $('.chat-name').val();
+                    var connectedDateTime = $('.chat-connecteddatetime').val();
+                    var wAvatar = $('.chat-avatar').val();
 
-                if ($('#message').val() !== '') {
-                    chat.server.SendChatMessage(connecitonId, "Me",message );
+                    var jsonObject = {
+                        ConnectedDateTime: connectedDateTime,
+                        Who: { ConnectionId: wConnectionId, FullName: wFullName, UserName: wUserName, Name: wName, Avatar: wAvatar },
+                        Me: { ConnectionId: myConnectionId, FullName: fullName, UserName: username, Name: name, Avatar: avatar }
+                    };
+
+                    chat.server.sendChatMessage(wUserName, JSON.stringify(jsonObject), message).done(function (d) {
+                        //Add message to chat
+                        addNewMessageToChat(true, jsonObject, message);
+                        fixScroll();
+                        chat.server.whoIsTyping($('.chat-username').val(), '');
+                    });
                 };
             });
         }
 
+        function fixScroll() {
+            $('#btn-input').val('');
+            var scrollTo = $('#btn-input');
+            var container = $('#chatdialog');
+            container.animate({
+                scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
+            });
+        }
+
+        function addNewMessageToPage(jsonobject, message) {
+            // Add the message to the page
+            var _me = JSON.parse(jsonobject);
+            var avatar = _me.Avatar === null || _me.Avatar === undefined || _me.Avatar === '' ? '<div class="avatar-circle“><span class="initials”>' + getInitials(_me.Name + ' ' + _me.LastName) + '</span></div >' : '<div class="avatar-circle"><img class="img-circle" src="' + _me.Avatar + '" /></div>';
+            var name = _me.Name;
+            var date = formatAMPM(new Date());
+            $('#discussion').append('<li><div class="talk-bubble tri-right border round btm-left-in"><div class="talktext"><p><strong>' + htmlEncode(name)
+                + (_me.ShowSays ? ' says' : '') + '</strong>: ' + htmlEncode(message) + '<p><span class="glyphicon glyphicon-time"><small class="item-time">' + date + '</small></p></p></div></div>' + avatar + '</li>');
+
+            refreshMembers();
+        }
+
+        function addNewMessageToChat(isMe, jsonObject, message) {
+            if (jsonObject.ConnectedDateTime === undefined)
+                jsonObject.ConnectedDateTime = new Date();
+
+            var avatar = isMe ? '<img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />' : '<img src="' + jsonObject.Me.Avatar + '" alt="User Avatar" class="img-circle" />';
+            var direcction = isMe ? "right" : "left";
+            var fullName = jsonObject.Me.FullName;
+            var userName = jsonObject.Me.UserName;
+            var cuserName = $('.chat-history').find('.username').val();
+            var chatHistory = $('.chat-history');
+
+            if (!isMe && userName !== cuserName)
+                chatHistory.empty();//Clean list
+
+            var htmlString = '<li class="' + direcction + ' clearfix">' +
+                '<span class="chat-img pull-'+ direcction + '">' +
+                avatar +
+                '</span >' +
+                '<input class="username" type="hidden" value="'+ userName + '" />'+
+                '<div class="chat-body clearfix">' +
+                '<div class="header">' +
+                '<strong class="primary-font">' + fullName + '</strong> <small class="pull-right text-muted">' +
+                '<span class="glyphicon glyphicon-time"></span>&#160;' + moment(jsonObject.ConnectedDateTime).fromNow() +
+                '</small>' +
+                '</div>' +
+                '<p>' +
+                message +
+                '</p>' +
+                '</div>' +
+                '</li >';
+
+            chatHistory.append(htmlString);
+            chatHistory.children().clone().appendTo($('.chat'));
+        }
+
         function openChatDialog(e) {
             if (wnd.element.is(":hidden")) {//if not open
+                var connectionId = $(e).find("#wconnectionid").val();
+                var userName = $(e).find("#wusername").val();
+                var name = $(e).find("#wname").val();
+                var fullName = $(e).find("#wfullname").val();
+                var connectedDatetime = new Date();
+                var wAvatar = $(e).find("#wavatar").val();
+
                 var pos = $(e).position();
                 var width = $(e).outerWidth();
                 wnd.title(kendo.format('<span class="glyphicon glyphicon-comment"></span> Chat {0}', e.title));
-                wnd.content(chatDialogTemplate({}));
+                wnd.content(chatDialogTemplate({ ConnectionId: connectionId, UserName: userName, Name: name, FullName: fullName, ConnectedDateTime: connectedDatetime, Avatar: wAvatar }));
                 wnd.center().open().element.closest(".k-window").css({
                     top: pos.top + "px",
                     left: pos.left + width + "px"
                 });
             }
+        }
+
+        function openChatDialogFromYou(data, message) {
+            var d = data.Me;
+            if (wnd.element.is(":hidden")) {//if not open
+                var pos = $('#members').position();
+                var width = $('#members').outerWidth();
+
+                wnd.title(kendo.format('<span class="glyphicon glyphicon-comment"></span> Chat {0}', d.Name));
+                wnd.content(chatDialogTemplate({ ConnectionId: d.ConnectionId, UserName: d.UserName, Name: d.Name, FullName: d.FullName, ConnectedDateTime: data.ConnectedDateTime, Avatar: d.Avatar }));
+                wnd.center().open().element.closest(".k-window").css({
+                    top: pos.top + "px",
+                    left: pos.left + width + "px"
+                    });
+            }
+
+            addNewMessageToChat(false, data, message);
         }
 
         function findUserFromList(userName, array) {
@@ -260,14 +335,25 @@
                 var me = JSON.parse(d.UserObject);
                 var enable = me.UserName !== username;
                 var connectionId = d.ConnectionId;
-                var avatar = me.Avatar === null || me.Avatar === undefined || me.Avatar === '' ? '<div class="avatar-circle“ title="' + getInitials(me.Name + ' ' + me.LastName) + '"><span class="initials”>' + getInitials(me.Name + ' ' + me.LastName) + '</span></div >' : '<div class="avatar-circle"title="' + getInitials(me.Name + ' ' + me.LastName) +'"><img class="img-circle" src="' + me.Avatar + '" /></div>';
+
+                if (me.UserName == username)
+                    myConnectionId = connectionId;
+
+                var avatar = me.Avatar === null || me.Avatar === undefined || me.Avatar === '' ? '<div class="avatar-circle“ title="' + getInitials(me.Name + ' ' + me.LastName) +
+                    '"><span class="initials”>' + getInitials(me.Name + ' ' + me.LastName) + '</span></div >' : '<div class="avatar-circle"title="' + getInitials(me.Name + ' ' + me.LastName) +
+                    '"><img class="img-circle" src="' + me.Avatar + '" /></div>';
+
                 var strElement = '<li>'
-                    + (enable ? '<a href="#" class="clearfix" onclick="openChatDialog(this);" title="' + me.Name + '" username="' + me.UserName + '">' : '<a href="#" class="clearfix item-disabled" title="' + me.Name + '">')
+                    + (enable ? '<a href="#" class="clearfix" onclick="openChatDialog(this);" title="' + me.Name + '" >' : '<a href="#" class="clearfix item-disabled" title="' + me.Name + '">')
                     + avatar
                     + '<div class="friend-name"><strong>'+ me.Name + ' ' + me.LastName + '</strong></div >'
                     + '<div class="last-message text-muted">&#160;has Has established connection in the room.</div>'
-                    + '<input type="hidden" id="connectionid" value="' + connectionId +'"/>'
-                    + '<small class="time text-muted">' + moment(me.ConnectedDateTime).fromNow() + '</small>'
+                    + '<input type="hidden" id="wconnectionid" value="' + connectionId + '"/>'
+                    + '<input type="hidden" id="wusername" value="' + me.UserName + '"/>'
+                    + '<input type="hidden" id="wname" value="' + me.Name + '"/>'
+                    + '<input type="hidden" id="wfullname" value="' + me.Name + ' ' + me.LastName + '"/>'
+                    + '<input type="hidden" id="wavatar" value="' + me.Avatar + '"/>'
+                    + '<small class="time text-muted">&#160;' + moment(me.ConnectedDateTime).fromNow() + '</small>'
                                     +'<small class="chat-alert text-muted"><i class="fa fa-reply"></i></small>'
                                     + '</a>'
                                 + '</li >';

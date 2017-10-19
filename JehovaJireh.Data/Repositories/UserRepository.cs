@@ -38,8 +38,18 @@ namespace JehovaJireh.Data.Repositories
 		
 		public User GetByUserName(string userName)
 		{
-			return (from u in Query() where u.UserName == userName select u).SingleOrDefault();
-		}
+            User user;
+            try
+            {
+                user  = (from u in Query() where u.UserName == userName select u).SingleOrDefault();
+            }
+            catch (System.Exception ex)
+            {
+                throw;
+            }
+
+            return user;
+        }
 
 		public User GetByEmail(string email)
 		{

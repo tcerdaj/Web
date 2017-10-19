@@ -29,10 +29,14 @@ namespace JehovaJireh.Web.UI.Hubs
             Clients.Group(roomName).addNewMessageToPage(json, message);
         }
 
-        public void SendChatMessage(string connectionId, string who, string message)
+        public void SendChatMessage(string who, string jsonObject, string message)
         {
-            string name = Context.User.Identity.Name;
-            Clients.Group(roomName).Client(connectionId).addChatMessage(who, message);
+            Clients.Group(who).addChatMessage(who, jsonObject, message);
+        }
+
+        public void WhoIsTyping(string who, string message)
+        {
+            Clients.Group(who).WhoIsTypingMessage(message);
         }
 
         public override Task OnConnected()
@@ -40,10 +44,11 @@ namespace JehovaJireh.Web.UI.Hubs
             userObject = Context.QueryString["userobject"];
             user = Json.Decode(userObject);
             user.ConnectionId = Context.ConnectionId;
+            userObject = Json.Encode(user);
 
             if (!string.IsNullOrEmpty(userObject))
             {
-                var results = JoinRoom(roomName);
+                JoinRoom(roomName);
             }
 
             return base.OnConnected();
@@ -51,28 +56,67 @@ namespace JehovaJireh.Web.UI.Hubs
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            var results = LeaveRoom(roomName);
+            LeaveRoom(roomName);
             return base.OnDisconnected(stopCalled);
         }
 
-        public Task JoinRoom(string roomName)
+        public override Task OnReconnected()
+        {
+            userObject = Context.QueryString["userobject"];
+            user = Json.Decode(userObject);
+            user.ConnectionId = Context.ConnectionId;
+            userObject = Json.Encode(user);
+
+            if (!string.IsNullOrEmpty(userObject))
+            {
+                JoinRoom(roomName);
+            }
+            return base.OnReconnected();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+
+        }
+
+        public void JoinRoom(string roomName)
         {
             user = Json.Decode(userObject);
             var memberName = GetProperty(user, "Name");
+            var userName = GetProperty(user, "UserName");
+            Groups.Add(Context.ConnectionId, userName);
+            Groups.Add(Context.ConnectionId, roomName);
+
+            var count = SignalRUsers.RemoveAll(x => GetProperty(Json.Decode(x.UserObject), "UserName") == userName);
             var userAlreadyConnected = SignalRUsers.Any(x =>x.ConnectionId == Context.ConnectionId);
 
             if (!userAlreadyConnected)
                 SignalRUsers.Add(new UserConnection { ConnectionId = Context.ConnectionId, UserObject = userObject });
 
-            Clients.Group(roomName).addNewMessageToPage(userObject, "has entered the room.");
-            return Groups.Add(Context.ConnectionId, roomName);
+            string msg = "has entered the room.";
+            Clients.Group(roomName).addNewMessageToPage(userObject, msg);
+            Clients.Group(roomName).messageReceived(userName, msg);
         }
 
-        public Task LeaveRoom(string roomName)
+        public void LeaveRoom(string roomName)
         {
-            var count = SignalRUsers.RemoveAll(x =>x.ConnectionId == Context.ConnectionId);
-            Clients.Group(roomName).addNewMessageToPage(userObject, "has left the room.");
-            return Groups.Remove(Context.ConnectionId, roomName);
+            var userLeave = Json.Decode(Context.QueryString["userobject"]);
+            var userName  = GetProperty(userLeave, "UserName");
+
+            foreach (var user in SignalRUsers)
+            {
+                if (GetProperty(Json.Decode(user.UserObject), "UserName") == userName)
+                {
+                    Groups.Remove(user.ConnectionId, userName);
+                    Groups.Remove(Context.ConnectionId, roomName);
+                }
+            }
+            
+            var count = SignalRUsers.RemoveAll(x =>GetProperty(Json.Decode(x.UserObject), "UserName") == userName);
+
+            string msg = "has left the room.";
+            Clients.Group(roomName).addNewMessageToPage(userObject, msg);
+            Clients.Group(roomName).messageReceived(userName, msg);
         }
 
         public List<UserConnection> GetAllActiveConnections()

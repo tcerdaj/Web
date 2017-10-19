@@ -49,7 +49,10 @@ namespace JehovaJireh.Data.Repositories
 
 			try
 			{
-				data = Session.Query<T>();
+                if (Session.Connection.State == System.Data.ConnectionState.Closed)
+                    Session.Connection.Open();
+
+                data = Session.Query<T>();
 			}
 			catch (System.Exception ex)
 			{
