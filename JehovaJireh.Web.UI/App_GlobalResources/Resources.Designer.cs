@@ -241,6 +241,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chat.
+        /// </summary>
+        public static string Chat {
+            get {
+                return ResourceManager.GetString("Chat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose Your Language.
         /// </summary>
         public static string ChooseYourLanguage {

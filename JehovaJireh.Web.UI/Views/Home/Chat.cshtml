@@ -3,6 +3,8 @@
     ViewBag.Title = "Chat";
 }
 <div id="chatdialog" reference=".k-button.k-button-icontext.k-grid-ViewDetails"></div>
+<audio id="audiochat" src="~/audio/you-wouldnt-believe.mp3" preload="auto"></audio>
+<audio id="audiomainchat" src="~/audio/echoed-ding.mp3" preload="auto"></audio>
 <ul class="chat-history" style="display:none"></ul>
 @*lest make two columns*@
 <div class="main-chat-container">
@@ -39,6 +41,14 @@
     @Styles.Render("~/bundles/kendo-css")
     @Scripts.Render("~/bundles/kendo")
 
+<script type="text/javascript">
+    function play_single_sound() {
+        document.getElementById('audiochat').play();
+    }
+    function play_single_main_sound() {
+        document.getElementById('audiomainchat').play();
+    }
+</script>
     <script type="text/x-kendo-template" id="chattemplate">
         <div class="">
             <div class="">
@@ -51,7 +61,23 @@
                 <div class="panel panel-primary">
                     <div class="panel-body">
                         <ul class="chat">
-                           
+                            # for (var i = 0; i < UserHistory.length; i++) { #
+                                <li class="#= UserHistory[i].class # clearfix">
+                                    <span class="chat-img pull #= UserHistory[i].class #">
+                                        #= UserHistory[i].avatar #
+                                    </span>
+                                    <input class="username" type="hidden" value="#= UserHistory[i].UserName #" />
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">#= UserHistory[i].FullName #</strong> 
+                                            <small class="pull-right text-muted">
+                                                <span class="glyphicon glyphicon-time"></span> #= moment(UserHistory[i].ConnectedDateTime).fromNow() # 
+                                            </small>
+                                        </div>
+                                        <p>#= UserHistory[i].Message #</p>
+                                    </div>
+                                </li>
+                            # } #
                         </ul>
                     </div>
                     <div class="panel-footer">
@@ -104,11 +130,13 @@
             chat.connection.qs = { 'userobject': JSON.stringify(me) };
             // Create a function that the hub can call back to display messages.
             chat.client.addNewMessageToPage = function (jsonObject, message) {
+                play_single_main_sound();
                 addNewMessageToPage(jsonObject, message);
             };
 
             chat.client.addChatMessage = function (who, jsonObject, message) {
                 // Add the message to the page
+                play_single_sound();
                 openChatDialogFromYou(JSON.parse(jsonObject), message);
                 fixScroll();
             };
@@ -170,8 +198,8 @@
         }
 
         function onWindowOpen(e) {
-            $('#btn-input').keypress(function (e) {
-                if (e.which == 13 && !wnd.element.is(":hidden")) {
+            $('#btn-input').keypress(function (k) {
+                if (k.which == 13 && !wnd.element.is(":hidden")) {
                     $('#btn-chat').click();
                 }
             });
@@ -241,25 +269,66 @@
             refreshMembers();
         }
 
-        function addNewMessageToChat(isMe, jsonObject, message) {
-            if (jsonObject.ConnectedDateTime === undefined)
-                jsonObject.ConnectedDateTime = new Date();
 
+        function openChatDialog(e) {
+            if (wnd.element.is(":hidden")) {//if not open
+                var connectionId = $(e).find("#wconnectionid").val();
+                var userName = $(e).find("#wusername").val();
+                var name = $(e).find("#wname").val();
+                var fullName = $(e).find("#wfullname").val();
+                var connectedDatetime = new Date();
+                var wAvatar = $(e).find("#wavatar").val();
+                var strHistory = localStorage[userName];
+                var userHistory = strHistory !== '' && strHistory !== undefined ? JSON.parse(strHistory) : [];
+
+                var pos = $(e).position();
+                var width = $(e).outerWidth();
+                wnd.title(kendo.format('<span class="glyphicon glyphicon-comment"></span> Chat {0}', e.title));
+                wnd.content(chatDialogTemplate({ ConnectionId: connectionId, UserName: userName, Name: name, FullName: fullName, ConnectedDateTime: connectedDatetime, Avatar: wAvatar, UserHistory:userHistory }));
+                wnd.center().open().element.closest(".k-window").css({
+                    top: pos.top + "px",
+                    left: pos.left + width + "px"
+                });
+            }
+        }
+
+        function openChatDialogFromYou(data, message) {
+            //TODO:
+            //1.Check if the current wnd user is the same that sent the message.
+            // * if no close the windows
+            // * open new windows
+            // * load user chat history
+            // * add new message
+            // * add new message to cache
+            var d = data.Me;
+            var currentUserName = $(wnd.title()).attr('username');
+            var pos = $('#members').position();
+            var width = $('#members').outerWidth();
+            var strHistory = localStorage[d.UserName];
+            var userHistory = strHistory !== '' && strHistory !== undefined ? JSON.parse(strHistory) : [];
+
+            wnd.title(kendo.format('<span class="glyphicon glyphicon-comment" username="' + d.UserName + '"></span> Chat {0}', d.Name));
+            wnd.content(chatDialogTemplate({ ConnectionId: d.ConnectionId, UserName: d.UserName, Name: d.Name, FullName: d.FullName, ConnectedDateTime: data.ConnectedDateTime, Avatar: d.Avatar, UserHistory: userHistory }));
+            wnd.center().open().element.closest(".k-window").css({
+                top: pos.top + "px",
+                left: pos.left + width + "px"
+            });
+
+            addNewMessageToChat(false, data, message);
+        }
+
+
+        function addNewMessageToChat(isMe, jsonObject, message) {
             var avatar = isMe ? '<img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />' : '<img src="' + jsonObject.Me.Avatar + '" alt="User Avatar" class="img-circle" />';
             var direcction = isMe ? "right" : "left";
             var fullName = jsonObject.Me.FullName;
             var userName = jsonObject.Me.UserName;
-            var cuserName = $('.chat-history').find('.username').val();
-            var chatHistory = $('.chat-history');
-
-            if (!isMe && userName !== cuserName)
-                chatHistory.empty();//Clean list
 
             var htmlString = '<li class="' + direcction + ' clearfix">' +
-                '<span class="chat-img pull-'+ direcction + '">' +
+                '<span class="chat-img pull-' + direcction + '">' +
                 avatar +
                 '</span >' +
-                '<input class="username" type="hidden" value="'+ userName + '" />'+
+                '<input class="username" type="hidden" value="' + userName + '" />' +
                 '<div class="chat-body clearfix">' +
                 '<div class="header">' +
                 '<strong class="primary-font">' + fullName + '</strong> <small class="pull-right text-muted">' +
@@ -272,45 +341,21 @@
                 '</div>' +
                 '</li >';
 
-            chatHistory.append(htmlString);
-            chatHistory.children().clone().appendTo($('.chat'));
-        }
+            //TODO:Get from cache user
+            //Build history
 
-        function openChatDialog(e) {
-            if (wnd.element.is(":hidden")) {//if not open
-                var connectionId = $(e).find("#wconnectionid").val();
-                var userName = $(e).find("#wusername").val();
-                var name = $(e).find("#wname").val();
-                var fullName = $(e).find("#wfullname").val();
-                var connectedDatetime = new Date();
-                var wAvatar = $(e).find("#wavatar").val();
+            $('.chat').append(htmlString);
 
-                var pos = $(e).position();
-                var width = $(e).outerWidth();
-                wnd.title(kendo.format('<span class="glyphicon glyphicon-comment"></span> Chat {0}', e.title));
-                wnd.content(chatDialogTemplate({ ConnectionId: connectionId, UserName: userName, Name: name, FullName: fullName, ConnectedDateTime: connectedDatetime, Avatar: wAvatar }));
-                wnd.center().open().element.closest(".k-window").css({
-                    top: pos.top + "px",
-                    left: pos.left + width + "px"
-                });
-            }
-        }
-
-        function openChatDialogFromYou(data, message) {
-            var d = data.Me;
-            if (wnd.element.is(":hidden")) {//if not open
-                var pos = $('#members').position();
-                var width = $('#members').outerWidth();
-
-                wnd.title(kendo.format('<span class="glyphicon glyphicon-comment"></span> Chat {0}', d.Name));
-                wnd.content(chatDialogTemplate({ ConnectionId: d.ConnectionId, UserName: d.UserName, Name: d.Name, FullName: d.FullName, ConnectedDateTime: data.ConnectedDateTime, Avatar: d.Avatar }));
-                wnd.center().open().element.closest(".k-window").css({
-                    top: pos.top + "px",
-                    left: pos.left + width + "px"
-                    });
-            }
-
-            addNewMessageToChat(false, data, message);
+            //add to history
+            jsonObject.Me.class = direcction;
+            jsonObject.Me.avatar = avatar;
+            jsonObject.Me.Message = message;
+            jsonObject.Me.ConnectedDateTime = new Date();
+            var _userName = isMe ? jsonObject.Who.UserName : jsonObject.Me.UserName;
+            var strHistory = localStorage[_userName];
+            var userHistory = strHistory !== '' && strHistory !== undefined ? JSON.parse(localStorage[_userName]) : [];
+            userHistory.push(jsonObject.Me);
+            localStorage[_userName] = JSON.stringify(userHistory);
         }
 
         function findUserFromList(userName, array) {

@@ -465,4 +465,7 @@
   <data name="MyRequest" xml:space="preserve">
     <value>My Request</value>
   </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
 </root>

@@ -27,9 +27,9 @@ namespace JehovaJireh.Web.UI
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            GlobalHost.Configuration.ConnectionTimeout = TimeSpan.FromSeconds(110);
-            GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromSeconds(30);
-            GlobalHost.Configuration.KeepAlive = TimeSpan.FromSeconds(10);
+            GlobalHost.Configuration.ConnectionTimeout = TimeSpan.FromSeconds(6000);
+            GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromSeconds(6000);
+            GlobalHost.Configuration.KeepAlive = TimeSpan.FromSeconds(100);
 
             container = BootstrapContainer();
 			var log = container.Resolve<ILogger>();
