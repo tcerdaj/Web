@@ -50,7 +50,7 @@
     $(document).ready(function () {
         $.when(donationStatus(), donationTypes()).done(function (ds, dt) {
             donationTypesArray = dt[0]; donationStatusArray = ds[0];
-            userId = "@ViewBag.UserId";
+            userId = parseInt("@ViewBag.UserId");
 
             var grid = $("#grid").kendoGrid({
                 dataSource: {

@@ -24,9 +24,9 @@ namespace JehovaJireh.Web.UI.Controllers
 		private ApplicationUserManager _userManager;
 		private static IWindsorContainer container;
 		private ILogger log;
-		
+        private const string USERSETTINGS = "UserSettings";
 
-		public AccountController()
+        public AccountController()
 		{
 			container = MvcApplication.BootstrapContainer();
 			log = container.Resolve<ILogger>();
@@ -84,7 +84,7 @@ namespace JehovaJireh.Web.UI.Controllers
 			{
 				return View(model);
 			}
-
+            
 			Stopwatch timespan = Stopwatch.StartNew();
 			log.LoginStarted(model.UserName);
 			// This doesn't count login failures towards account lockout
@@ -95,7 +95,9 @@ namespace JehovaJireh.Web.UI.Controllers
 			switch (result)
 			{
 				case SignInStatus.Success:
-					return RedirectToLocal(returnUrl);
+                    var user = UserManager.FindByName(model.UserName);
+                    Session[USERSETTINGS] = user.ToJson();
+                    return RedirectToLocal(returnUrl);
 				case SignInStatus.LockedOut:
 					return View("Lockout");
 				case SignInStatus.RequiresVerification:
@@ -198,7 +200,7 @@ namespace JehovaJireh.Web.UI.Controllers
 						//Send email to user to complete the proccess.
 						//var callbackUrl = Url.Action("RegisterConfirmationCallBack", "Account", new { token = confirmationToken }, protocol: Request.Url.Scheme);
 						//var emailResult = UserManager.SendEmailAsync(user.Id.ToString(), "Register Confirmation", "Please complete your registration by clicking <a href=\"" + callbackUrl + "\">here</a>");
-						Session["UserSettings"] = user.ToJson();
+						Session[USERSETTINGS] = user.ToJson();
 						return RedirectToAction("Index","Home");
 					}
 
@@ -438,7 +440,8 @@ namespace JehovaJireh.Web.UI.Controllers
 		{
 			log.LogOff(User.Identity.Name);
 			AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-			return RedirectToAction("Index", "Home");
+            Session[USERSETTINGS] = string.Empty;
+            return RedirectToAction("Index", "Home");
 		}
 
 		//
