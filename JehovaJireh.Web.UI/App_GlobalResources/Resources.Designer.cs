@@ -412,6 +412,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Created by.
+        /// </summary>
+        public static string CreatedBy {
+            get {
+                return ResourceManager.GetString("CreatedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created On.
         /// </summary>
         public static string CreatedOn {
@@ -808,6 +817,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Need this.
+        /// </summary>
+        public static string NeedThis {
+            get {
+                return ResourceManager.GetString("NeedThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Need To Be Visited?.
         /// </summary>
         public static string NeedToBeVisited {
@@ -930,6 +948,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         public static string Remove {
             get {
                 return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request List.
+        /// </summary>
+        public static string RequestList {
+            get {
+                return ResourceManager.GetString("RequestList", resourceCulture);
             }
         }
         

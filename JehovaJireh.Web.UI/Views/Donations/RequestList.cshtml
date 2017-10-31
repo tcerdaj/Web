@@ -1,9 +1,9 @@
 ﻿@using JehovaJireh.Web.UI.App_GlobalResources
 @{
-    ViewBag.Title = "My Request";
+    ViewBag.Title = Resources.RequestList;
 }
 
-<h2>My Request</h2>
+<h2>@ViewBag.Title</h2>
 <p>
     @Html.ActionLink(Resources.MakeNewRequest, "MakeNewRequest")
 </p>
@@ -29,7 +29,7 @@
 </script>
 <script type="text/x-kendo-template" id="template">
     <div id="details-container">
-        <h2>#= CreatedBy.FirstName # #= CreatedBy.LastName #</h2>
+        <h2>#= CreatedBy.FirstName # #= CreatedBy.LastName # <span class="needthis">@Resources.NeedThis</span></h2>
         <em>#= Title #</em>
         <dl>
             <dt>
@@ -38,6 +38,7 @@
                  </span>
              </dt>
         </dl>
+        <em>#= Description #</em>
     </div>
 </script>
 
@@ -50,7 +51,7 @@
     $(document).ready(function () {
         $.when(donationStatus(), donationTypes()).done(function (ds, dt) {
             donationTypesArray = dt[0]; donationStatusArray = ds[0];
-            userId = parseInt("@ViewBag.UserId");
+            userId = "@ViewBag.UserId";
 
             var grid = $("#grid").kendoGrid({
                 dataSource: {
@@ -99,9 +100,15 @@
                         width: "150px"
                     },
                     {
+                        field: "CreatedBy",
+                        title: "@Resources.CreatedBy",
+                        width: "70px",
+                        template: "#= CreatedBy.FirstName # #= CreatedBy.LastName #"
+                    },
+                    {
                         field: "DonationStatus",
                         title: "@Resources.DonationStatus",
-                        width: "120px",
+                        width: "90px",
                         template: "#: displayFieldTextByArray(DonationStatus, donationStatusArray)	 #"
                     },
                     {
@@ -117,7 +124,7 @@
                         }],
                         class:"test",
                         title: " ",
-                        width: "180px"
+                        width: "190px"
                     }
                 ]
             });
@@ -227,6 +234,10 @@
     });
 </script>
 <style type="text/css">
+    .needthis {
+        color: greenyellow;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    }
 
     .k-edit-buttons {
         background-color: #fafafa;

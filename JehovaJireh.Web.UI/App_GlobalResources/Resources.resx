@@ -468,4 +468,13 @@
   <data name="Chat" xml:space="preserve">
     <value>Chat</value>
   </data>
+  <data name="RequestList" xml:space="preserve">
+    <value>Request List</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Created by</value>
+  </data>
+  <data name="NeedThis" xml:space="preserve">
+    <value>Need this</value>
+  </data>
 </root>

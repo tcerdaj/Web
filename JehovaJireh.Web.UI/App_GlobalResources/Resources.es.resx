@@ -463,9 +463,18 @@
     <value>Excluir mis Applicaciones</value>
   </data>
   <data name="MyRequest" xml:space="preserve">
-    <value>Mis Applicaciones</value>
+    <value>Mis Solicitudes</value>
   </data>
   <data name="Chat" xml:space="preserve">
     <value>Chat</value>
+  </data>
+  <data name="RequestList" xml:space="preserve">
+    <value>Lista Solicitudes</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Creado por</value>
+  </data>
+  <data name="NeedThis" xml:space="preserve">
+    <value>Necesita esto</value>
   </data>
 </root>
