@@ -15,6 +15,8 @@ using JehovaJireh.Core.Entities;
 using Omu.ValueInjecter;
 using JehovaJireh.Data.Mappings;
 using MvcSiteMapProvider;
+using JehovaJireh.Core.EntitiesDto;
+using System.Threading.Tasks;
 
 namespace JehovaJireh.Web.UI.Controllers
 {
@@ -239,8 +241,34 @@ namespace JehovaJireh.Web.UI.Controllers
 			return View();
 		}
 
-		#region Helpers	
-		public enum DonationMessageId
+        [Authorize]
+        [HttpPost]
+        public Task<DonationDto> RequestedBy(int donationId)
+        {
+            var dta = donationRepository.GetById(donationId);
+            DonationDto dto = null;
+
+            try
+            {
+                if (dta != null)
+                {
+                    dta.RequestedBy = CurrentUser;
+                    dta.ModifiedBy = CurrentUser;
+                    dta.ModifiedOn = DateTime.Now;
+                    donationRepository.Update(dta);
+                    dto = (DonationDto)new DonationDto().InjectFrom<DeepCloneInjection>(dta);
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+
+            return Task.FromResult<DonationDto>(dto);
+        }
+
+        #region Helpers	
+        public enum DonationMessageId
 		{
 			CrateDonationSuccess,
 			Error,

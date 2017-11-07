@@ -8,6 +8,8 @@ using JehovaJireh.Core.Entities;
 using JehovaJireh.Core.EntitiesDto;
 using JehovaJireh.Core.IRepositories;
 using JehovaJireh.Logging;
+using JehovaJireh.Data.Mappings;
+using Omu.ValueInjecter;
 
 namespace JehovaJireh.Web.Services.Controllers
 {
@@ -221,5 +223,27 @@ namespace JehovaJireh.Web.Services.Controllers
 
 			return dto;
 		}
-	}
+
+        [HttpGet]
+        [Route("Donations/RequestedBy/{id}")]
+        public IEnumerable<DonationDto> RequestedBy(int id)
+        {
+            IEnumerable<DonationDto> dto;
+            try
+            {
+                var dta = repository.Query().Where(x => x.RequestedBy.Id == id).ToList();
+                dto = dta.Select(x => new DonationDto()
+                                .InjectFrom<DeepCloneInjection>(x))
+                                .Cast<DonationDto>()
+                                .ToList();
+            }
+            catch (System.Exception ex)
+            {
+                log.Error(ex);
+                throw ex;
+            }
+
+            return dto;
+        }
+    }
 }

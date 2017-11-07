@@ -477,4 +477,7 @@
   <data name="NeedThis" xml:space="preserve">
     <value>Necesita esto</value>
   </data>
+  <data name="SchedulerMessage" xml:space="preserve">
+    <value>Las entragas deben planificarse para fechas igual o mayor a la fecha de hoy.</value>
+  </data>
 </root>

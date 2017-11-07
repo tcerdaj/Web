@@ -85,11 +85,11 @@ namespace JehovaJireh.Web.UI
 			   ));
             #endregion
 
-            #if DEBUG
-                 BundleTable.EnableOptimizations = false;
-            #else
-                 BundleTable.EnableOptimizations = true;
-            #endif
+            //#if DEBUG
+            //     BundleTable.EnableOptimizations = false;
+            //#else
+            //     BundleTable.EnableOptimizations = true;
+            //#endif
         }
     }
 }

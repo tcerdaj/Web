@@ -970,6 +970,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The deliveries must be planned for dates equal or greater than today s date..
+        /// </summary>
+        public static string SchedulerMessage {
+            get {
+                return ResourceManager.GetString("SchedulerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to State.
         /// </summary>
         public static string State {

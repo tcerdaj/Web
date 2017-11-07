@@ -4,4 +4,281 @@
 }
 
 <h2>@ViewBag.Title</h2>
+<div id="scheduler"></div>
+<h3>Drags events from the Grid to the Scheduler:</h3>
 <div id="grid"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/areYouSure")
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/moment")
+    @Scripts.Render("~/bundles/donation/donationviewmodel")
+    @Styles.Render("~/bundles/kendo-css")
+    @Scripts.Render("~/bundles/kendo")
+    <script type="text/x-kendo-template" id="template">
+        <div class="tabstrip">
+            <ul>
+                <li class="k-state-active">
+                    @Resources.DonationDetails
+                </li>
+                <li>
+                    @Resources.ContactInfo
+                </li>
+            </ul>
+            <div>
+                <div class="donation-details"></div>
+            </div>
+            <div>
+                <div class='user-info'>
+                    <ul>
+                        <li><label>Name:</label>#= CreatedBy.FirstName # <a class="pop" href="\\#"><img style="height: 50px;" class="img-rounded  thumb" src="#= CreatedBy.ImageUrl #" /></a></li>
+                        <li><label>Home Phone:</label>#= CreatedBy.PhoneNumber #</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            var userId = "@ViewBag.UserId";
+
+            function scheduler_edit(e) {
+                console.log("edit");
+                var currentDate = new Date(moment().format("M/D/YYYY"));
+                var start = new Date(moment(e.event.start).format("M/D/YYYY"));
+
+                if (moment(start).isBefore(currentDate)) {
+                    e._defaultPrevented = true;
+                    alert('@Resources.SchedulerMessage');
+                }
+            }
+
+            function scheduler_navigate(e) {
+                var currentDate = moment().format("M/D/YYYY");
+                if (e.action === 'previous' && moment(e.date).isBefore(currentDate)) {
+                    e.preventDefault();
+                    $($(e.sender.element[0].firstChild).find('.k-state-default.k-header.k-nav-prev.k-state-hover')).css('opacity', .5);
+                    console.log(kendo.format("navigate:: action:{0}; view:{1}; date:{2:d};", e.action, e.view, e.date));
+                } else {
+                    $(e.sender.element[0].firstChild).find('li.k-state-default.k-header.k-nav-prev').css('opacity', 1);
+                }
+            }
+
+            function scheduler_change(e) {
+                var currentDate = new Date(moment().format("M/D/YYYY"));
+                var start = e.start; //selection start date
+
+                if (moment(start).isBefore(currentDate)) {
+                    start = new Date(moment(e.start).format("M/D/YYYY")); //selection start date
+                    alert('@Resources.SchedulerMessage');
+                    e.preventDefault;
+                }
+                else {
+                    var end = e.end; //selection end date
+                    var slots = e.slots; //list of selected slots
+                    var events = e.events; //list of selected Scheduler events
+                    var message = "change:: selection from {0:g} till {1:g}";
+
+                    if (events.length) {
+                        message += ". The selected event is '" + events[events.length - 1].title + "'";
+                    }
+
+                    console.log(kendo.format(message, start, end));
+                }
+            }
+
+            function scheduler_moveEnd(e) {
+                 console.log("moveEnd");
+                 var currentDate = new Date(moment().format("M/D/YYYY"));
+                 var start = new Date(moment(e.event.start).format("M/D/YYYY"));
+
+                if (moment(start).isBefore(currentDate)) {
+                    e._defaultPrevented = true;
+                    alert('@Resources.SchedulerMessage');
+                }
+            }
+
+            var grid =  $("#grid").kendoGrid({
+                dataSource: {
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json",
+                    transport: {
+                        read: getBaseUrl() + "Donations/RequestBy/" + userId
+                    },
+                    pageSize: 20,
+                    serverPaging: false,
+                    serverSorting: false,
+                    sort: { field: "Id", dir: "desc" },
+                    schema: {
+                        parse: function (response) {
+                            $.each(response, function (idx, elem) {
+                                if (elem !== null && elem.CreatedOn && typeof elem.CreatedOn == "string") {
+                                    elem.CreatedOn = kendo.parseDate(elem.CreatedOn, "yyyy-MM-ddTHH:mm:ss");
+                                }
+                            });
+
+                            return response;
+                        }
+                    }
+                },
+                height: 550,
+                sortable: true,
+                pageable: false,
+                detailTemplate: kendo.template($("#template").html()),
+                detailInit: detailInit,
+                dataBound: onDataBound,
+                columns: [
+                    {
+                        field: "CreatedOn",
+                        title: "@Resources.CreatedOn",
+                        width: "100px",
+                        format: "{0:MM-dd-yyyy}"
+                    },
+                    {
+                        field: "Title",
+                        title: "@Resources.Title",
+                        width: "100px"
+                    },
+                    {
+                        field: "Description",
+                        title: "@Resources.Description",
+                        width: "150px"
+                    },
+                    {
+                        field: "CreatedBy",
+                        title: "@Resources.CreatedBy",
+                        width: "70px",
+                        template: "#= CreatedBy.FirstName # #= CreatedBy.LastName #"
+                    },
+                    {
+                        field: "DonationStatus",
+                        title: "@Resources.DonationStatus",
+                        width: "90px",
+                        template: "#: displayFieldTextByArray(DonationStatus, donationStatusArray)	 #"
+                    },
+                    {
+                        command: [{
+                            text: "View Details",
+                            click: showDetails,
+                            iconClass: "k-icon k-i-preview k-i-eye"
+                        },
+                        {
+                            text: "I want to give you this",
+                            click: wantGiveYou,
+                            iconClass: "k-icon k-i-reset-sm"
+                        }],
+                        class:"test",
+                        title: " ",
+                        width: "190px"
+                    }
+                ]
+            });
+
+            var gridRowOffset = grid.tbody.find("tr:first").offset();
+
+            $("#scheduler").kendoScheduler({
+                date: new Date(moment().format("YYYY/M/DD")),
+                startTime: new Date(moment().format("YYYY/M/DD 7:00")),
+                height: 400,
+                timezone: "Etc/UTC",
+                navigate: scheduler_navigate,
+                change: scheduler_change,
+                edit: scheduler_edit,
+                moveEnd: scheduler_moveEnd,
+                views: [
+                    "day",
+                    { type: "week", selected: true },
+                    "month",
+                    "agenda",
+                    "timeline"
+                ],
+                timezone: "Etc/UTC",
+                dataSource: {
+                    batch: true,
+                    transport: {
+                        read: {
+                            url: "https://demos.telerik.com/kendo-ui/service/tasks",
+                            dataType: "jsonp"
+                        },
+                        update: {
+                            url: "https://demos.telerik.com/kendo-ui/service/tasks/update",
+                            dataType: "jsonp"
+                        },
+                        create: {
+                            url: "https://demos.telerik.com/kendo-ui/service/tasks/create",
+                            dataType: "jsonp"
+                        },
+                        destroy: {
+                            url: "https://demos.telerik.com/kendo-ui/service/tasks/destroy",
+                            dataType: "jsonp"
+                        },
+                        parameterMap: function (options, operation) {
+                            if (operation !== "read" && options.models) {
+                                return { models: kendo.stringify(options.models) };
+                            }
+                        }
+                    },
+                    schema: {
+                        model: {
+                            id: "taskID",
+                            fields: {
+                                taskID: { from: "TaskID", type: "number" },
+                                title: { from: "Title", defaultValue: "No title", validation: { required: true } },
+                                start: { type: "date", from: "Start" },
+                                end: { type: "date", from: "End" },
+                                startTimezone: { from: "StartTimezone" },
+                                endTimezone: { from: "EndTimezone" },
+                                description: { from: "Description" },
+                                recurrenceId: { from: "RecurrenceID" },
+                                recurrenceRule: { from: "RecurrenceRule" },
+                                recurrenceException: { from: "RecurrenceException" },
+                                ownerId: { from: "OwnerID", defaultValue: 1 },
+                                isAllDay: { type: "boolean", from: "IsAllDay" }
+                            }
+                        }
+                    }
+                }
+            });
+
+
+        });
+
+        function detailInit(e) {
+		var detailRow = e.detailRow;
+
+		detailRow.find(".tabstrip").kendoTabStrip({
+			animation: {
+				open: { effects: "fadeIn" }
+			}
+		});
+
+		detailRow.find(".donation-details").kendoGrid({
+			dataSource: new kendo.data.DataSource({
+                data: e.data.DonationDetails,
+                sort: { field: "Line", dir: "asc" },
+				pageSize: 10
+			}),
+			scrollable: false,
+
+			sortable: true,
+			pageable: true,
+			rowTemplate: kendo.template($("#rowTemplate").html()),
+			selectable: "singe",
+			columns: [
+                { field: "Id"},
+                { field: "Line", title: "@Resources.ItemLine", width: "80px" },
+				{ field: "ItemType", title: "@Resources.ItemType", width: "110px" },
+				{ field: "ItemName", title: "@Resources.ItemName", width: "110px" },
+				{ field: "DonationStatus", title: "@Resources.DonationStatus", width: "110px"},
+                { field: "Images", title: "@Resources.ImageUrl", width: "100px" },
+                { template: "#: Images.length #", title: " ", width: 110 },
+                { command: { text: "@Resources.WantThis", click: selectThisDonation }, title: " ", width: "180px" }
+			]
+		});
+    </script>
+    <style>
+        
+    </style>
+}

@@ -103,8 +103,8 @@
             #}#
         </td>
 		<td class="command">
-			#if(CreatedBy.UserName !== "@User.Identity.Name" && DonationStatus === 0){#
-			   <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="selectThisDonation();"><span class="k-icon k-edit"></span>@Resources.WantThis</a>
+			#if(CreatedBy.UserName !== "@User.Identity.Name" && DonationStatus === 0 && "@User.Identity.IsAuthenticated" === "True" ){#
+			   <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy('#= Id #');"><span class="k-icon k-edit"></span>@Resources.WantThis</a>
 			#}#
 		</td>
 </tr>
@@ -140,6 +140,7 @@
 
 <script>
     var donationTypesArray = [], donationStatusArray = [];
+    var userId = "@ViewBag.UserId";
     $(document).keydown(function (e) {
         if (e.keyCode === 37) {
             // Previous
@@ -222,11 +223,18 @@
 					{
 						field: "DonationStatus",
 						title: "@Resources.DonationStatus",
-						width: "120px",
-						template:"#: displayFieldTextByArray(DonationStatus, donationStatusArray)	 #"
+						width: "80px",
+						template:"#= displayFieldTextByArray(DonationStatus, donationStatusArray) #"
+                    },
+                    {
+						title: "",
+						width: "80px",
+                        template:'#= buildMasterRowButton(CreatedBy.UserName, "@User.Identity.Name","@User.Identity.IsAuthenticated" === "True", DonationStatus, DonationDetails.length > 0, Id) #'
 					}
 				]
-			});
+            });
+
+
 
 			grid.find(".k-grid-toolbar").on("click", ".k-pager-refresh", function (e) {
 				e.preventDefault();
@@ -281,6 +289,15 @@
 		});
 	});
 
+    function buildMasterRowButton(user1, user2, isAuthenticated,donationStatus, hasRows, donationId){
+        var str ='<a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy(' + donationId + ');"><span class="k-icon k-edit"></span>@Resources.WantThis</a>';
+        if (user1 !== user2 && isAuthenticated && donationStatus === 0 && !hasRows)
+            return str;
+        else if(hasRows)
+            return "Go to details"
+        else
+            return "";
+    }
 
 	function detailInit(e) {
 		var detailRow = e.detailRow;
@@ -311,7 +328,7 @@
 				{ field: "DonationStatus", title: "@Resources.DonationStatus", width: "110px"},
                 { field: "Images", title: "@Resources.ImageUrl", width: "100px" },
                 { template: "#: Images.length #", title: " ", width: 110 },
-                { command: { text: "@Resources.WantThis", click: selectThisDonation }, title: " ", width: "180px" }
+                { command: { text: "@Resources.WantThis", click: setDonationRequestedBy }, title: " ", width: "180px" }
 			]
 		});
 
@@ -419,8 +436,11 @@
 		});
 	}
 
-	function selectThisDonation() {
-		alert('put some code here...');
+	function setDonationRequestedBy(donationId) {
+        //TODO:
+        //1. Change Donation Status and assing RequestBy
+        //2. Refresh list.
+        alert('put some code here...' + donationId);
 	}
 </script>
 <style>
