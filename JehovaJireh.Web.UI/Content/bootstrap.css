@@ -6843,3 +6843,19 @@ td.visible-print {
 .navbar-collapse .navbar-nav.navbar-right:last-child {
 	margin-right: 0; 
 }
+
+#gh-cart-i {
+    width: 20px;
+    height: 18px;
+    display: block;
+    overflow: hidden;
+    text-indent: -9999px;
+    background-position: -55px -101px !important;
+}
+#gh-cart-i {
+    font-size: 0;
+}
+.gh-sprRetina {
+    background-image: url(https://ir.ebaystatic.com/rs/v/fxxj3ttftm5ltcqnto1o4baovyl.png);
+    background-repeat: no-repeat;
+}

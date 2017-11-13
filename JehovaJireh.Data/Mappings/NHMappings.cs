@@ -62,19 +62,19 @@ namespace JehovaJireh.Data.Mappings
 				.Column("DonationId")
 				.GeneratedBy.Increment();
 			
-			Map(x => x.Title);
+			Map(x => x.Title).Not.Nullable();
 			Map(x => x.Description);
 			Map(x => x.Amount);
 			Map(x => x.ExpireOn);
-			Map(x => x.DonationStatus).CustomType<DonationStatus>();
+			Map(x => x.DonationStatus).CustomType<DonationStatus>().Not.Nullable();
             Map(x => x.RequestId);
-            Map(x => x.CreatedOn);
-			Map(x => x.ModifiedOn);
-			Map(x => x.DonatedOn);
-			HasMany(x => x.DonationDetails)
-				.KeyColumn("DonationId")
-				.Inverse()
-				.Cascade.All();
+            Map(x => x.CreatedOn).Default("getdate()").Not.Nullable();
+			Map(x => x.ModifiedOn).Nullable();
+			Map(x => x.DonatedOn).Default("getdate()").Not.Nullable();
+			//HasMany(x => x.DonationDetails)
+			//	.KeyColumn("DonationId")
+			//	.Inverse()
+			//	.Cascade.All();
 			References(x => x.RequestedBy)
 				.Column("RequestedBy")
 				.Nullable()
@@ -89,7 +89,38 @@ namespace JehovaJireh.Data.Mappings
 				.ForeignKey();
 		}
 	}
-
+    public class DonationDetailMap : ClassMap<DonationDetails>
+    {
+        public DonationDetailMap()
+        {
+            Table("DonationDetails");
+            Id(x => x.Id)
+                .Column("ItemId")
+                .GeneratedBy.Guid();
+            References(x => x.Donation, "DonationId");
+            HasMany(x => x.Images)
+                .KeyColumn("ItemId")
+                .Inverse()
+                .Cascade.All();
+            Map(x => x.Line).Column("Line");
+            Map(x => x.ItemType)
+                .CustomType<DonationType>();
+            Map(x => x.ItemName);
+            Map(x => x.DonationStatus)
+                .CustomType<DonationStatus>();
+            Map(x => x.CreatedOn);
+            Map(x => x.ModifiedOn);
+            References(x => x.RequestedBy)
+                .Column("RequestedBy")
+                .ForeignKey();
+            References(x => x.CreatedBy)
+                .Column("CreatedBy")
+                .ForeignKey();
+            References(x => x.ModifiedBy)
+                .Column("ModifiedBy")
+                .ForeignKey();
+        }
+    }
     public class RequestMap : ClassMap<Request>
     {
         public RequestMap()
@@ -119,38 +150,7 @@ namespace JehovaJireh.Data.Mappings
         }
     }
 
-    public class DonationDetailMap : ClassMap<DonationDetails>
-	{
-		public DonationDetailMap()
-		{
-			Table("DonationDetails");
-			Id(x => x.Id)
-				.Column("ItemId")
-				.GeneratedBy.Guid();
-			References(x => x.Donation, "DonationId"); 
-			HasMany(x => x.Images)
-				.KeyColumn("ItemId")
-				.Inverse()
-				.Cascade.All();
-			Map(x => x.Line).Column("Line");
-			Map(x => x.ItemType)
-				.CustomType<DonationType>(); 
-			Map(x => x.ItemName);
-			Map(x => x.DonationStatus)
-				.CustomType<DonationStatus>();
-			Map(x => x.CreatedOn);
-			Map(x => x.ModifiedOn);
-			References(x => x.RequestedBy)
-				.Column("RequestedBy")
-				.ForeignKey();
-			References(x => x.CreatedBy)
-				.Column("CreatedBy")
-				.ForeignKey();
-			References(x => x.ModifiedBy)
-				.Column("ModifiedBy")
-				.ForeignKey();
-		}
-	}
+   
 
 	public class DonationImageMap : ClassMap<DonationImage>
 	{

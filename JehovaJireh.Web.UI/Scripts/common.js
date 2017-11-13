@@ -28,12 +28,12 @@ function readCookie(name) {
 
 function eraseCookie(name) {
 	if (name !== '' && name !== undefined)
-		createCookie(name, "", -1);
+		createCookie(name, null, -1);
 }
 
 function getBaseUrl() {
     //return window.location.host.indexOf('localhost') > -1 ? "http://localhost:58095/" : "http://jehovajireh.web.service/";
-    return window.location.host.indexOf('localhost') > -1 ? "http://jehovajireh.web.service/" : "http://jehovajireh.web.service/";
+    return window.location.host.indexOf('localhost') > -1 ? "http://localhost:58095/" : "http://jehovajireh.web.service/";
 }
 
 var donationStatus = function () {
@@ -78,7 +78,7 @@ function displayFieldTextByArray(id, array) {
 
 function findMemberFromList(id, array) {
     var result = null;
-    if (!(id === undefined || id === "" || id === null || id === "00000000-0000-0000-0000-000000000000") && !(array === undefined || array === "" || array === null || array.length == 0)) {
+    if (!(id === undefined || id === "" || id === null || id === "00000000-0000-0000-0000-000000000000") && !(array === undefined || array === "" || array === null || array.length === 0)) {
         result = $.grep(array, function (n, i) {
             return n.ConnectionId === id.toString();
         });
@@ -103,4 +103,21 @@ var getInitials = function (string) {
         initials += names[names.length - 1].substring(0, 1).toUpperCase();
     }
     return initials;
+};
+
+// check if an element exists in array using a comparer function
+// comparer : function(currentElement)
+Array.prototype.inArray = function (comparer) {
+    for (var i = 0; i < this.length; i++) {
+        if (comparer(this[i])) return true;
+    }
+    return false;
+}; 
+
+// adds an element to the array if it does not already exist using a comparer 
+// function
+Array.prototype.pushIfNotExist = function (element, comparer) {
+    if (!this.inArray(comparer)) {
+        this.push(element);
+    }
 };

@@ -10,6 +10,7 @@
 	@Scripts.Render("~/bundles/modernizr")
 	@Scripts.Render("~/bundles/jquery")
 	@Scripts.Render("~/bundles/common")
+
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top">
@@ -52,7 +53,7 @@
 	</div>
 
 	<script type="text/javascript">
-		
+
 
 		(function ($) {
 			$("input[name = 'culture']").click(function () {
@@ -61,15 +62,43 @@
 				createCookie(cookieName, (this).value, 5);
 				$(this).parents("#culture-form").submit(); // post form
 				$('a[href="/Manage"]')[0].css('float','left');
-			});
+            });
+
+            //update shopping car
+            var cName = "", cValue = "";
+            document.cookie.split(/; */).forEach(function (cookieraw) {
+                var cookie = cookieraw.split('=');
+                if (cookie[0].indexOf("car") > -1)
+                    cName = cookie[0];//print it 
+            });
+
+            var userName = '@User.Identity.IsAuthenticated' == 'True' ? '@User.Identity.Name' : '';
+            var cookieName = "";
+
+            if (userName !== '')
+                cookieName = "car_" + userName;
+            else
+                cookieName = "car_" + cName;
+                
+            var cookieArray = JSON.parse(readCookie(cookieName));
+            if (cookieArray) {
+                var msg = "Your shopping car contains " + cookieArray.length + " item" + (cookieArray.length > 1 ? "s" : "");
+                $(".gh-cart-c").attr('title', msg);
+                $("#gh-cart-n").text(cookieArray.length);
+            }
+
+             //var cookie = readCookie(cookieName);
 		})(jQuery);
 
 		function getCurrentCulture()
 		{
 			console.log("@System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant()");
-		}
+        }
 	</script>
 	@Scripts.Render("~/bundles/bootstrap")
+    @Styles.Render("~/bundles/kendo-css")
+    @Scripts.Render("~/bundles/kendo")
+    
 	@RenderSection("scripts", required: false)
 </body>
 </html>

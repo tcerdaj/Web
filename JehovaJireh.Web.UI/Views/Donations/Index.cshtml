@@ -46,8 +46,7 @@
    @Scripts.Render("~/bundles/jqueryval")
    @Scripts.Render("~/bundles/areYouSure")
    @Scripts.Render("~/bundles/knockout")
-   @Styles.Render("~/bundles/kendo-css")
-   @Scripts.Render("~/bundles/kendo")	
+   @Scripts.Render("~/bundles/moment")
 
 <script type="text/x-kendo-template" id="template">
 	<div class="tabstrip">
@@ -75,9 +74,6 @@
 </script>
 <script id="rowTemplate" type="text/x-kendo-tmpl">
 	<tr data-uid="#: uid #">
-        <td class="itemId">
-            <span class="title" hidden="hidden"> #: Id #</span>
-        </td>
         <td class="line">
 			<span class="title"> #: Line #</span>
 		</td>
@@ -104,9 +100,9 @@
         </td>
 		<td class="command">
 			#if(CreatedBy.UserName !== "@User.Identity.Name" && DonationStatus === 0 && "@User.Identity.IsAuthenticated" === "True" ){#
-			   <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy('#= Id #');"><span class="k-icon k-edit"></span>@Resources.WantThis</a>
+			   <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy(this, '#= Id #');"><span class="k-icon k-i-cart"></span>@Resources.WantThis</a>
 			#}#
-		</td>
+		</td>   
 </tr>
 </script>
 <script id="altRowTemplate" type="text/x-kendo-tmpl">
@@ -221,20 +217,18 @@
 						format: "{0:MM-dd-yyyy}"
 					},
 					{
-						field: "DonationStatus",
+                        field: "DonationStatus",
 						title: "@Resources.DonationStatus",
 						width: "80px",
-						template:"#= displayFieldTextByArray(DonationStatus, donationStatusArray) #"
+                        template:"#= displayFieldTextByArray(DonationStatus, donationStatusArray) #"
                     },
                     {
-						title: "",
+						title: "Action",
 						width: "80px",
                         template:'#= buildMasterRowButton(CreatedBy.UserName, "@User.Identity.Name","@User.Identity.IsAuthenticated" === "True", DonationStatus, DonationDetails.length > 0, Id) #'
 					}
 				]
             });
-
-
 
 			grid.find(".k-grid-toolbar").on("click", ".k-pager-refresh", function (e) {
 				e.preventDefault();
@@ -290,11 +284,13 @@
 	});
 
     function buildMasterRowButton(user1, user2, isAuthenticated,donationStatus, hasRows, donationId){
-        var str ='<a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy(' + donationId + ');"><span class="k-icon k-edit"></span>@Resources.WantThis</a>';
+        var str = '<a id="' + donationId + '" class="k-button k-button-icontext k-grid-edit" href="#" onclick="setDonationRequestedBy(this, ' + donationId + ');"><span class="k-icon k-i-cart"></span>@Resources.WantThis</a>';
         if (user1 !== user2 && isAuthenticated && donationStatus === 0 && !hasRows)
             return str;
+        else if (!isAuthenticated)
+            return '<a class="k-button k-button-icontext k-grid-edit" id="' + donationId + '" href="#" onclick="goToLogin(this);"><span class="k-icon k-i-user"></span>@Resources.LogIn</a>';
         else if(hasRows)
-            return "Go to details"
+            return '<a class="k-button k-button-icontext k-grid-edit" id="' + donationId + '" href="#" onclick="goToRowMasterDetail(this);"><span class="k-icon k-i-insert-up"></span>@Resources.DonationDetails</a>';
         else
             return "";
     }
@@ -321,7 +317,6 @@
 			rowTemplate: kendo.template($("#rowTemplate").html()),
 			selectable: "singe",
 			columns: [
-                { field: "Id"},
                 { field: "Line", title: "@Resources.ItemLine", width: "80px" },
 				{ field: "ItemType", title: "@Resources.ItemType", width: "110px" },
 				{ field: "ItemName", title: "@Resources.ItemName", width: "110px" },
@@ -436,12 +431,92 @@
 		});
 	}
 
-	function setDonationRequestedBy(donationId) {
+    function setDonationRequestedBy(e, id) {
         //TODO:
         //1. Change Donation Status and assing RequestBy
         //2. Refresh list.
-        alert('put some code here...' + donationId);
-	}
+        var isDonationLine = !$.isNumeric(id);
+        var masterRow = isDonationLine ? $(e).parent().closest("tr.k-detail-row").prev(".k-master-row") :
+            $(e).parent().closest("tr");
+        var userName = '@User.Identity.Name';
+        var cookieName = kendo.format("car_{0}", userName);
+        var cookie = readCookie(cookieName);
+        var cookieArray = cookie ? JSON.parse(cookie) : [];
+        var grid = $("#grid").data("kendoGrid");
+        var dataItem = grid.dataItem(masterRow);
+        var donationId = dataItem.Id;
+        var itemId = isDonationLine ? id : "00000000-0000-0000-0000-000000000000";
+        var item = dataItem.DonationDetails.length > 0 ? $.grep(dataItem.DonationDetails, function (n, i) { return n.Id == itemId })[0] : null;
+        var imageUrl = item && item.Images.length > 0 ? item.Images[0].ImageUrl : "";
+        var title = isDonationLine && item ? item.ItemName : dataItem.Title;
+        var description = isDonationLine && item ? item.ItemName : dataItem.Description;
+        var obj = { UserName: userName, Line: cookieArray.length + 1, DonationId: donationId, ItemId: itemId, Title: title, Description: description, ImageUrl: imageUrl };
+        var alreadyExist = false;
+
+        cookieArray.pushIfNotExist(obj, function (e) {
+            alreadyExist = e.DonationId === obj.DonationId && e.ItemId === obj.ItemId;
+            return e.DonationId === obj.DonationId && e.ItemId === obj.ItemId;
+        });
+
+        if (alreadyExist) {
+            alert('This item already exist in you shooping cart');
+        }
+        else {
+            dataItem.RequestedBy = { Id: userId };
+            dataItem.ModifiedBy = { Id: userId };
+            dataItem.ModifiedOn = moment().format("YYYY-MM-DDTHH:MM:ss");
+            dataItem.DonationDetails = itemId !== "00000000-0000-0000-0000-000000000000"?  { Id: itemId } : null;
+            dataItem.DonationStatus = 2;
+        }
+
+        $.ajax({
+            url: "/Donations/Update/" + dataItem.Id ,
+            datatype: "json",
+            contentType: 'application/json',
+            type: "PUT",
+            data: JSON.stringify(dataItem),
+            success: function (result) {
+                console.log("success");
+                createCookie(cookieName, JSON.stringify(cookieArray), 5);
+                var msg = kendo.format("Your shopping car contains {0} item{1}", cookieArray.length, cookieArray.length > 1 ? "s" : "");
+                $(".gh-cart-c").attr('title', msg);
+                $("#gh-cart-n").text(cookieArray.length);
+                //TODO:
+                //refresh Car
+                //refreshCart();
+                //refresh Grid
+                grid.dataSource.read();
+            },
+            error: function (xhr, status, error) {
+                alert(xhr.responseJSON.data);
+            }
+        });
+    }
+
+    function refreshCart() {
+        //Cookie Name
+        var userName = '@User.Identity.Name';
+        var cookieName = kendo.format("car_{0}", userName);
+        //Cookie Data
+        var cookie = readCookie(cookieName);
+        var cookieArray = cookie ? JSON.parse(cookie) : [];
+        //refresh element
+    }
+
+    function goToLogin(e) {
+        window.location ='@Url.Action("Login", "Account", new { returnUrl = "/Donations/" })';
+    }
+
+    function goToRowMasterDetail(e) {
+        var expanded = $(e).parent().closest("tr").find('.k-icon.k-i-collapse').length > 0;
+        var grid = $("#grid").data("kendoGrid");
+        var row = $(e).parent().closest("tr");
+
+        if (expanded) {grid.collapseRow(row);}
+        else { grid.expandRow(row) };
+    }
+
+
 </script>
 <style>
 	.modal-header {padding:20px;}

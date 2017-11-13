@@ -17,6 +17,7 @@ using JehovaJireh.Data.Mappings;
 using MvcSiteMapProvider;
 using JehovaJireh.Core.EntitiesDto;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace JehovaJireh.Web.UI.Controllers
 {
@@ -34,10 +35,7 @@ namespace JehovaJireh.Web.UI.Controllers
         {
             get
             {
-                if (_user == null) 
-                    return userRepository.GetByUserName(User.Identity.Name);
-                else
-                    return _user;
+               return _user;
             }
 
             set { _user = value; }
@@ -58,14 +56,17 @@ namespace JehovaJireh.Web.UI.Controllers
 					message == DonationMessageId.CrateDonationSuccess ? Resources.YourDonationHasBenCreated
 					: message == DonationMessageId.Error ? Resources.Error
 					: "";
+           
+            CurrentUser = CurrentUser ?? userRepository.GetByUserName(User.Identity.Name);
+            ViewBag.UserId = CurrentUser?.Id;
 
-			//TODO: 
-			//Create kendo parent child grid.
-			//Get webapi call
-			//if message is null show all donation 
-			//else if message is not null show the current user donations.
-			
-			return View();
+            //TODO: 
+            //Create kendo parent child grid.
+            //Get webapi call
+            //if message is null show all donation 
+            //else if message is not null show the current user donations.
+
+            return View();
         }
 
 		[Authorize]
@@ -176,18 +177,54 @@ namespace JehovaJireh.Web.UI.Controllers
 				donationRepository.Create(donation);
 				//Success
 				return Json(new { result = "Redirect", url = Url.Action("Index", "Donations", new { Message = DonationMessageId.CrateDonationSuccess })});
-
 			}
 			catch (System.Exception ex)
 			{
 				ViewBag.StatusMessage = ex.Message;
 			}
 
-
-			return View(model);
+            return View(model);
 		}
 
+        [HttpPut]
+        public ActionResult Update(int id, DonationDto model)
+        {
+            try
+            {
+                Console.WriteLine("Inside Update");
+                if (model != null )
+                {
+                    var dta = donationRepository.Query().FirstOrDefault(x => x.Id == id);
+                    dta.InjectFrom<DeepCloneInjection>(model);
+                    var selected = dta.DonationDetails.Where(x => x.DonationStatus == Core.Entities.DonationStatus.Requested).Count();
+                    var isRequested = model.DonationDetails != null || (selected + 1) == dta.DonationDetails.Count() ;
+                    dta.DonationStatus = isRequested ? Core.Entities.DonationStatus.Requested : Core.Entities.DonationStatus.PartialRequested;
 
+                    if (dta.DonationStatus == Core.Entities.DonationStatus.PartialRequested)
+                    {
+                        var itemId = model.DonationDetails.FirstOrDefault().Id;
+                        var line = dta.DonationDetails.FirstOrDefault(x => x.Id == itemId);
+                        line.RequestedBy = CurrentUser;
+                        line.ModifiedBy = CurrentUser;
+                        line.ModifiedOn = DateTime.Now;
+                        line.DonationStatus = Core.Entities.DonationStatus.Requested;
+                        dta.DonationDetails.Where(x => x.Id == itemId).Select(u => u = line);
+                    }
+                    //var dto = (DonationDto)new DonationDto().InjectFrom<DeepCloneInjection>(dta);
+                    //var jsonStr = JsonConvert.SerializeObject(dto);
+                    donationRepository.Update(dta);
+                    //model = (DonationDto)new DonationDto().InjectFrom<DeepCloneInjection>(dta);
+                    Response.StatusCode = (int)HttpStatusCode.OK;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { status = "error", data = ex.Message });
+            }
+
+            return Json(new { status = "ok", data = model });
+        }
 
         public ActionResult RequestList()
         {
