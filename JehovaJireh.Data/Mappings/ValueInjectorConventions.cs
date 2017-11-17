@@ -55,7 +55,7 @@ namespace JehovaJireh.Data.Mappings
 
 		protected virtual void SetValue(PropertyDescriptor prop, object component, object value)
 		{
-			prop.SetValue(component, value);
+               prop.SetValue(component, value);
 		}
 
 		protected virtual object GetValue(PropertyDescriptor prop, object component)

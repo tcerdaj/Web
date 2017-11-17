@@ -15,8 +15,8 @@ namespace JehovaJireh.Core.EntitiesDto
 		}
 
 		public virtual int Line { get; set; }
-		public virtual DonationDto Donation { get; set; }
-		public virtual UserDto RequestedBy { get; set; }
+		public virtual DonationRefDto Donation { get; set; }
+		public virtual RequestedByDto RequestedBy { get; set; }
 		public virtual DonationType ItemType { get; set; }
 		public virtual string ItemName { get; set; }
 		public virtual DonationStatus DonationStatus { get; set; }

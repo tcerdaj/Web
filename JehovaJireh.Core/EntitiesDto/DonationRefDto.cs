@@ -7,12 +7,8 @@ using JehovaJireh.Core.Entities;
 
 namespace JehovaJireh.Core.EntitiesDto
 {
-	public class DonationDto: EntityBaseDto<int>
+	public class DonationRefDto: EntityBaseDto<int>
 	{
-		public DonationDto()
-		{
-			this.DonationDetails = new List<DonationDetailsDto>();
-		}
 
 		public virtual RequestedByDto RequestedBy { get; set; }
 		public virtual string Title { get; set; }
@@ -22,7 +18,5 @@ namespace JehovaJireh.Core.EntitiesDto
 		public virtual DateTime DonatedOn { get; set; }
 		public virtual DonationStatus DonationStatus { get; set; }
         public virtual int? RequestId { get; set; }
-
-        public virtual ICollection<DonationDetailsDto> DonationDetails { get; set; }
 	}
 }

@@ -7,6 +7,7 @@
 
 <h2>@ViewBag.Title</h2>
 <p class="text-success">@ViewBag.StatusMessage</p>
+<p>La donación es el acto que consiste en dar fondos u otros bienes materiales, generalmente por razones de caridad.</p>
 <p>
     @Html.ActionLink(Resources.MakeADonation, "MakeADonation")
 </p>
@@ -154,13 +155,51 @@
 			donationTypesArray = dt[0]; donationStatusArray = ds[0];
 
 			var grid = $("#grid").kendoGrid({
-				dataSource: {
-					type: "GET",
-					dataType: "json",
-					contentType: "application/json",
-					transport: {
-						read: getBaseUrl() + "Donations"
-					},
+                dataSource: {
+                    transport: {
+                        read: function (options) {
+                            $.ajax({
+                                url: getBaseUrl() + "Donations",
+                                dataType: "json",
+                                cache: false,
+                                type: "GET",
+                                contentType: "application/json; charset=utf-8",
+                                crossDomain: true,
+                                xhrFields: {
+                                    withCredentials: false
+                                },
+                                success: function (data) {
+                                    options.success(data);
+                                },
+                                error: function (e) {
+                                    alert("error");
+                                }
+                            });
+                        },
+                        parameterMap: function (data, type) {
+                            var ret;
+                            switch (type) {
+                                case "read":
+                                    ret = data;
+                                    break;
+                                case "destroy":
+                                    ret = kendo.stringify(data.models[0]);
+                                    break;
+                                default:
+                                    {
+                                        var persons = new Array();
+                                        for (var i = 0; i < data.models.length; i++) {
+                                            persons[i] = data.models[i];
+                                        }
+                                        ret = kendo.stringify({ "Persons": persons });
+                                        break;
+                                    }
+
+                            }
+                            return ret;
+                        }
+                    },
+                    pageSize: 20,
 					pageSize: 20,
 					serverPaging: false,
                     serverSorting: false,
@@ -199,6 +238,11 @@
 						title: "@Resources.CreatedOn",
 						width: "100px",
 						format: "{0:MM-dd-yyyy}"
+                    },
+                    {
+						field: "Id",
+						title: "Donation Id",
+						width: "50px"
 					},
 					{
 						field: "Title",
@@ -225,7 +269,7 @@
                     {
 						title: "Action",
 						width: "80px",
-                        template:'#= buildMasterRowButton(CreatedBy.UserName, "@User.Identity.Name","@User.Identity.IsAuthenticated" === "True", DonationStatus, DonationDetails.length > 0, Id) #'
+                        template:'#= buildMasterRowButton(CreatedBy.UserName, "@User.Identity.Name","@User.Identity.IsAuthenticated" === "True", DonationStatus, DonationDetails, Id) #'
 					}
 				]
             });
@@ -283,7 +327,8 @@
 		});
 	});
 
-    function buildMasterRowButton(user1, user2, isAuthenticated,donationStatus, hasRows, donationId){
+    function buildMasterRowButton(user1, user2, isAuthenticated, donationStatus, DonationDetails, donationId){
+        var hasRows = DonationDetails !== null && DonationDetails.length > 0 && DonationDetails[0].ItemName !== null;
         var str = '<a id="' + donationId + '" class="k-button k-button-icontext k-grid-edit" href="#" onclick="setDonationRequestedBy(this, ' + donationId + ');"><span class="k-icon k-i-cart"></span>@Resources.WantThis</a>';
         if (user1 !== user2 && isAuthenticated && donationStatus === 0 && !hasRows)
             return str;
@@ -311,7 +356,6 @@
 				pageSize: 10
 			}),
 			scrollable: false,
-
 			sortable: true,
 			pageable: true,
 			rowTemplate: kendo.template($("#rowTemplate").html()),
@@ -465,32 +509,38 @@
             dataItem.RequestedBy = { Id: userId };
             dataItem.ModifiedBy = { Id: userId };
             dataItem.ModifiedOn = moment().format("YYYY-MM-DDTHH:MM:ss");
-            dataItem.DonationDetails = itemId !== "00000000-0000-0000-0000-000000000000"?  { Id: itemId } : null;
+            dataItem.DonationDetails = itemId !== "00000000-0000-0000-0000-000000000000" ? { Id: itemId } : null;
             dataItem.DonationStatus = 2;
-        }
 
-        $.ajax({
-            url: "/Donations/Update/" + dataItem.Id ,
-            datatype: "json",
-            contentType: 'application/json',
-            type: "PUT",
-            data: JSON.stringify(dataItem),
-            success: function (result) {
-                console.log("success");
-                createCookie(cookieName, JSON.stringify(cookieArray), 5);
-                var msg = kendo.format("Your shopping car contains {0} item{1}", cookieArray.length, cookieArray.length > 1 ? "s" : "");
-                $(".gh-cart-c").attr('title', msg);
-                $("#gh-cart-n").text(cookieArray.length);
-                //TODO:
-                //refresh Car
-                //refreshCart();
-                //refresh Grid
-                grid.dataSource.read();
-            },
-            error: function (xhr, status, error) {
-                alert(xhr.responseJSON.data);
-            }
-        });
+            $.ajax({
+                url: getBaseUrl() + "Donations/" + dataItem.Id,
+                contentType: "application/json; charset=utf-8",
+                cache: false,
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: false
+                },
+                type: "PUT",
+                data: JSON.stringify(dataItem),
+                success: function (result) {
+                    console.log("success");
+                    createCookie(cookieName, JSON.stringify(cookieArray), 5);
+                    var msg = kendo.format("Your shopping car contains {0} item{1}", cookieArray.length, cookieArray.length > 1 ? "s" : "");
+                    $(".gh-cart-c").attr('title', msg);
+                    $("#gh-cart-n").text(cookieArray.length);
+                    var _grid = $('#grid').data("kendoGrid");
+                    _grid.dataSource.read();
+                    _grid.dataSource.fetch();
+                },
+                error: function (xhr, status, error) {
+                    try {
+                        alert(xhr.responseJSON.Message);
+                    } catch (e) {
+                        alert("An error has occurred.");
+                    }
+                }
+            });
+        }
     }
 
     function refreshCart() {

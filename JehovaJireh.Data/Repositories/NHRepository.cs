@@ -45,23 +45,19 @@ namespace JehovaJireh.Data.Repositories
 		{
 			IQueryable<T> data = null;
 			Stopwatch timespan = Stopwatch.StartNew();
-			//log.GetStarted("Query Start");
 
-			try
+            try
 			{
                 if (Session.Connection.State == System.Data.ConnectionState.Closed)
                     Session.Connection.Open();
 
                 data = Session.Query<T>();
-			}
+                foreach (var obj in data)
+                    Session.Evict(obj);
+            }
 			catch (System.Exception ex)
 			{
 				HandleException(ex);
-			}
-			finally
-			{
-				//timespan.Stop();
-				//log.GetFinished("Query Finish", timespan.Elapsed);
 			}
 
 			return data;
@@ -97,7 +93,8 @@ namespace JehovaJireh.Data.Repositories
 			try
 			{
 				item = Session.Get<T>(Id);
-			}
+                Session.Evict(item);
+            }
 			catch (System.Exception ex)
 			{
 				HandleException(ex);
@@ -181,7 +178,7 @@ namespace JehovaJireh.Data.Repositories
 
 		public void Dispose()
 		{
-
+            session.Close();
 		}
 
 		public void Update(T entity)

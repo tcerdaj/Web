@@ -12,6 +12,8 @@ using NHibernate;
 using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 using JehovaJireh.Logging;
 using System.Web;
+using System.Web.Http;
+using Microsoft.Owin.Cors;
 
 namespace JehovaJireh.Web.Services
 {
@@ -46,8 +48,10 @@ namespace JehovaJireh.Web.Services
 		// For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
 		public void ConfigureAuth(IAppBuilder app)
 		{
-			//Check to see if we are running local and if we are set the cookie domain to nothing so authentication works correctly.
-			string cookieDomain = ".jehovajireh.com";
+            //Check to see if we are running local and if we are set the cookie domain to nothing so authentication works correctly.
+            app.UseCors(CorsOptions.AllowAll);
+
+            string cookieDomain = ".jehovajireh.com";
 			bool isLocal = HttpContext.Current.Request.IsLocal;
 			if (isLocal)
 			{
@@ -64,23 +68,30 @@ namespace JehovaJireh.Web.Services
 
 			app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
-			// Enable the application to use bearer tokens to authenticate users
-			app.UseOAuthBearerTokens(OAuthOptions);
+            // Enable the application to use bearer tokens to authenticate users
+            //app.UseOAuthAuthorizationServer(OAuthOptions);
+            app.UseOAuthAuthorizationServer(OAuthOptions);
+            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+            //app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
-			// Uncomment the following lines to enable logging in with third party login providers
-			//app.UseMicrosoftAccountAuthentication(
-			//    clientId: "",
-			//    clientSecret: "");
+            var config = new HttpConfiguration();
+            config.MapHttpAttributeRoutes();
+            app.UseWebApi(config);
 
-			//app.UseTwitterAuthentication(
-			//    consumerKey: "",
-			//    consumerSecret: "");
+            // Uncomment the following lines to enable logging in with third party login providers
+            //app.UseMicrosoftAccountAuthentication(
+            //    clientId: "",
+            //    clientSecret: "");
 
-			//app.UseFacebookAuthentication(
-			//    appId: "",
-			//    appSecret: "");
+            //app.UseTwitterAuthentication(
+            //    consumerKey: "",
+            //    consumerSecret: "");
 
-			//app.UseGoogleAuthentication();
-		}
+            //app.UseFacebookAuthentication(
+            //    appId: "",
+            //    appSecret: "");
+
+            //app.UseGoogleAuthentication();
+        }
 	}
 }

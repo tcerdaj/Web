@@ -71,23 +71,20 @@ namespace JehovaJireh.Data.Mappings
             Map(x => x.CreatedOn).Default("getdate()").Not.Nullable();
 			Map(x => x.ModifiedOn).Nullable();
 			Map(x => x.DonatedOn).Default("getdate()").Not.Nullable();
-			//HasMany(x => x.DonationDetails)
-			//	.KeyColumn("DonationId")
-			//	.Inverse()
-			//	.Cascade.All();
-			References(x => x.RequestedBy)
-				.Column("RequestedBy")
-				.Nullable()
-				.ForeignKey();
-			References(x => x.CreatedBy)
-				.Column("CreatedBy")
-				.Not.Nullable()
-				.ForeignKey();
-			References(x => x.ModifiedBy)
-				.Column("ModifiedBy")
-				.Nullable()
-				.ForeignKey();
-		}
+            HasMany(x => x.DonationDetails)
+                .KeyColumn("DonationId")
+                .Inverse()
+                .Cascade.All();
+            References(x => x.RequestedBy)
+                .Column("RequestedBy")
+                .ForeignKey("CreatedBy"); ;
+            References(x => x.CreatedBy)
+                .Column("CreatedBy")
+                .ForeignKey("CreatedBy");
+            References(x => x.ModifiedBy)
+                .Column("ModifiedBy")
+                .ForeignKey("ModifiedBy");
+        }
 	}
     public class DonationDetailMap : ClassMap<DonationDetails>
     {

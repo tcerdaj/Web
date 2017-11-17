@@ -19,8 +19,8 @@ namespace JehovaJireh.Web.Services
 			// Web API configuration and services
 			
 			// Configure Web API to use only bearer token authentication.
-			//config.SuppressDefaultHostAuthentication();
-			//config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+			config.SuppressDefaultHostAuthentication();
+			config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
 			//Configure Raygun for WebApi
 			var raygunSettings = (Mindscape.Raygun4Net.RaygunSettings)ConfigurationManager.GetSection("RaygunSettings");
@@ -39,7 +39,7 @@ namespace JehovaJireh.Web.Services
 			config.Services.Replace(typeof(IExceptionHandler), new OopsExceptionHandler());
 
 			// Setting Cors
-			var cors = new EnableCorsAttribute(origins: "http://jehovajirehwebservices.azurewebsites.net", headers: "*", methods: "GET,POST,DELETE,PUT");
+			var cors = new EnableCorsAttribute(origins: "http://localhost:53371", headers: "*", methods: "GET,POST,DELETE,PUT");
 			cors.SupportsCredentials = true;
 			config.EnableCors(cors);
 
