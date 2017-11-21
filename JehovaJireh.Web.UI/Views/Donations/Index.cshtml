@@ -172,31 +172,9 @@
                                     options.success(data);
                                 },
                                 error: function (e) {
-                                    alert("error");
+                                    openDialog("Donations", "An general error has ocurred.");
                                 }
                             });
-                        },
-                        parameterMap: function (data, type) {
-                            var ret;
-                            switch (type) {
-                                case "read":
-                                    ret = data;
-                                    break;
-                                case "destroy":
-                                    ret = kendo.stringify(data.models[0]);
-                                    break;
-                                default:
-                                    {
-                                        var persons = new Array();
-                                        for (var i = 0; i < data.models.length; i++) {
-                                            persons[i] = data.models[i];
-                                        }
-                                        ret = kendo.stringify({ "Persons": persons });
-                                        break;
-                                    }
-
-                            }
-                            return ret;
                         }
                     },
                     pageSize: 20,
@@ -225,13 +203,6 @@
 				pageable: false,
 				detailTemplate: kendo.template($("#template").html()),
 				detailInit: detailInit,
-                dataBound: function (e) {
-
-                    //$('a.k-icon.k-i-expand').click(function () {
-                    //    return false;
-                    //});
-					//this.expandRow(this.tbody.find("tr.k-master-row").first());
-				},
 				columns: [
 					{
 						field: "CreatedOn",
@@ -302,7 +273,6 @@
 			});
 
 			$('#excludeMine').on("click", function () {
-
 				if (!this.disabled) {
 					var span = $(this).children();
 					var checkedClass = "k-i-checkbox-checked";
@@ -323,7 +293,6 @@
 					}
 				}
 			});
-
 		});
 	});
 

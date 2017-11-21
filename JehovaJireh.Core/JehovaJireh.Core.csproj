@@ -100,15 +100,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntitiesDto\DonationDetailsDto.cs" />
+    <Compile Include="EntitiesDto\DonationDetailsImageDto.cs" />
     <Compile Include="EntitiesDto\DonationRefDto.cs" />
     <Compile Include="EntitiesDto\DonationDto.cs" />
     <Compile Include="EntitiesDto\DonationImageDto.cs" />
+    <Compile Include="EntitiesDto\DonationRequestedDto.cs" />
     <Compile Include="EntitiesDto\EntityBaseDto.cs" />
     <Compile Include="EntitiesDto\RequestDto.cs" />
     <Compile Include="EntitiesDto\RequestedByDto.cs" />
     <Compile Include="EntitiesDto\UserDto.cs" />
     <Compile Include="Entities\DonationDetails.cs" />
     <Compile Include="Entities\DonationImage.cs" />
+    <Compile Include="Entities\DonationRequested.cs" />
     <Compile Include="Entities\Donattion.cs" />
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\Enum.cs" />

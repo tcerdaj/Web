@@ -19,9 +19,9 @@ namespace JehovaJireh.Web.UI
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-		private static IWindsorContainer container;
+        private static IWindsorContainer container;
 
-		protected void Application_Start()
+        protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -32,42 +32,42 @@ namespace JehovaJireh.Web.UI
             GlobalHost.Configuration.KeepAlive = TimeSpan.FromSeconds(100);
 
             container = BootstrapContainer();
-			var log = container.Resolve<ILogger>();
-			log.WebApplicationStarting();
-			
-			//initialize controller situation
-			var controllerFactory = new WindsorControllerFactory(container.Kernel);
-			ControllerBuilder.Current.SetControllerFactory(controllerFactory);
+            var log = container.Resolve<ILogger>();
+            log.WebApplicationStarting();
+
+            //initialize controller situation
+            var controllerFactory = new WindsorControllerFactory(container.Kernel);
+            ControllerBuilder.Current.SetControllerFactory(controllerFactory);
 
             //ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new CultureAwareControllerActivator()));
         }
 
-		public static IWindsorContainer BootstrapContainer()
-		{
-			if (container != null)
-			{
-				return container;
-			}
+        public static IWindsorContainer BootstrapContainer()
+        {
+            if (container != null)
+            {
+                return container;
+            }
 
-			return container = new WindsorContainer()
-				.Install(FromAssembly.This(), FromAssembly.Containing<Infrastructure.Installers.RepositoryInstaller>());
-		}
+            return container = new WindsorContainer()
+                .Install(FromAssembly.This(), FromAssembly.Containing<Infrastructure.Installers.RepositoryInstaller>());
+        }
 
-		protected void Application_End()
-		{
-			container.Dispose();
-		}
+        protected void Application_End()
+        {
+            container.Dispose();
+        }
 
-		protected void Application_AcquireRequestState(object sender, EventArgs e)
-		{
-			if (Request.Cookies["Culture"] != null && !string.IsNullOrEmpty(Request.Cookies["Culture"].Value))
-			{
-				string culture = Request.Cookies["culture"].Value;
-				culture = CultureHelper.GetImplementedCulture(culture); // This is safe
-				CultureInfo ci = new CultureInfo(culture);
-				Thread.CurrentThread.CurrentUICulture = ci;
-				Thread.CurrentThread.CurrentCulture = ci;
-			}
-		}
-	}
+        protected void Application_AcquireRequestState(object sender, EventArgs e)
+        {
+            if (Request.Cookies["Culture"] != null && !string.IsNullOrEmpty(Request.Cookies["Culture"].Value))
+            {
+                string culture = Request.Cookies["culture"].Value;
+                culture = CultureHelper.GetImplementedCulture(culture); // This is safe
+                CultureInfo ci = new CultureInfo(culture);
+                Thread.CurrentThread.CurrentUICulture = ci;
+                Thread.CurrentThread.CurrentCulture = ci;
+            }
+        }
+    }
 }

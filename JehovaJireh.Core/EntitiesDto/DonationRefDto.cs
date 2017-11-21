@@ -7,10 +7,10 @@ using JehovaJireh.Core.Entities;
 
 namespace JehovaJireh.Core.EntitiesDto
 {
-	public class DonationRefDto: EntityBaseDto<int>
+	public class DonationRefDto
 	{
 
-		public virtual RequestedByDto RequestedBy { get; set; }
+        public virtual int Id { get; set; }
 		public virtual string Title { get; set; }
 		public virtual string Description { get; set; }
 		public virtual decimal Amount { get; set; }

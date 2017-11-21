@@ -18,12 +18,17 @@ using Microsoft.WindowsAzure.Storage.Queue;
 using Microsoft.WindowsAzure.Storage.Table;
 using NHibernate;
 using NHibernate.Event;
+using JehovaJireh.Exception;
+using JehovaJireh.Logging;
+using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
 namespace JehovaJireh.Infrastructure.Plumbing
 {
 	public class PersistenceFacility : AbstractFacility
 	{
-		protected override void Init()
+        private readonly ILogger log;
+        private readonly ExceptionManager exManager;
+        protected override void Init()
 		{
 			var configDB = BuildDatabaseConfiguration();
 			var configAzureStorage = BuildCloudStorageAccountConfiguration();
@@ -72,10 +77,37 @@ namespace JehovaJireh.Infrastructure.Plumbing
 
 		private CloudStorageAccount BuildCloudStorageAccountConfiguration()
 		{
-			var storageAccount = CloudConfiguration.GetStorageAccount("StorageConnectionString");
-			var queueContext = new AzureQueue(storageAccount.CreateCloudQueueClient());
-			queueContext.EnsureQueueExists<UserMessage>();
-			return storageAccount;
-		}
-	}
+            try
+            {
+                var storageAccount = CloudConfiguration.GetStorageAccount("StorageConnectionString");
+                var queueContext = new AzureQueue(storageAccount.CreateCloudQueueClient());
+                queueContext.EnsureQueueExists<UserMessage>();
+                return storageAccount;
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void HandleException(System.Exception ex)
+        {
+            System.Exception exceptionToThrow;
+            System.Exception results;
+            if (exManager.HandleException(ex, ExceptionPolicies.DataAccess.WebServicePolicy, out exceptionToThrow))
+            {
+                if (exceptionToThrow == null)
+                    results = ex;
+                else
+                    results = exceptionToThrow;
+            }
+            else
+            {
+                results = ex;
+            }
+
+            log.Error(ex);
+            throw results;
+        }
+    }
 }

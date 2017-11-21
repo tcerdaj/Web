@@ -121,3 +121,28 @@ Array.prototype.pushIfNotExist = function (element, comparer) {
         this.push(element);
     }
 };
+
+function openDialog(title, htmlMessage) {
+
+    var applySetup = $("#dialog").length === 0;
+    var dialog = $("#dialog").length === 0 ? $('<div id="dialog"> </div >').appendTo($('.container')) : $("#dialog");
+
+    if (applySetup) {
+        dialog.kendoDialog({
+            width: "400px",
+            title: title,
+            closable: true,
+            modal: false,
+            content: htmlMessage,
+            actions: [
+                { text: 'Ok', primary: true }
+            ],
+        });
+    }
+    else {
+        dialog.data("kendoDialog").title(title);
+        dialog.data("kendoDialog").content(htmlMessage);
+    }
+
+    dialog.data("kendoDialog").open();
+}

@@ -163,11 +163,19 @@ namespace JehovaJireh.Data.Queues
 
 		private void EnsureQueueExists(string queueName)
 		{
-			if (!this.ensuredQueues.Contains(queueName))
-			{
-				this.storageRetryPolicy.ExecuteAction(() => this.queue.GetQueueReference(queueName).CreateIfNotExists());
-				this.ensuredQueues.Add(queueName);
-			}
+
+            try
+            {
+                if (!this.ensuredQueues.Contains(queueName))
+                {
+                    this.storageRetryPolicy.ExecuteAction(() => this.queue.GetQueueReference(queueName).CreateIfNotExists());
+                    this.ensuredQueues.Add(queueName);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
 		}
 	}
 }

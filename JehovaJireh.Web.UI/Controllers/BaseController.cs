@@ -9,7 +9,7 @@ using System.Linq;
 namespace JehovaJireh.Web.UI.Controllers
 {
 	public class BaseController : Controller
-	{
+    {
 		//protected override IAsyncResult BeginExecuteCore(AsyncCallback callback, object state)
 		//{
 		//	string cultureName = RouteData.Values["culture"] as string;

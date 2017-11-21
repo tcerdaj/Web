@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentNHibernate.Mapping;
 using JehovaJireh.Core.Entities;
+using JehovaJireh.Core.EntitiesDto;
 
 namespace JehovaJireh.Data.Mappings
 {
@@ -77,7 +78,7 @@ namespace JehovaJireh.Data.Mappings
                 .Cascade.All();
             References(x => x.RequestedBy)
                 .Column("RequestedBy")
-                .ForeignKey("CreatedBy"); ;
+                .ForeignKey("RequestedBy"); 
             References(x => x.CreatedBy)
                 .Column("CreatedBy")
                 .ForeignKey("CreatedBy");
@@ -116,6 +117,21 @@ namespace JehovaJireh.Data.Mappings
             References(x => x.ModifiedBy)
                 .Column("ModifiedBy")
                 .ForeignKey();
+        }
+    }
+
+    public class DonationRequetedMap : ClassMap<DonationRequested>
+    {
+        public DonationRequetedMap()
+        {
+            Table("vw_DonationRequested");
+            ReadOnly();
+            Id(x => x.Id);
+            Map(x => x.Title);
+            Map(x => x.Description);
+            Map(x => x.ImageUrl);
+            References(x => x.Donation, "DonationId");
+            References(x => x.RequetedBy, "RequestedBy");
         }
     }
     public class RequestMap : ClassMap<Request>
