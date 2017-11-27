@@ -88,7 +88,7 @@
 			#: displayFieldTextByArray(DonationStatus, donationStatusArray)	 #
 		</td>
 		<td class="photo">
-			<a class="pop" id="#= Line #" name="#= Line #" href="\\#"><img class="grid-photo" src="#:Images[0].ImageUrl#" alt="#: ItemName #" /></a>
+			 <a class="pop" id="#= Line #" name="#= Line #" href="\\#"><img class="grid-photo" src="#:Images.length > 0 && Images[0].ImageUrl ? Images[0].ImageUrl: '/img/no-photo.png'#" alt="#: ItemName #" /></a>
 		</td>
         <td class="photo">
             #if(Images.length > 1 ){#
@@ -376,22 +376,31 @@
 
 				htmlstring += '	</ol>';
 
-				htmlstring += '<div class="carousel-inner">';
-				for (var i = 0; i < images.length; i++) {
-					var image = images[i];
+                htmlstring += '<div class="carousel-inner">';
+                var image = { ImageUrl: "/img/no-photo.png"};
 
-					if (i === 0) {
+                if (images.length == 0) {
+                    htmlstring += '<div class="item active">';
+                    htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
+                    htmlstring += '</div>';
+                } else {
 
-						htmlstring += '<div class="item active">';
-						htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
-					}
-					else {
-						htmlstring += '<div class="item">';
-						htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
-					}
+                    for (var i = 0; i < images.length; i++) {
+                        image = images[i];
 
-					htmlstring += '</div>';
-				}
+                        if (i === 0) {
+
+                            htmlstring += '<div class="item active">';
+                            htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
+                        }
+                        else {
+                            htmlstring += '<div class="item">';
+                            htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
+                        }
+
+                        htmlstring += '</div>';
+                    }
+                }
 
 				htmlstring += '	</div>';
 
