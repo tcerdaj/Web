@@ -46,7 +46,7 @@ namespace JehovaJireh.Web.Services
 			// Web API routes
 			config.MapHttpAttributeRoutes();
 
-			config.Routes.MapHttpRoute(
+            config.Routes.MapHttpRoute(
 				name: "DefaultApi",
 				routeTemplate: "{controller}/{id}/{action}",
 				defaults: new { id = RouteParameter.Optional, action = RouteParameter.Optional }

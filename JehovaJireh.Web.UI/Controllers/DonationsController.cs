@@ -272,7 +272,9 @@ namespace JehovaJireh.Web.UI.Controllers
 		[Authorize]
 		public ActionResult SchedulerDonation()
 		{
-			return View();
+            CurrentUser = CurrentUser ?? userRepository.GetByUserName(User.Identity.Name);
+            ViewBag.UserId = CurrentUser?.Id;
+            return View();
 		}
 
         [Authorize]

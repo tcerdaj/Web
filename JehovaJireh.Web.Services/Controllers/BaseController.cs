@@ -63,8 +63,9 @@ namespace JehovaJireh.Web.Services.Controllers
 			return dto;
 		}
 
-		//get by id
-		public DTO Get(IdT id)
+        //get by id
+        [ActionName("Get")]
+        public DTO Get(IdT id)
 		{
 			DTO dto = new DTO();
 			try

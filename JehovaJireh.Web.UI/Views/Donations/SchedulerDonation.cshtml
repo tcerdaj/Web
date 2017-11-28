@@ -16,29 +16,36 @@
     @Scripts.Render("~/bundles/donation/donationviewmodel")
     @Styles.Render("~/bundles/kendo-css")
     @Scripts.Render("~/bundles/kendo")
-    <script type="text/x-kendo-template" id="template">
-        <div class="tabstrip">
-            <ul>
-                <li class="k-state-active">
-                    @Resources.DonationDetails
-                </li>
-                <li>
-                    @Resources.ContactInfo
-                </li>
-            </ul>
-            <div>
-                <div class="donation-details"></div>
-            </div>
-            <div>
-                <div class='user-info'>
-                    <ul>
-                        <li><label>Name:</label>#= CreatedBy.FirstName # <a class="pop" href="\\#"><img style="height: 50px;" class="img-rounded  thumb" src="#= CreatedBy.ImageUrl #" /></a></li>
-                        <li><label>Home Phone:</label>#= CreatedBy.PhoneNumber #</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </script>
+ <script id="rowTemplate" type="text/x-kendo-tmpl">
+    <tr data-uid="#: uid #">
+        <td class="photo">
+            <img src="/img/no-photo.png" alt="#: Title #" />
+        </td>
+        <td class="details">
+            <span class="title">Title: #: Title #</span>
+        </td>
+        <td class="country">
+            #: Description #
+        </td>
+        <td class="country">
+            <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy(this, '#= Id #');"><span class="k-icon k-i-cart"></span>View Details</a>
+        </td>
+    </tr>
+</script>
+<script id="altRowTemplate" type="text/x-kendo-tmpl">
+    <tr data-uid="#: uid #">
+        <td class="photo">
+            <img src="/img/no-photo.png" alt="#: Title #" />
+        </td>
+        <td class="details">
+            <span class="title">Title: #: Title #</span>
+        </td>
+        <td class="country">
+            #: Description #
+        </td>
+        <td class="country"><a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy(this, '#= Id #');"><span class="k-icon k-i-cart"></span>View Details</a></td>
+    </tr>
+</script>
     <script type="text/javascript">
         $(function () {
             var userId = "@ViewBag.UserId";
@@ -105,37 +112,22 @@
                     dataType: "json",
                     contentType: "application/json",
                     transport: {
-                        read: getBaseUrl() + "Donations/RequestBy/" + userId
+                        read: getBaseUrl() + kendo.format("Donations/{0}/RequestedBy", userId)
                     },
                     pageSize: 20,
                     serverPaging: false,
                     serverSorting: false,
                     sort: { field: "Id", dir: "desc" },
-                    schema: {
-                        parse: function (response) {
-                            $.each(response, function (idx, elem) {
-                                if (elem !== null && elem.CreatedOn && typeof elem.CreatedOn == "string") {
-                                    elem.CreatedOn = kendo.parseDate(elem.CreatedOn, "yyyy-MM-ddTHH:mm:ss");
-                                }
-                            });
-
-                            return response;
-                        }
-                    }
                 },
                 height: 550,
                 sortable: true,
                 pageable: false,
-                detailTemplate: kendo.template($("#template").html()),
-                detailInit: detailInit,
-                dataBound: onDataBound,
+                rowTemplate: kendo.template($("#rowTemplate").html()),
+                altRowTemplate: kendo.template($("#altRowTemplate").html()),
+                //detailTemplate: kendo.template($("#template").html()),
+                //detailInit: detailInit,
+                //dataBound: onDataBound,
                 columns: [
-                    {
-                        field: "CreatedOn",
-                        title: "@Resources.CreatedOn",
-                        width: "100px",
-                        format: "{0:MM-dd-yyyy}"
-                    },
                     {
                         field: "Title",
                         title: "@Resources.Title",
@@ -146,29 +138,18 @@
                         title: "@Resources.Description",
                         width: "150px"
                     },
-                    {
-                        field: "CreatedBy",
-                        title: "@Resources.CreatedBy",
-                        width: "70px",
-                        template: "#= CreatedBy.FirstName # #= CreatedBy.LastName #"
-                    },
-                    {
-                        field: "DonationStatus",
-                        title: "@Resources.DonationStatus",
-                        width: "90px",
-                        template: "#: displayFieldTextByArray(DonationStatus, donationStatusArray)	 #"
+                     {
+                        field: "ImageUrl",
+                        title: "@Resources.ImageUrl",
+                        width: "150px"
                     },
                     {
                         command: [{
                             text: "View Details",
                             click: showDetails,
                             iconClass: "k-icon k-i-preview k-i-eye"
-                        },
-                        {
-                            text: "I want to give you this",
-                            click: wantGiveYou,
-                            iconClass: "k-icon k-i-reset-sm"
-                        }],
+                        }
+                       ],
                         class:"test",
                         title: " ",
                         width: "190px"
@@ -176,7 +157,6 @@
                 ]
             });
 
-            var gridRowOffset = grid.tbody.find("tr:first").offset();
 
             $("#scheduler").kendoScheduler({
                 date: new Date(moment().format("YYYY/M/DD")),
@@ -246,37 +226,75 @@
         });
 
         function detailInit(e) {
-		var detailRow = e.detailRow;
+            var detailRow = e.detailRow;
 
-		detailRow.find(".tabstrip").kendoTabStrip({
-			animation: {
-				open: { effects: "fadeIn" }
-			}
-		});
+            detailRow.find(".tabstrip").kendoTabStrip({
+                animation: {
+                    open: { effects: "fadeIn" }
+                }
+            });
 
-		detailRow.find(".donation-details").kendoGrid({
-			dataSource: new kendo.data.DataSource({
-                data: e.data.DonationDetails,
-                sort: { field: "Line", dir: "asc" },
-				pageSize: 10
-			}),
-			scrollable: false,
+            detailRow.find(".donation-details").kendoGrid({
+                dataSource: new kendo.data.DataSource({
+                    data: e.data.DonationDetails,
+                    sort: { field: "Line", dir: "asc" },
+                    pageSize: 10
+                }),
+                scrollable: false,
 
-			sortable: true,
-			pageable: true,
-			rowTemplate: kendo.template($("#rowTemplate").html()),
-			selectable: "singe",
-			columns: [
-                { field: "Id"},
-                { field: "Line", title: "@Resources.ItemLine", width: "80px" },
-				{ field: "ItemType", title: "@Resources.ItemType", width: "110px" },
-				{ field: "ItemName", title: "@Resources.ItemName", width: "110px" },
-				{ field: "DonationStatus", title: "@Resources.DonationStatus", width: "110px"},
-                { field: "Images", title: "@Resources.ImageUrl", width: "100px" },
-                { template: "#: Images.length #", title: " ", width: 110 },
-                { command: { text: "@Resources.WantThis", click: selectThisDonation }, title: " ", width: "180px" }
-			]
-		});
+                sortable: true,
+                pageable: true,
+                rowTemplate: kendo.template($("#rowTemplate").html()),
+                selectable: "singe",
+                columns: [
+                    { field: "Id" },
+                    { field: "Line", title: "@Resources.ItemLine", width: "80px" },
+                    { field: "ItemType", title: "@Resources.ItemType", width: "110px" },
+                    { field: "ItemName", title: "@Resources.ItemName", width: "110px" },
+                    { field: "DonationStatus", title: "@Resources.DonationStatus", width: "110px" },
+                    { field: "Images", title: "@Resources.ImageUrl", width: "100px" },
+                    { template: "#: Images.length #", title: " ", width: 110 },
+                    { command: { text: "@Resources.WantThis", click: selectThisDonation }, title: " ", width: "180px" }
+                ]
+            });
+        }
+
+        function showDetails(e) {
+            var pos = $(e.currentTarget).position();
+            var width = $(e.currentTarget).outerWidth();
+            e.preventDefault();
+
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            wnd.content(detailsTemplate(dataItem));
+            wnd.center().open().element.closest(".k-window").css({
+                top: pos.top + "px",
+                left: pos.left + width + "px"
+            });
+
+            wnd.element
+                .append($('<div class="k-edit-buttons k-state-default"><a role="button" class="k-button k-button-icontext close-button" href="#"><span class="k-icon k-i-close"></span>Close</a></div>'));
+
+            $(".close-button").click(function () {
+                wnd.close();
+            });
+        }
+
+        function onDataBound(e) {
+            var grid = $("#grid").data("kendoGrid");
+            var gridData = grid.dataSource.view();
+            for (var i = 0; i < gridData.length; i++) {
+                var currentUid = gridData[i].uid;
+                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                var editButton = $($(currenRow[0]).find('a.k-button.k-button-icontext')[1]);
+
+                if (gridData[i].CreatedBy !== null && gridData[i].CreatedBy.Id.toString() === userId) {
+                    editButton.hide();
+                }
+                else {
+                    editButton.show();
+                }
+            }
+        }
     </script>
     <style>
         

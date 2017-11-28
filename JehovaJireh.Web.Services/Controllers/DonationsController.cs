@@ -29,20 +29,19 @@ namespace JehovaJireh.Web.Services.Controllers
 			this.log = log;
             this.session = session;
 		}
-        
 
+        [ActionName("RequestedBy")]
         [HttpGet]
-        [Route("Donations/RequestedBy/{id}")]
-        public IEnumerable<DonationDto> RequestedBy(int id)
+        public IEnumerable<DonationRequestedDto> RequestedBy(int id)
         {
-            IEnumerable<DonationDto> dto;
+            IEnumerable<DonationRequestedDto> dto;
             try
             {
                 var data = session.Query<DonationRequested>().ToList();
                 var dta = repository.Query().Where(x => x.RequestedBy.Id == id).ToList();
-                dto = dta.Select(x => new DonationDto()
+                dto = dta.Select(x => new DonationRequestedDto()
                                 .InjectFrom<DeepCloneInjection>(x))
-                                .Cast<DonationDto>()
+                                .Cast<DonationRequestedDto>()
                                 .ToList();
             }
             catch (System.Exception ex)
