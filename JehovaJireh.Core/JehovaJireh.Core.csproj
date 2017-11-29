@@ -121,6 +121,7 @@
     <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\Scheduler.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="IRepositories\ISchedulerRepository.cs" />
     <Compile Include="IRepositories\IDonationRepository.cs" />
     <Compile Include="IRepositories\IImageService.cs" />
     <Compile Include="IRepositories\IRepository.cs" />

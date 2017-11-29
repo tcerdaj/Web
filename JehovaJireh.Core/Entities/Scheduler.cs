@@ -19,6 +19,5 @@ namespace JehovaJireh.Core.Entities
         public virtual string RecurrenceException { get; set; }
         public virtual string RecurrenceRule { get; set; }
         public virtual bool IsAllDay { get; set; }
-
     }
 }

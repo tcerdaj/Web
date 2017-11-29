@@ -21,7 +21,9 @@ namespace JehovaJireh.Infrastructure.Installers
 								Component.For<IDonationRepository>()
 								.ImplementedBy<DonationRepository>(),
                                 Component.For<IRequestRepository>()
-                                .ImplementedBy<RequestRepository>()
+                                .ImplementedBy<RequestRepository>(),
+                                Component.For<ISchedulerRepository>()
+                                .ImplementedBy<SchedulerRepository>()
                             );
 		}
 	}

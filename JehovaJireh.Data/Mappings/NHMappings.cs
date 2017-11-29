@@ -87,6 +87,7 @@ namespace JehovaJireh.Data.Mappings
                 .ForeignKey("ModifiedBy");
         }
 	}
+
     public class DonationDetailMap : ClassMap<DonationDetails>
     {
         public DonationDetailMap()
@@ -185,4 +186,36 @@ namespace JehovaJireh.Data.Mappings
 				.ForeignKey();
 		}
 	}
+
+    public class SchedulerMap : ClassMap<Scheduler>
+    {
+        public SchedulerMap()
+        {
+            Table("Scheduler");
+            Id(x => x.Id)
+                .Column("SchedulerId")
+                .GeneratedBy.Increment();
+            Map(x => x.ItemId);
+            Map(x => x.Title).Not.Nullable();
+            Map(x => x.ImageUrl);
+            Map(x => x.Description);
+            Map(x => x.StartDate);
+            Map(x => x.EndDate);
+            Map(x => x.RecurrenceId);
+            Map(x => x.RecurrenceException);
+            Map(x => x.RecurrenceRule);
+            Map(x => x.IsAllDay);
+            Map(x => x.CreatedOn).Default("getdate()").Not.Nullable();
+            Map(x => x.ModifiedOn).Nullable();
+            References(x => x.Donation)
+                .Column("DonationId")
+                .ForeignKey("DonationId");
+            References(x => x.CreatedBy)
+                .Column("CreatedBy")
+                .ForeignKey("CreatedBy");
+            References(x => x.ModifiedBy)
+                .Column("ModifiedBy")
+                .ForeignKey("ModifiedBy");
+        }
+    }
 }
