@@ -46,6 +46,16 @@
         <td class="country"><a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy(this, '#= Id #');"><span class="k-icon k-i-cart"></span>View Details</a></td>
     </tr>
 </script>
+<script id="event-template" type="text/x-kendo-template">
+    <div class="movie-template">
+        <img src="#= imageUrl #">
+        <p>
+            #: kendo.toString(start, "hh:mm") # - #: kendo.toString(end, "hh:mm") #
+        </p>
+        <h3>#: title #</h3>
+        @*<a href="#= imdb #">Movie in IMDB</a>*@
+    </div>
+</script>
     <script type="text/javascript">
         $(function () {
             var userId = "@ViewBag.UserId";
@@ -96,9 +106,9 @@
             }
 
             function scheduler_moveEnd(e) {
-                 console.log("moveEnd");
-                 var currentDate = new Date(moment().format("M/D/YYYY"));
-                 var start = new Date(moment(e.event.start).format("M/D/YYYY"));
+                console.log("moveEnd");
+                var currentDate = new Date(moment().format("M/D/YYYY"));
+                var start = new Date(moment(e.event.start).format("M/D/YYYY"));
 
                 if (moment(start).isBefore(currentDate)) {
                     e._defaultPrevented = true;
@@ -111,10 +121,10 @@
                 transport: {
                     read: {
                         url: getBaseUrl() + kendo.format("Donations/{0}/RequestedBy", userId),
-                        dataType:"json"
-                },
-                destroy: {
-                    url: getBaseUrl() + kendo.format("Donations/{0}/RequestedBy", userId),
+                        dataType: "json"
+                    },
+                    destroy: {
+                        url: getBaseUrl() + kendo.format("Donations/{0}/RequestedBy", userId),
                         dataType: "json"
                     },
                 },
@@ -124,7 +134,7 @@
                 sort: { field: "Id", dir: "desc" }
             });
 
-            var grid =  $("#grid").kendoGrid({
+            var grid = $("#grid").kendoGrid({
                 dataSource: gridDataSource,
                 height: 550,
                 sortable: true,
@@ -145,7 +155,7 @@
                         title: "@Resources.Title",
                         width: "150px"
                     },
-                     {
+                    {
                         field: "Description",
                         title: "@Resources.Description",
                         width: "150px"
@@ -156,8 +166,8 @@
                             click: showDetails,
                             iconClass: "k-icon k-i-preview k-i-eye"
                         }
-                       ],
-                        class:"test",
+                        ],
+                        class: "test",
                         title: " ",
                         width: "190px"
                     }
@@ -188,6 +198,7 @@
                     //create drop area from current View
                     createDropArea(this);
                 },
+                eventTemplate: $("#event-template").html(),
                 views: [
                     "day",
                     { type: "week", selected: true },
@@ -200,20 +211,24 @@
                     batch: true,
                     transport: {
                         read: {
-                            url: "https://demos.telerik.com/kendo-ui/service/tasks",
-                            dataType: "jsonp"
+                            url: getBaseUrl() + "scheduler/" + userId,
+                            dataType: "json"
                         },
                         update: {
-                            url: "https://demos.telerik.com/kendo-ui/service/tasks/update",
-                            dataType: "jsonp"
+                            url: function (m) {
+                                return getBaseUrl() + "scheduler/" + m.Id
+                            },
+                            dataType: "json"
                         },
                         create: {
-                            url: "https://demos.telerik.com/kendo-ui/service/tasks/create",
-                            dataType: "jsonp"
+                            url: getBaseUrl() + "scheduler/create",
+                            dataType: "json"
                         },
                         destroy: {
-                            url: "https://demos.telerik.com/kendo-ui/service/tasks/destroy",
-                            dataType: "jsonp"
+                            url: function (m) {
+                                return getBaseUrl() + "scheduler/" + m.Id
+                            },
+                            dataType: "json"
                         },
                         parameterMap: function (options, operation) {
                             if (operation !== "read" && options.models) {
@@ -223,9 +238,9 @@
                     },
                     schema: {
                         model: {
-                            id: "taskID",
+                            id: "Id",
                             fields: {
-                                taskID: { from: "TaskID", type: "number" },
+                                taskID: { from: "Id", type: "number" },
                                 title: { from: "Title", defaultValue: "No title", validation: { required: true } },
                                 start: { type: "date", from: "Start" },
                                 end: { type: "date", from: "End" },
@@ -235,7 +250,7 @@
                                 recurrenceId: { from: "RecurrenceID" },
                                 recurrenceRule: { from: "RecurrenceRule" },
                                 recurrenceException: { from: "RecurrenceException" },
-                                ownerId: { from: "OwnerID", defaultValue: 1 },
+                                ownerId: { from: "CreatedBy.Id", defaultValue: 1 },
                                 isAllDay: { type: "boolean", from: "IsAllDay" }
                             }
                         }
@@ -243,7 +258,7 @@
                 }
             });
 
-            function createDropArea(scheduler) {
+           function createDropArea(scheduler) {
                 scheduler.view().content.kendoDropTargetArea({
                     filter: ".k-scheduler-table td, .k-event",
                     drop: function (e) {
@@ -273,7 +288,7 @@
 
                     },
                     group: "gridGroup1"
-                });
+               });
             }
         });
 
