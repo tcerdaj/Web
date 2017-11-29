@@ -195,7 +195,6 @@ namespace JehovaJireh.Data.Mappings
             Id(x => x.Id)
                 .Column("SchedulerId")
                 .GeneratedBy.Increment();
-            Map(x => x.ItemId);
             Map(x => x.Title).Not.Nullable();
             Map(x => x.ImageUrl);
             Map(x => x.Description);
@@ -210,6 +209,9 @@ namespace JehovaJireh.Data.Mappings
             References(x => x.Donation)
                 .Column("DonationId")
                 .ForeignKey("DonationId");
+            References(x => x.Item)
+                .Column("ItemId")
+                .ForeignKey("ItemId");
             References(x => x.CreatedBy)
                 .Column("CreatedBy")
                 .ForeignKey("CreatedBy");

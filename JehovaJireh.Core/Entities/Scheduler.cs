@@ -9,7 +9,7 @@ namespace JehovaJireh.Core.Entities
     public class Scheduler:EntityBase<int>
     {
         public virtual Donation Donation { get; set; }
-        public virtual Guid ItemId { get; set; }
+        public virtual DonationDetails Item { get; set; }
         public virtual string Title { get; set; }
         public virtual string ImageUrl { get; set; }
         public virtual string Description { get; set; }

@@ -211,7 +211,7 @@
                     batch: true,
                     transport: {
                         read: {
-                            url: getBaseUrl() + "scheduler/" + userId,
+                            url: getBaseUrl() + kendo.format("scheduler/{0}/createdBy", userId),
                             dataType: "json"
                         },
                         update: {
@@ -250,7 +250,9 @@
                                 recurrenceId: { from: "RecurrenceID" },
                                 recurrenceRule: { from: "RecurrenceRule" },
                                 recurrenceException: { from: "RecurrenceException" },
-                                ownerId: { from: "CreatedBy.Id", defaultValue: 1 },
+                                owner: { from: "CreatedBy", defaultValue: { Id: userId } },
+                                donation: { from: "Donation", validation: { required: true } },
+                                item: { from: "Item", validation: { required: true } },
                                 isAllDay: { type: "boolean", from: "IsAllDay" }
                             }
                         }
@@ -275,7 +277,7 @@
                                 start: slot.startDate,
                                 isAllDay: slot.isDaySlot,
                                 description: dataItem.Description,
-                                itemId: dataItem.ItemId,
+                                item: { Id: dataItem.ItemId },
                                 imageUrl: dataItem.ImageUrl,
                                 donation: dataItem.Donation,
                                 createdBy: { id: userId },
