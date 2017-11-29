@@ -126,12 +126,12 @@ namespace JehovaJireh.Data.Mappings
         {
             Table("vw_DonationRequested");
             ReadOnly();
-            Id(x => x.Id);
+            Id(x => x.Id).Column("Id");
             Map(x => x.Title);
             Map(x => x.Description);
             Map(x => x.ImageUrl);
-            References(x => x.Donation, "DonationId");
-            References(x => x.RequetedBy, "RequestedBy");
+            References(x => x.Donation).Column("DonationId");
+            References(x => x.RequestedBy).Column("RequestedBy");
         }
     }
     public class RequestMap : ClassMap<Request>

@@ -37,8 +37,7 @@ namespace JehovaJireh.Web.Services.Controllers
             IEnumerable<DonationRequestedDto> dto;
             try
             {
-                var data = session.Query<DonationRequested>().ToList();
-                var dta = repository.Query().Where(x => x.RequestedBy.Id == id).ToList();
+                var dta = session.Query<DonationRequested>().Where(x => x.RequestedBy.Id == id).ToList();
                 dto = dta.Select(x => new DonationRequestedDto()
                                 .InjectFrom<DeepCloneInjection>(x))
                                 .Cast<DonationRequestedDto>()

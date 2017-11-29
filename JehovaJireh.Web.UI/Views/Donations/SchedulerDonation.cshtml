@@ -22,7 +22,7 @@
             <img src="/img/no-photo.png" alt="#: Title #" />
         </td>
         <td class="details">
-            <span class="title">Title: #: Title #</span>
+            <span class="title">#: Title #</span>
         </td>
         <td class="country">
             #: Description #
@@ -106,19 +106,26 @@
                 }
             }
 
-            var grid =  $("#grid").kendoGrid({
-                dataSource: {
-                    type: "GET",
-                    dataType: "json",
-                    contentType: "application/json",
-                    transport: {
-                        read: getBaseUrl() + kendo.format("Donations/{0}/RequestedBy", userId)
-                    },
-                    pageSize: 20,
-                    serverPaging: false,
-                    serverSorting: false,
-                    sort: { field: "Id", dir: "desc" },
+            var gridDataSource = new kendo.data.DataSource({
+                contentType: "application/json",
+                transport: {
+                    read: {
+                        url: getBaseUrl() + kendo.format("Donations/{0}/RequestedBy", userId),
+                        dataType:"json"
                 },
+                destroy: {
+                    url: getBaseUrl() + kendo.format("Donations/{0}/RequestedBy", userId),
+                        dataType: "json"
+                    },
+                },
+                pageSize: 20,
+                serverPaging: false,
+                serverSorting: false,
+                sort: { field: "Id", dir: "desc" }
+            });
+
+            var grid =  $("#grid").kendoGrid({
+                dataSource: gridDataSource,
                 height: 550,
                 sortable: true,
                 pageable: false,
@@ -129,18 +136,18 @@
                 //dataBound: onDataBound,
                 columns: [
                     {
-                        field: "Title",
-                        title: "@Resources.Title",
+                        field: "ImageUrl",
+                        title: "@Resources.ImageUrl",
                         width: "100px"
                     },
                     {
-                        field: "Description",
-                        title: "@Resources.Description",
+                        field: "Title",
+                        title: "@Resources.Title",
                         width: "150px"
                     },
                      {
-                        field: "ImageUrl",
-                        title: "@Resources.ImageUrl",
+                        field: "Description",
+                        title: "@Resources.Description",
                         width: "150px"
                     },
                     {
@@ -157,6 +164,16 @@
                 ]
             });
 
+            var _grid = $(grid).data("kendoGrid");
+
+            $(_grid.element).kendoDraggable({
+                filter: "tr",
+                hint: function (e) {
+                    var item = $('<div class="k-grid k-widget" style="background-color: DarkOrange; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
+                    return item;
+                },
+                group: "gridGroup1",
+            });
 
             $("#scheduler").kendoScheduler({
                 date: new Date(moment().format("YYYY/M/DD")),
@@ -167,6 +184,10 @@
                 change: scheduler_change,
                 edit: scheduler_edit,
                 moveEnd: scheduler_moveEnd,
+                dataBound: function (e) {
+                    //create drop area from current View
+                    createDropArea(this);
+                },
                 views: [
                     "day",
                     { type: "week", selected: true },
@@ -222,42 +243,39 @@
                 }
             });
 
+            function createDropArea(scheduler) {
+                scheduler.view().content.kendoDropTargetArea({
+                    filter: ".k-scheduler-table td, .k-event",
+                    drop: function (e) {
 
+                        var offset = $(e.dropTarget).offset();
+                        var slot = scheduler.slotByPosition(offset.left, offset.top);
+                        var dataItem = gridDataSource.getByUid(e.draggable.currentTarget.data("uid"));
+
+                        if (dataItem && slot) {
+                            var offsetMiliseconds = new Date().getTimezoneOffset() * 60000;
+                            var newEvent = {
+                                title: dataItem.Title,
+                                end: slot.endDate,
+                                start: slot.startDate,
+                                isAllDay: slot.isDaySlot,
+                                description: dataItem.Description,
+                                itemId: dataItem.ItemId,
+                                imageUrl: dataItem.ImageUrl,
+                                donation: dataItem.Donation,
+                                createdBy: { id: userId },
+                                createdOn: new Date()
+                            };
+
+                            gridDataSource.remove(dataItem);
+                            scheduler.dataSource.add(newEvent);
+                        }
+
+                    },
+                    group: "gridGroup1"
+                });
+            }
         });
-
-        function detailInit(e) {
-            var detailRow = e.detailRow;
-
-            detailRow.find(".tabstrip").kendoTabStrip({
-                animation: {
-                    open: { effects: "fadeIn" }
-                }
-            });
-
-            detailRow.find(".donation-details").kendoGrid({
-                dataSource: new kendo.data.DataSource({
-                    data: e.data.DonationDetails,
-                    sort: { field: "Line", dir: "asc" },
-                    pageSize: 10
-                }),
-                scrollable: false,
-
-                sortable: true,
-                pageable: true,
-                rowTemplate: kendo.template($("#rowTemplate").html()),
-                selectable: "singe",
-                columns: [
-                    { field: "Id" },
-                    { field: "Line", title: "@Resources.ItemLine", width: "80px" },
-                    { field: "ItemType", title: "@Resources.ItemType", width: "110px" },
-                    { field: "ItemName", title: "@Resources.ItemName", width: "110px" },
-                    { field: "DonationStatus", title: "@Resources.DonationStatus", width: "110px" },
-                    { field: "Images", title: "@Resources.ImageUrl", width: "100px" },
-                    { template: "#: Images.length #", title: " ", width: 110 },
-                    { command: { text: "@Resources.WantThis", click: selectThisDonation }, title: " ", width: "180px" }
-                ]
-            });
-        }
 
         function showDetails(e) {
             var pos = $(e.currentTarget).position();
@@ -277,23 +295,6 @@
             $(".close-button").click(function () {
                 wnd.close();
             });
-        }
-
-        function onDataBound(e) {
-            var grid = $("#grid").data("kendoGrid");
-            var gridData = grid.dataSource.view();
-            for (var i = 0; i < gridData.length; i++) {
-                var currentUid = gridData[i].uid;
-                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
-                var editButton = $($(currenRow[0]).find('a.k-button.k-button-icontext')[1]);
-
-                if (gridData[i].CreatedBy !== null && gridData[i].CreatedBy.Id.toString() === userId) {
-                    editButton.hide();
-                }
-                else {
-                    editButton.show();
-                }
-            }
         }
     </script>
     <style>
