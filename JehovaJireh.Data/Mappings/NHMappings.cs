@@ -62,7 +62,6 @@ namespace JehovaJireh.Data.Mappings
 			Id(x => x.Id)
 				.Column("DonationId")
 				.GeneratedBy.Increment();
-			
 			Map(x => x.Title).Not.Nullable();
 			Map(x => x.Description);
 			Map(x => x.Amount);
@@ -73,6 +72,10 @@ namespace JehovaJireh.Data.Mappings
 			Map(x => x.ModifiedOn).Nullable();
 			Map(x => x.DonatedOn).Default("getdate()").Not.Nullable();
             HasMany(x => x.DonationDetails)
+                .KeyColumn("DonationId")
+                .Inverse()
+                .Cascade.All();
+            HasMany(x => x.Schedulers)
                 .KeyColumn("DonationId")
                 .Inverse()
                 .Cascade.All();
@@ -208,15 +211,19 @@ namespace JehovaJireh.Data.Mappings
             Map(x => x.ModifiedOn).Nullable();
             References(x => x.Donation)
                 .Column("DonationId")
+                .Not.Nullable()
                 .ForeignKey("DonationId");
             References(x => x.Item)
                 .Column("ItemId")
+                .Nullable()
                 .ForeignKey("ItemId");
             References(x => x.CreatedBy)
                 .Column("CreatedBy")
+                .Not.Nullable()
                 .ForeignKey("CreatedBy");
             References(x => x.ModifiedBy)
                 .Column("ModifiedBy")
+                .Nullable()
                 .ForeignKey("ModifiedBy");
         }
     }

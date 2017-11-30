@@ -13,7 +13,7 @@ using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 using JehovaJireh.Logging;
 using System.Web;
 using System.Web.Http;
-using Microsoft.Owin.Cors;
+//using Microsoft.Owin.Cors;
 
 namespace JehovaJireh.Web.Services
 {
@@ -49,7 +49,7 @@ namespace JehovaJireh.Web.Services
 		public void ConfigureAuth(IAppBuilder app)
 		{
             //Check to see if we are running local and if we are set the cookie domain to nothing so authentication works correctly.
-            app.UseCors(CorsOptions.AllowAll);
+            //app.UseCors(CorsOptions.AllowAll);
 
             string cookieDomain = ".jehovajireh.com";
 			bool isLocal = HttpContext.Current.Request.IsLocal;

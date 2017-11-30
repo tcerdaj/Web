@@ -53,7 +53,7 @@
             #: kendo.toString(start, "hh:mm") # - #: kendo.toString(end, "hh:mm") #
         </p>
         <h3>#: title #</h3>
-        @*<a href="#= imdb #">Movie in IMDB</a>*@
+        <p>#: description #</p>
     </div>
 </script>
     <script type="text/javascript">
@@ -117,6 +117,10 @@
             }
 
             var gridDataSource = new kendo.data.DataSource({
+                error: function (e) {
+                    alert("An general error occurred.")
+                    this.cancelChanges();
+                },
                 contentType: "application/json",
                 transport: {
                     read: {
@@ -141,9 +145,6 @@
                 pageable: false,
                 rowTemplate: kendo.template($("#rowTemplate").html()),
                 altRowTemplate: kendo.template($("#altRowTemplate").html()),
-                //detailTemplate: kendo.template($("#template").html()),
-                //detailInit: detailInit,
-                //dataBound: onDataBound,
                 columns: [
                     {
                         field: "ImageUrl",
@@ -194,6 +195,25 @@
                 change: scheduler_change,
                 edit: scheduler_edit,
                 moveEnd: scheduler_moveEnd,
+                remove: function scheduler_remove(e) {
+                    e.preventDefault();
+                    console.log("removing");
+                    var event = e.event;
+                    event.id = event.taskID;
+                    this.dataSource.remove(event);
+                    this.dataSource.sync().then(function () {
+                        //retrieve grid dataItem
+                        var data = gridDataSource.data();
+                        var dataItem = getGridDataItem(event.donation, event.item, data);
+                        //change status to 2
+                        //refresh grid
+
+                        console.log("done");
+                    }, function () {
+                        alert("Error.")
+                    });
+                    
+                },
                 dataBound: function (e) {
                     //create drop area from current View
                     createDropArea(this);
@@ -208,31 +228,88 @@
                 ],
                 timezone: "Etc/UTC",
                 dataSource: {
-                    batch: true,
+                    error: function (e) {
+                        alert(e.status);
+                        this.cancelChanges();
+                    },
+                    success: function (e) {
+                        alert("success...");
+                    },
                     transport: {
                         read: {
                             url: getBaseUrl() + kendo.format("scheduler/{0}/createdBy", userId),
-                            dataType: "json"
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            dataType: "json",
+                            contentType: "application/json",
+                            type: "GET"
                         },
                         update: {
-                            url: function (m) {
-                                return getBaseUrl() + "scheduler/" + m.Id
+                            url: function (model) {
+                                return getBaseUrl() + "scheduler/" + model.Id
                             },
-                            dataType: "json"
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            dataType: "json",
+                            contentType: "application/json",
+                            type: "PUT",
+                            complete: function (e) {
+                                //REFRESH THE GRID IN SUCCESS.
+                                e.success(function (e) {
+                                    console.log("Succcess");
+                                });
+
+                                e.error(function (e) {
+                                    console.log("error");
+                                });
+                            },
                         },
                         create: {
-                            url: getBaseUrl() + "scheduler/create",
-                            dataType: "json"
+                            url: getBaseUrl() + "scheduler",
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            contentType: "application/json",
+                            type: "POST",
+                            complete: function (e) {
+                                //REFRESH THE GRID IN SUCCESS.
+                                e.success(function (e) {
+                                    console.log("Succcess");
+                                });
+
+                                e.error(function (e) {
+                                    console.log("error");
+                                });
+                            },
+                            success: function (data) {
+                                alert(data);
+                            }
                         },
                         destroy: {
-                            url: function (m) {
-                                return getBaseUrl() + "scheduler/" + m.Id
+                            url: function (model) {
+                                return getBaseUrl() + "scheduler/" + model.Id
                             },
-                            dataType: "json"
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            contentType: "application/json",
+                            type: "DELETE",
+                            complete: function (e) {
+                                //REFRESH THE GRID IN SUCCESS.
+                                e.success(function (e) {
+                                    console.log("Succcess");
+                                });
+
+                                e.error(function (e) {
+                                    console.log("error");
+                                });
+                            }
                         },
                         parameterMap: function (options, operation) {
-                            if (operation !== "read" && options.models) {
-                                return { models: kendo.stringify(options.models) };
+                            if (operation !== "read" && options) {
+                                return  kendo.stringify(options);
                             }
                         }
                     },
@@ -242,23 +319,37 @@
                             fields: {
                                 taskID: { from: "Id", type: "number" },
                                 title: { from: "Title", defaultValue: "No title", validation: { required: true } },
-                                start: { type: "date", from: "Start" },
-                                end: { type: "date", from: "End" },
+                                start: { type: "date", from: "StartDate" },
+                                end: { type: "date", from: "EndDate" },
                                 startTimezone: { from: "StartTimezone" },
                                 endTimezone: { from: "EndTimezone" },
                                 description: { from: "Description" },
                                 recurrenceId: { from: "RecurrenceID" },
                                 recurrenceRule: { from: "RecurrenceRule" },
                                 recurrenceException: { from: "RecurrenceException" },
-                                owner: { from: "CreatedBy", defaultValue: { Id: userId } },
+                                createdBy: { from: "CreatedBy", defaultValue: { Id: userId } },
+                                imageUrl: { from: "ImageUrl" },
                                 donation: { from: "Donation", validation: { required: true } },
                                 item: { from: "Item", validation: { required: true } },
-                                isAllDay: { type: "boolean", from: "IsAllDay" }
+                                isAllDay: { type: "boolean", from: "IsAllDay" },
+                                createdOn: {type: "date"}
                             }
                         }
                     }
                 }
             });
+
+            function getGridDataItem(donation, item, array) {
+                var result = $.grep(array, function (n, i) {
+                    return item !== null || item !== "" ? (n.Donation.Id === donation.Id && n.ItemId === (item !== null ? item.Id : "")) : (n.Donation.Id === donation.Id);
+                });
+
+                try {
+                    return result[0];
+                } catch (e) {
+                    return null;
+                }
+            }
 
            function createDropArea(scheduler) {
                 scheduler.view().content.kendoDropTargetArea({
@@ -272,22 +363,31 @@
                         if (dataItem && slot) {
                             var offsetMiliseconds = new Date().getTimezoneOffset() * 60000;
                             var newEvent = {
+                                id: null,
                                 title: dataItem.Title,
                                 end: slot.endDate,
                                 start: slot.startDate,
                                 isAllDay: slot.isDaySlot,
                                 description: dataItem.Description,
-                                item: { Id: dataItem.ItemId },
+                                item: dataItem.ItemId === '00000000-0000-0000-0000-000000000000' ? null : { Id: dataItem.ItemId },
                                 imageUrl: dataItem.ImageUrl,
                                 donation: dataItem.Donation,
                                 createdBy: { id: userId },
-                                createdOn: new Date()
+                                createdOn: new Date(),
+                                startTimezone: "Etc/UTC",
+                                endTimezone: "Etc/UTC",
+                                recurrenceId: null,
+                                recurrenceRule: null,
+                                recurrenceException: null
                             };
 
-                            gridDataSource.remove(dataItem);
                             scheduler.dataSource.add(newEvent);
+                            scheduler.dataSource.sync().then(function (e) {
+                                gridDataSource.remove(dataItem);
+                            }, function (e) {
+                                alert("error.")
+                            });
                         }
-
                     },
                     group: "gridGroup1"
                });

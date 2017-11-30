@@ -38,9 +38,10 @@ namespace JehovaJireh.Web.Services
 			//Remove Existing Handler and add custom
 			config.Services.Replace(typeof(IExceptionHandler), new OopsExceptionHandler());
 
-			// Setting Cors
-			var cors = new EnableCorsAttribute(origins: "http://localhost:53371", headers: "*", methods: "GET,POST,DELETE,PUT");
-			cors.SupportsCredentials = true;
+            // Setting Cors
+            //var cors = new EnableCorsAttribute(origins: "http://localhost:53371", headers: "*", methods: "GET,POST,DELETE,PUT");
+            var cors = new EnableCorsAttribute("*","*","*");
+            cors.SupportsCredentials = true;
 			config.EnableCors(cors);
 
 			// Web API routes
