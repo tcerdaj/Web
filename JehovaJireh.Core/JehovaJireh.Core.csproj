@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="EntitiesDto\DonationDetailsDto.cs" />
     <Compile Include="EntitiesDto\DonationDetailsImageDto.cs" />
+    <Compile Include="EntitiesDto\DonationSchDto.cs" />
     <Compile Include="EntitiesDto\DonationRefDto.cs" />
     <Compile Include="EntitiesDto\DonationDto.cs" />
     <Compile Include="EntitiesDto\DonationImageDto.cs" />

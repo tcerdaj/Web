@@ -21,7 +21,8 @@ namespace JehovaJireh.Core.Entities
 		Scheduled = 4,
 		Delivery = 5,
 		Matched = 6,
-	}
+        PartialScheduled = 7
+    }
 
 	public enum DonationType
 	{

@@ -10,6 +10,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Omu.ValueInjecter;
+using NHibernate;
+using NHibernate.Linq;
 
 namespace JehovaJireh.Web.Services.Controllers
 {
@@ -17,12 +19,14 @@ namespace JehovaJireh.Web.Services.Controllers
     {
         ISchedulerRepository repository;
         ILogger log;
+        ISession session;
 
-        public SchedulerController(ISchedulerRepository repository, ILogger log)
+        public SchedulerController(ISchedulerRepository repository, ILogger log, ISession session)
 			:base(repository, log)
         {
             this.repository = repository;
             this.log = log;
+            this.session = session;
         }
 
         [ActionName("CreatedBy")]
@@ -49,5 +53,47 @@ namespace JehovaJireh.Web.Services.Controllers
 
             return dto;
         }
+
+        public override IHttpActionResult Post(SchedulerDto dto)
+        {
+            try
+            {
+                Donation donation = null;
+                Scheduler data = new Scheduler();
+                data.InjectFrom<DeepCloneInjection>(dto);
+
+                if (dto != null && dto.Donation != null)
+                {
+                    donation = session.Query<Donation>().FirstOrDefault(x => x.Id == dto.Donation.Id);
+                    if (donation != null)
+                    {
+                        var itemsCount = donation.DonationDetails.Count();
+                        var scheduledCount = donation.DonationDetails.Where(x => x.DonationStatus == DonationStatus.Scheduled).Count() + 1;
+
+                        if (itemsCount > 0 && scheduledCount > 0 & itemsCount == scheduledCount)
+                        {
+                            data.Donation.DonationStatus = DonationStatus.Scheduled;
+                        }
+                        else
+                            data.Donation.DonationStatus = DonationStatus.PartialScheduled;
+
+                        if (dto.Item != null)
+                        {
+                            data.Donation.DonationDetails.Where(x => x.Id == dto.Item.Id).Select(y => y.DonationStatus == DonationStatus.Scheduled);
+                        }
+                    }
+                }
+
+                repository.Create(data);
+            }
+            catch (System.Exception ex)
+            {
+                log.Error(ex);
+                throw ex;
+            }
+            return Ok(dto);
+        }
+
+
     }
 }

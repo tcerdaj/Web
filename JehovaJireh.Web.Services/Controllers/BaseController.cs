@@ -84,7 +84,7 @@ namespace JehovaJireh.Web.Services.Controllers
 		}
 
 		// POST: api/baseapi
-		public IHttpActionResult Post(DTO dto)
+		public virtual IHttpActionResult Post(DTO dto)
 		{
 			try
 			{
@@ -100,8 +100,9 @@ namespace JehovaJireh.Web.Services.Controllers
 			return Ok();
 		}
 
-		// PUT: api/baseapi
-		public IHttpActionResult Put(IdT id, DTO dto)
+        // PUT: api/baseapi
+        [ActionName("Put")]
+        public IHttpActionResult Put(IdT id, DTO dto)
 		{
 			try
 			{
@@ -122,7 +123,8 @@ namespace JehovaJireh.Web.Services.Controllers
 		{
 			try
 			{
-				repository.Delete(repository.GetById(id));
+                var entity = repository.GetById(id);
+                repository.Delete(entity);
 			}
 			catch (System.Exception ex)
 			{

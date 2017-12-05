@@ -48,9 +48,6 @@ namespace JehovaJireh.Data.Repositories
 
             try
 			{
-                if (Session.Connection.State == System.Data.ConnectionState.Closed)
-                    Session.Connection.Open();
-
                 data = Session.Query<T>();
                 foreach (var obj in data)
                     Session.Evict(obj);
@@ -88,7 +85,7 @@ namespace JehovaJireh.Data.Repositories
 		{
 			object item = new object();
 			Stopwatch timespan = Stopwatch.StartNew();
-			log.GetStarted(Id);
+			//log.GetStarted(Id);
 
 			try
 			{
@@ -102,22 +99,23 @@ namespace JehovaJireh.Data.Repositories
 			finally
 			{
 				timespan.Stop();
-				log.GetFinished(Id.ToString(), timespan.Elapsed);
+				//log.GetFinished(Id.ToString(), timespan.Elapsed);
 			}
 			return (T)item;
 		}
 
 		public void Create(T entity)
 		{
-			log.SaveInsertStarted(entity);
+			//log.SaveInsertStarted(entity);
 			Stopwatch timespan = Stopwatch.StartNew();
 			try
 			{
 				using (var tx = Session.BeginTransaction())
 				{
 					Session.Save(entity);
-					tx.Commit();
+                    Session.Flush();
                     Session.Evict(entity);
+                    tx.Commit();
                 }
 			}
 			catch (System.Exception ex)
@@ -127,21 +125,24 @@ namespace JehovaJireh.Data.Repositories
 			finally
 			{
 				timespan.Stop();
-				log.SaveInsertFinished(entity, timespan.Elapsed);
+				//log.SaveInsertFinished(entity, timespan.Elapsed);
 			}
 		}
 
 		public void Delete(T entity)
 		{
-			log.DeleteStarted(entity);
+			//log.DeleteStarted(entity);
 			Stopwatch timespan = Stopwatch.StartNew();
 			try
 			{
 				using (var tx = Session.BeginTransaction())
 				{
-					Session.Delete(entity);
-					tx.Commit();
-                    Session.Evict(entity);
+                    if (entity != null)
+                    {
+                        Session.Delete(entity);
+                        tx.Commit();
+                        Session.Evict(entity);
+                    }
                 }
 			}
 			catch (System.Exception ex)
@@ -151,13 +152,13 @@ namespace JehovaJireh.Data.Repositories
 			finally
 			{
 				timespan.Stop();
-				log.DeleteFinished(entity);
+				//log.DeleteFinished(entity);
 			}
 		}
 
 		public void DeleteById(IdT Id)
 		{
-			log.DeleteStarted(Session.Load<T>(Id));
+			//log.DeleteStarted(Session.Load<T>(Id));
 			Stopwatch timespan = Stopwatch.StartNew();
             var entity = Session.Load<T>(Id);
 
@@ -178,27 +179,27 @@ namespace JehovaJireh.Data.Repositories
 			finally
 			{
 				timespan.Stop();
-				log.DeleteFinished(entity);
+				//log.DeleteFinished(entity);
 			}
 		}
 
 		public void Dispose()
 		{
-            session.Close();
+            //session.Close();
 		}
 
 		public void Update(T entity)
 		{
-			log.SaveStarted(entity);
+			//log.SaveStarted(entity);
 			Stopwatch timespan = Stopwatch.StartNew();
 			try
 			{
 				using (var tx = Session.BeginTransaction())
 				{
-					Session.SaveOrUpdate(entity);
+                    Session.SaveOrUpdate(entity);
 					tx.Commit();
-					log.SaveFinished(entity);
-				}
+                    //log.SaveFinished(entity);
+                }
 			}
 			catch (System.Exception ex)
 			{
@@ -207,7 +208,7 @@ namespace JehovaJireh.Data.Repositories
 			finally
 			{
 				timespan.Stop();
-				log.SaveFinished(entity);
+				//log.SaveFinished(entity);
 			}
 		}
 

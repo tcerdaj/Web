@@ -12,7 +12,6 @@ namespace JehovaJireh.Core.Entities
 		public Donation()
 		{
 			this.DonationDetails = (ICollection<DonationDetails>)new List<DonationDetails>();
-            this.Schedulers = (ICollection<Scheduler>)new List<Scheduler>();
         }
 
 		public virtual User RequestedBy { get; set; }
@@ -23,7 +22,6 @@ namespace JehovaJireh.Core.Entities
 		public virtual DateTime DonatedOn { get; set; }
 		public virtual DonationStatus DonationStatus { get; set; }
 		public virtual ICollection<DonationDetails> DonationDetails { get; set; }
-        public virtual ICollection<Scheduler> Schedulers { get; set; }
 
 
         public virtual int RequestId { get; set; }

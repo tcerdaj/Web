@@ -19,7 +19,11 @@
  <script id="rowTemplate" type="text/x-kendo-tmpl">
     <tr data-uid="#: uid #">
         <td class="photo">
-            <img src="/img/no-photo.png" alt="#: Title #" />
+            #if(ImageUrl === '' || ImageUrl === null){#
+               <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
+            #}else{#
+               <img class="drag-image" src="#: ImageUrl #" alt="#: Title #" />
+            #}#
         </td>
         <td class="details">
             <span class="title">#: Title #</span>
@@ -35,10 +39,14 @@
 <script id="altRowTemplate" type="text/x-kendo-tmpl">
     <tr data-uid="#: uid #">
         <td class="photo">
-            <img src="/img/no-photo.png" alt="#: Title #" />
+            #if(ImageUrl === '' || ImageUrl === null){#
+               <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />   
+            #}else{#
+                <img class="drag-image" src="#: ImageUrl #" alt="#: Title #" />   
+            #}#
         </td>
         <td class="details">
-            <span class="title">Title: #: Title #</span>
+            <span class="title">#: Title #</span>
         </td>
         <td class="country">
             #: Description #
@@ -48,7 +56,7 @@
 </script>
 <script id="event-template" type="text/x-kendo-template">
     <div class="movie-template">
-        <img src="#= imageUrl #">
+        <img class="drag-image" src="#= imageUrl #">
         <p>
             #: kendo.toString(start, "hh:mm") # - #: kendo.toString(end, "hh:mm") #
         </p>
@@ -57,8 +65,11 @@
     </div>
 </script>
     <script type="text/javascript">
+        var generalError = "An server error occurred and has been logged." +
+            "\nPlease contact your administrator. " + "ServerException";
         $(function () {
             var userId = "@ViewBag.UserId";
+            moment.tz.add('America/New_York|EST EDT|50 40|0101|1Lz50 1zb0 Op0');
 
             function scheduler_edit(e) {
                 console.log("edit");
@@ -107,6 +118,7 @@
 
             function scheduler_moveEnd(e) {
                 console.log("moveEnd");
+                e.preventDefault();
                 var currentDate = new Date(moment().format("M/D/YYYY"));
                 var start = new Date(moment(e.event.start).format("M/D/YYYY"));
 
@@ -117,8 +129,8 @@
             }
 
             var gridDataSource = new kendo.data.DataSource({
-                error: function (e) {
-                    alert("An general error occurred.")
+                error: function (xhr, textStatus, errorThrown) {
+                    openDialog("Error", generalError);
                     this.cancelChanges();
                 },
                 contentType: "application/json",
@@ -181,6 +193,7 @@
                 filter: "tr",
                 hint: function (e) {
                     var item = $('<div class="k-grid k-widget" style="background-color: DarkOrange; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
+                    isDragging = true;
                     return item;
                 },
                 group: "gridGroup1",
@@ -190,11 +203,17 @@
                 date: new Date(moment().format("YYYY/M/DD")),
                 startTime: new Date(moment().format("YYYY/M/DD 7:00")),
                 height: 400,
-                timezone: "Etc/UTC",
+                //timezone: "Etc/UTC",
                 navigate: scheduler_navigate,
                 change: scheduler_change,
                 edit: scheduler_edit,
+                move: function (e) {
+                    e.preventDefault();
+                },
                 moveEnd: scheduler_moveEnd,
+                resize: function (e) {
+                   e.preventDefault();
+                },
                 remove: function scheduler_remove(e) {
                     e.preventDefault();
                     console.log("removing");
@@ -209,7 +228,7 @@
                         //refresh grid
 
                         console.log("done");
-                    }, function () {
+                    }, function (xhr, textStatus, errorThrown) {
                         alert("Error.")
                     });
                     
@@ -226,14 +245,10 @@
                     "agenda",
                     "timeline"
                 ],
-                timezone: "Etc/UTC",
                 dataSource: {
-                    error: function (e) {
-                        alert(e.status);
+                    error: function (xhr, textStatus, errorThrown) {
+                        openDialog("Error", generalError);
                         this.cancelChanges();
-                    },
-                    success: function (e) {
-                        alert("success...");
                     },
                     transport: {
                         read: {
@@ -257,11 +272,12 @@
                             type: "PUT",
                             complete: function (e) {
                                 //REFRESH THE GRID IN SUCCESS.
-                                e.success(function (e) {
+                                e.success(function (data) {
+                                    this.dataSource.read();
                                     console.log("Succcess");
                                 });
 
-                                e.error(function (e) {
+                                e.error(function (data) {
                                     console.log("error");
                                 });
                             },
@@ -272,20 +288,22 @@
                                 withCredentials: true
                             },
                             contentType: "application/json",
+                            //dataType: "json",
                             type: "POST",
                             complete: function (e) {
                                 //REFRESH THE GRID IN SUCCESS.
-                                e.success(function (e) {
+                                e.success(function (data) {
                                     console.log("Succcess");
+                                    console.log("{ data: " + JSON.stringify(this.data) + "}");
+                                    //update donation
+                                    //Status scheduler 4
+                                    //refresh grid
                                 });
 
-                                e.error(function (e) {
+                                e.error(function (data) {
                                     console.log("error");
                                 });
-                            },
-                            success: function (data) {
-                                alert(data);
-                            }
+                            } 
                         },
                         destroy: {
                             url: function (model) {
@@ -298,11 +316,14 @@
                             type: "DELETE",
                             complete: function (e) {
                                 //REFRESH THE GRID IN SUCCESS.
-                                e.success(function (e) {
+                                e.success(function (data) {
                                     console.log("Succcess");
+                                    //update donation
+                                    //status requested 2
+                                    //refresh grid
                                 });
 
-                                e.error(function (e) {
+                                e.error(function (data) {
                                     console.log("error");
                                 });
                             }
@@ -329,15 +350,53 @@
                                 recurrenceException: { from: "RecurrenceException" },
                                 createdBy: { from: "CreatedBy", defaultValue: { Id: userId } },
                                 imageUrl: { from: "ImageUrl" },
-                                donation: { from: "Donation", validation: { required: true } },
-                                item: { from: "Item", validation: { required: true } },
                                 isAllDay: { type: "boolean", from: "IsAllDay" },
-                                createdOn: {type: "date"}
+                                createdOn: { type: "date" },
+                                donation: { from: "Donation", type: "object", validation: { required: true }},
+                                item: { from: "Item", type: "object", validation: { required: false }}
                             }
+                        },
+                        parse: function (response) {
+                            $.each(response, function (idx, elem) {
+                                if (elem.StartDate && typeof elem.StartDate == "string") {
+                                    elem.StartDate = convertToJSONDate(elem.StartDate);
+                                }
+                                if (elem.EndDate && typeof elem.EndDate == "string") {
+                                    elem.EndDate = convertToJSONDate(elem.EndDate);
+                                }
+                            });
+
+                            return response
                         }
                     }
                 }
             });
+
+            function updateDonation(donationId, itemId, status) {
+                if (donation !== null && donation !== '' && donation !== undefined)
+                {
+                    $.ajax({
+                        url: kendo.format("{0}UpdateDonation/{1}/{2}?status={3}", getBaseUrl(), donationId, itemId, status),
+                        datatype: "json",
+                        contentType: 'application/json',
+                        type: "PUT",
+                        success: function (result) {
+                            console.log("success");
+                            gridDataSource.read();
+                        },
+                        error: function (xhr, status, error) {
+                            openDialog("Error", generalError);
+                        }
+                    });
+                }
+            }
+
+            function convertToJSONDate(strDate) {
+                var offsetMiliseconds = new Date().getTimezoneOffset() * 60000;
+                var dt = new Date(strDate);
+                var newDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds(), dt.getMilliseconds()));
+                return '/Date(' + newDate.getTime() + ')/';
+            }
 
             function getGridDataItem(donation, item, array) {
                 var result = $.grep(array, function (n, i) {
@@ -354,38 +413,47 @@
            function createDropArea(scheduler) {
                 scheduler.view().content.kendoDropTargetArea({
                     filter: ".k-scheduler-table td, .k-event",
+                    dragenter: function (e) {
+                        e.draggable.hint.css("opacity", 0.3);
+                        e.dropTarget.removeClass("orange").addClass("purple"); //modify dropTarget element
+                    },
+                    dragleave: function (e) {
+                        e.draggable.hint.css("opacity", 1); //modify the draggable hint
+                        e.dropTarget.removeClass("purple").addClass("orange"); //modify dropTarget element
+
+                    },
                     drop: function (e) {
 
                         var offset = $(e.dropTarget).offset();
                         var slot = scheduler.slotByPosition(offset.left, offset.top);
                         var dataItem = gridDataSource.getByUid(e.draggable.currentTarget.data("uid"));
-
+                        
                         if (dataItem && slot) {
                             var offsetMiliseconds = new Date().getTimezoneOffset() * 60000;
                             var newEvent = {
                                 id: null,
                                 title: dataItem.Title,
-                                end: slot.endDate,
+                                end: new Date(moment(slot.endDate).add(3, 'hours')),
                                 start: slot.startDate,
                                 isAllDay: slot.isDaySlot,
                                 description: dataItem.Description,
-                                item: dataItem.ItemId === '00000000-0000-0000-0000-000000000000' ? null : { Id: dataItem.ItemId },
                                 imageUrl: dataItem.ImageUrl,
-                                donation: dataItem.Donation,
                                 createdBy: { id: userId },
                                 createdOn: new Date(),
-                                startTimezone: "Etc/UTC",
-                                endTimezone: "Etc/UTC",
+                                startTimezone: "America/New_York",
+                                endTimezone: null,
                                 recurrenceId: null,
                                 recurrenceRule: null,
-                                recurrenceException: null
+                                recurrenceException: null,
+                                donation: dataItem.Donation,
+                                item: dataItem.Item
                             };
 
                             scheduler.dataSource.add(newEvent);
                             scheduler.dataSource.sync().then(function (e) {
-                                gridDataSource.remove(dataItem);
-                            }, function (e) {
-                                alert("error.")
+                                //gridDataSource.remove(dataItem);
+                            }, function (xhr, textStatus, errorThrown) {
+                                console.error(generalError);
                             });
                         }
                     },
@@ -415,6 +483,20 @@
         }
     </script>
     <style>
-        
+        td[role=gridcell].selected {
+            background-color: #f35800;
+            border-color: #f85a00;
+        }
+        .orange {
+            background-color: white;
+        }
+
+        .purple {
+            background-color: orange;
+        }
+        .drag-image {
+            width: 116px;
+            height: 116px;
+        }
     </style>
 }

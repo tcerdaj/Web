@@ -484,14 +484,30 @@
             alert('This item already exist in you shooping cart');
         }
         else {
+            //update item
+            if (item !== null && item !== "" && item !== undefined) {
+                for (var i = 0; i < dataItem.DonationDetails.length; i++) {
+                    var _item = dataItem.DonationDetails[i];
+                    if (_item.Id == item.Id) {
+                        if (itemId !== "00000000-0000-0000-0000-000000000000") {
+                            dataItem.DonationDetails[i].RequestedBy = { Id: userId };
+                            dataItem.DonationDetails[i].ModifiedBy = { Id: userId };
+                            dataItem.DonationDetails[i].ModifiedOn = moment().format("YYYY-MM-DDTHH:MM:ss");
+                            dataItem.DonationDetails[i].DonationStatus = 2;
+                        }
+                        else
+                            dataItem.DonationDetails[i] = null;
+                    }
+                }
+            }
+
             dataItem.RequestedBy = { Id: userId };
             dataItem.ModifiedBy = { Id: userId };
             dataItem.ModifiedOn = moment().format("YYYY-MM-DDTHH:MM:ss");
-            dataItem.DonationDetails = itemId !== "00000000-0000-0000-0000-000000000000" ? { Id: itemId } : null;
             dataItem.DonationStatus = 2;
 
             $.ajax({
-                url: getBaseUrl() + "Donations/" + dataItem.Id,
+                url: getBaseUrl() + "Donations/" + itemId + "/UpdateStatusRequested",
                 contentType: "application/json; charset=utf-8",
                 cache: false,
                 crossDomain: true,

@@ -74,11 +74,9 @@ namespace JehovaJireh.Data.Mappings
             HasMany(x => x.DonationDetails)
                 .KeyColumn("DonationId")
                 .Inverse()
-                .Cascade.All();
-            HasMany(x => x.Schedulers)
-                .KeyColumn("DonationId")
-                .Inverse()
-                .Cascade.All();
+                .Cascade.All()
+                .LazyLoad()
+                .NotFound.Ignore();
             References(x => x.RequestedBy)
                 .Column("RequestedBy")
                 .ForeignKey("RequestedBy"); 
@@ -99,11 +97,16 @@ namespace JehovaJireh.Data.Mappings
             Id(x => x.Id)
                 .Column("ItemId")
                 .GeneratedBy.Guid();
-            References(x => x.Donation, "DonationId");
+            References(x => x.Donation)
+                .Column("DonationId")
+                .ForeignKey()
+                .LazyLoad();
             HasMany(x => x.Images)
                 .KeyColumn("ItemId")
                 .Inverse()
-                .Cascade.All();
+                .Cascade.All()
+                .LazyLoad()
+                .NotFound.Ignore();
             Map(x => x.Line).Column("Line");
             Map(x => x.ItemType)
                 .CustomType<DonationType>();
@@ -135,6 +138,7 @@ namespace JehovaJireh.Data.Mappings
             Map(x => x.Description);
             Map(x => x.ImageUrl);
             References(x => x.Donation).Column("DonationId");
+            References(x => x.Item).Column("ItemId");
             References(x => x.RequestedBy).Column("RequestedBy");
         }
     }
@@ -177,11 +181,14 @@ namespace JehovaJireh.Data.Mappings
 			Id(x => x.Id)
 				.Column("DonationImageId")
 				.GeneratedBy.Increment();
-			References(x => x.Item, "ItemId");
 			Map(x => x.ImageUrl);
 			Map(x => x.CreatedOn);
 			Map(x => x.ModifiedOn);
-			References(x => x.CreatedBy)
+            References(x => x.Item)
+                .Column("ItemId")
+                .ForeignKey()
+                .LazyLoad();
+            References(x => x.CreatedBy)
 				.Column("CreatedBy")
 				.ForeignKey();
 			References(x => x.ModifiedBy)

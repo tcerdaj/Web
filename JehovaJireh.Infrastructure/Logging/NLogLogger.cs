@@ -211,107 +211,195 @@ namespace JehovaJireh.Infrastructure.Logging
 
 		public void GetStarted<T>(T entity)
 		{
-			Type entityType = ((object)entity).GetType();
-			IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
-			string info = string.Format("Getting {0} Started entity.{1}", entity.GetType().Name, Environment.NewLine);
-			//loop through all the properties in the generic class being updated and log their values
-			foreach (PropertyInfo prop in props)
-			{
-				object propValue = prop.GetValue(((object)entity), null);
-				info += string.Format("{0}='{1}'{2}", prop.Name, (propValue == null) ? "null" : propValue.ToString(), Environment.NewLine);
-			}
-			if (log.IsInfoEnabled)
-				log.Info(info);
+            try
+            {
+                Type entityType = ((object)entity).GetType();
+                IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
+                string info = string.Format("Getting {0} Started entity.{1}", entity.GetType().Name, Environment.NewLine);
+                //loop through all the properties in the generic class being updated and log their values
+                foreach (PropertyInfo prop in props)
+                {
+                    object propValue = prop.GetValue(((object)entity), null);
+                    info += string.Format("{0}='{1}'{2}", prop.Name, (propValue == null) ? "null" : propValue.ToString(), Environment.NewLine);
+                }
+                if (log.IsInfoEnabled)
+                    log.Info(info);
+            }
+            catch (System.Exception)
+            {
+
+            }
 		}
 
 		public void GetFinished<T>(T entity, TimeSpan? span)
 		{
-			string message = string.Format("Getting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
-			if (span != null)
-			{
-				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
-			}
-			if (log.IsInfoEnabled)
-				log.Info(message);
+            try
+            {
+                string message = string.Format("Getting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
+                if (span != null)
+                {
+                    message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
+                }
+                if (log.IsInfoEnabled)
+                    log.Info(message);
+            }
+            catch (System.Exception)
+            {
+
+            }
+           
 		}
 
 		public void SaveStarted<T>(T entity)
 		{
-			Type entityType = ((object)entity).GetType();
-			IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
-			string info = string.Format("Saving Started {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
-			//loop through all the properties in the generic class being updated and log their values
-			foreach (PropertyInfo prop in props)
-			{
-				object propValue = prop.GetValue(((object)entity), null);
-				info += string.Format("{0}='{1}'{2}", prop.Name, (propValue == null) ? "null" : propValue.ToString(), Environment.NewLine);
-			}
-			if (log.IsInfoEnabled)
-				log.Info(info);
+            try
+            {
+                Type entityType = ((object)entity).GetType();
+                IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
+                string info = string.Format("Saving Started {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
+                //loop through all the properties in the generic class being updated and log their values
+                foreach (PropertyInfo prop in props)
+                {
+                    object propValue = prop.GetValue(((object)entity), null);
+                    info += string.Format("{0}='{1}'{2}", prop.Name, (propValue == null) ? "null" : propValue.ToString(), Environment.NewLine);
+                }
+                if (log.IsInfoEnabled)
+                    log.Info(info);
+            }
+            catch 
+            {
+            }
+           
 		}
 
 
 		public void SaveFinished<T>(T entity, TimeSpan? span)
 		{
-			string message = string.Format("Saving Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
-			if (span != null)
-			{
-				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
-			}
-			if (log.IsInfoEnabled)
-				log.Info(message);
+            try
+            {
+                string message = string.Format("Saving Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
+                if (span != null)
+                {
+                    message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
+                }
+                if (log.IsInfoEnabled)
+                    log.Info(message);
+            }
+            catch (System.Exception)
+            {
+
+            }
+            
 		}
 
 		public void SaveInsertStarted<T>(T entity)
 		{
-			Type entityType = ((object)entity).GetType();
-			IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
-			string info = string.Format("Inserting Started {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
-			//loop through all the properties in the generic class being updated and log their values
-			foreach (PropertyInfo prop in props)
-			{
-				object propValue = prop.GetValue(((object)entity), null);
-				info += string.Format("{0}='{1}'{2}", prop.Name, (propValue == null) ? "null" : propValue.ToString(), Environment.NewLine);
-			}
-			if (log.IsInfoEnabled)
-				log.Info(info);
+
+            try
+            {
+                string info = string.Format("Inserting Started {0} entity.{1}", "Name", "NewLine");
+                if(entity != null)
+                {
+                    Type entityType = ((object)entity).GetType();
+                    IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
+                    info = string.Format("Inserting Started {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
+                    //loop through all the properties in the generic class being updated and log their values
+                    foreach (PropertyInfo prop in props)
+                    {
+                        object propValue = prop.GetValue(((object)entity), null);
+                        info += string.Format("{0}='{1}'{2}", prop.Name, (propValue == null) ? "null" : propValue.ToString(), Environment.NewLine);
+                    }
+                }
+                
+                if (log.IsInfoEnabled)
+                    log.Info(info);
+            }
+            catch (System.Exception)
+            {
+
+            }
+           
 		}
 
 		public void SaveInsertFinished<T>(T entity, TimeSpan? span)
 		{
-			string message = string.Format("Inserting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
-			if (span != null)
-			{
-				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
-			}
-			if (log.IsInfoEnabled)
-				log.Info(message);
+            try
+            {
+                string message = string.Format("Inserting Finished {0} entity with ID='{1}'", "Name", "Id");
+
+                if (entity != null)
+                {
+                    message = string.Format("Inserting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
+                }
+
+                if (span != null)
+                {
+                    message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
+                }
+                if (log.IsInfoEnabled)
+                    log.Info(message);
+            }
+            catch (System.Exception)
+            {
+
+                
+            }
+            
+			
 		}
 
 		public void DeleteStarted<T>(T entity)
 		{
-			Type entityType = ((object)entity).GetType();
-			IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
-			string info = string.Format("Deleting {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
-			//loop through all the properties in the generic class being updated and log their values
-			foreach (PropertyInfo prop in props)
-			{
-				object propValue = prop.GetValue(((object)entity), null);
-				info += string.Format("{0}='{1}'{2}", prop.Name, (propValue == null) ? "null" : propValue.ToString(), Environment.NewLine);
-			}
-			if (log.IsInfoEnabled)
-				log.Info(info);
+            try
+            {
+                string info = string.Format("Deleting {0} entity.{1}", "Name", "NewLine");
+
+                if (entity != null)
+                {
+                    info = string.Format("Deleting {0} entity.{1}", entity.GetType().Name, Environment.NewLine);
+                    Type entityType = ((object)entity).GetType();
+                    IList<PropertyInfo> props = new List<PropertyInfo>(entityType.GetProperties());
+                    //loop through all the properties in the generic class being updated and log their values
+                    foreach (PropertyInfo prop in props)
+                    {
+                        object propValue = prop.GetValue(((object)entity), null);
+                        info += string.Format("{0}='{1}'{2}", prop.Name, (propValue == null) ? "null" : propValue.ToString(), Environment.NewLine);
+                    }
+                }
+
+                if (log.IsInfoEnabled)
+                    log.Info(info);
+            }
+            catch (System.Exception)
+            {
+
+            }
 		}
 
 		public void DeleteFinished<T>(T entity, TimeSpan? span)
 		{
-			string message = string.Format("Deleting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
-			if (span != null)
-			{
-				message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
-			}
-			if (log.IsInfoEnabled)
-				log.Info(message);
+            try
+            {
+                string message = string.Format("Deleting Finished {0} entity with ID='{1}'", "entity", "Id");
+
+                if (entity != null)
+                {
+                    message = string.Format("Deleting Finished {0} entity with ID='{1}'", entity.GetType().Name, ((EntityBase<int>)(object)entity).Id);
+                }
+                
+                if (span != null)
+                {
+                    message += string.Format(" in {0} seconds", span.Value.TotalSeconds.ToString());
+                }
+                if (log.IsInfoEnabled)
+                    log.Info(message);
+            }
+            catch (System.Exception)
+            {
+
+                
+            }
+            
 		}
 
 		public void LoginStarted(string username)

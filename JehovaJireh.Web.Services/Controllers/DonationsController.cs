@@ -51,5 +51,62 @@ namespace JehovaJireh.Web.Services.Controllers
 
             return dto;
         }
+
+        [ActionName("UpdateStatusRequested")]
+        [HttpPut]
+        public IHttpActionResult UpdateStatusRequested(string id, DonationDto dto)
+        {
+            try
+            {
+                var data = repository.GetById(dto.Id);
+                //data.InjectFrom<DeepCloneInjection>(dto);
+                Guid itemId;
+                Guid.TryParse(id, out itemId);
+                var modifiedOn = DateTime.Now;
+
+                if (data != null)
+                {
+                    var itemsCount = data.DonationDetails.Count();
+                    var requestedCount = data.DonationDetails.Where(x => x.DonationStatus == DonationStatus.Requested).Count() + 1;
+
+                    if (itemsCount > 0 && requestedCount > 0 & itemsCount == requestedCount)
+                    {
+                        data.DonationStatus = DonationStatus.Requested;
+                        data.RequestedBy = new User { Id = dto.RequestedBy.Id };
+                        data.ModifiedBy = new User { Id = dto.RequestedBy.Id };
+                        data.ModifiedOn = modifiedOn;
+                    }
+                    else
+                    {
+                        data.DonationStatus = DonationStatus.PartialRequested;
+                        data.ModifiedBy = new User { Id = dto.RequestedBy.Id };
+                    }
+
+                    if (data.DonationDetails != null && itemId != Guid.Empty)
+                    {
+                        var item = data.DonationDetails.FirstOrDefault(x => x.Id == itemId);
+
+                        if (item != null)
+                        {
+                            item.DonationStatus = DonationStatus.Requested;
+                            item.RequestedBy = new User { Id = dto.RequestedBy.Id };
+                            item.ModifiedBy = new User { Id = dto.RequestedBy.Id };
+                            item.ModifiedOn = modifiedOn;
+
+                            //data.DonationDetails.Where(x => x.Id == itemId).Select(p => p == item);
+                        }
+                    }
+                }
+                
+                repository.Update(data);
+            }
+            catch (System.Exception ex)
+            {
+                log.Error(ex);
+                throw ex;
+            }
+
+            return Ok(dto);
+        }
     }
 }
