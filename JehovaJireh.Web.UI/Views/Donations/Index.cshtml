@@ -507,7 +507,7 @@
             dataItem.DonationStatus = 2;
 
             $.ajax({
-                url: getBaseUrl() + "Donations/" + itemId + "/UpdateStatusRequested",
+                url: getBaseUrl() + "Donations/" + itemId + "/UpdateDonationStatus?IsRequested=true",
                 contentType: "application/json; charset=utf-8",
                 cache: false,
                 crossDomain: true,

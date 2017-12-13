@@ -18,15 +18,19 @@ namespace JehovaJireh.Web.Services.Controllers
     public class SchedulerController : BaseController<Scheduler, SchedulerDto, int>
     {
         ISchedulerRepository repository;
+        IDonationDetailsRepository donationDetailsRepository;
         ILogger log;
         ISession session;
+        IDonationRepository donationRepository;
 
-        public SchedulerController(ISchedulerRepository repository, ILogger log, ISession session)
+        public SchedulerController(ISchedulerRepository repository, ILogger log, ISession session, IDonationDetailsRepository donationDetailsRepository, IDonationRepository donationRepository)
 			:base(repository, log)
         {
-            this.repository = repository;
             this.log = log;
             this.session = session;
+            this.repository = repository;
+            this.donationRepository = donationRepository;
+            this.donationDetailsRepository = donationDetailsRepository;
         }
 
         [ActionName("CreatedBy")]
@@ -37,8 +41,11 @@ namespace JehovaJireh.Web.Services.Controllers
             try
             {
                 var dta = repository.Query().Where(x => x.CreatedBy.Id == id && 
-                                     (x.Donation.DonationStatus == DonationStatus.Requested || x.Donation.DonationStatus == DonationStatus.PartialRequested
-                                     || x.Item.DonationStatus == DonationStatus.Requested))
+                                     (x.Donation.DonationStatus == DonationStatus.Requested 
+                                        || x.Donation.DonationStatus == DonationStatus.PartialRequested
+                                        || x.Item.DonationStatus == DonationStatus.Requested
+                                        || x.Donation.DonationStatus == DonationStatus.PartialScheduled
+                                        || x.Item.DonationStatus == DonationStatus.Scheduled))
                                      .ToList();
                 dto = dta.Select(x => new SchedulerDto()
                                 .InjectFrom<DeepCloneInjection>(x))
@@ -58,33 +65,10 @@ namespace JehovaJireh.Web.Services.Controllers
         {
             try
             {
-                Donation donation = null;
                 Scheduler data = new Scheduler();
                 data.InjectFrom<DeepCloneInjection>(dto);
-
-                if (dto != null && dto.Donation != null)
-                {
-                    donation = session.Query<Donation>().FirstOrDefault(x => x.Id == dto.Donation.Id);
-                    if (donation != null)
-                    {
-                        var itemsCount = donation.DonationDetails.Count();
-                        var scheduledCount = donation.DonationDetails.Where(x => x.DonationStatus == DonationStatus.Scheduled).Count() + 1;
-
-                        if (itemsCount > 0 && scheduledCount > 0 & itemsCount == scheduledCount)
-                        {
-                            data.Donation.DonationStatus = DonationStatus.Scheduled;
-                        }
-                        else
-                            data.Donation.DonationStatus = DonationStatus.PartialScheduled;
-
-                        if (dto.Item != null)
-                        {
-                            data.Donation.DonationDetails.Where(x => x.Id == dto.Item.Id).Select(y => y.DonationStatus == DonationStatus.Scheduled);
-                        }
-                    }
-                }
-
                 repository.Create(data);
+                dto.InjectFrom<DeepCloneInjection>(data);
             }
             catch (System.Exception ex)
             {

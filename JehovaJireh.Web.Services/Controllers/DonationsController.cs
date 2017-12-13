@@ -52,9 +52,9 @@ namespace JehovaJireh.Web.Services.Controllers
             return dto;
         }
 
-        [ActionName("UpdateStatusRequested")]
+        [ActionName("UpdateDonationStatus")]
         [HttpPut]
-        public IHttpActionResult UpdateStatusRequested(string id, DonationDto dto)
+        public IHttpActionResult UpdateStatusRequested(string id, bool IsRequested, DonationDto dto)
         {
             try
             {
@@ -67,19 +67,26 @@ namespace JehovaJireh.Web.Services.Controllers
                 if (data != null)
                 {
                     var itemsCount = data.DonationDetails.Count();
-                    var requestedCount = data.DonationDetails.Where(x => x.DonationStatus == DonationStatus.Requested).Count() + 1;
+                    var requestedCount = IsRequested? data.DonationDetails.Where(x => x.DonationStatus == DonationStatus.Requested).Count() + 1: data.DonationDetails.Where(x => x.DonationStatus == DonationStatus.Scheduled).Count() + 1;
+                    data.ModifiedBy = new User { Id = dto.ModifiedBy.Id };
+                    data.ModifiedOn = modifiedOn;
 
                     if (itemsCount > 0 && requestedCount > 0 & itemsCount == requestedCount)
                     {
-                        data.DonationStatus = DonationStatus.Requested;
-                        data.RequestedBy = new User { Id = dto.RequestedBy.Id };
-                        data.ModifiedBy = new User { Id = dto.RequestedBy.Id };
-                        data.ModifiedOn = modifiedOn;
+                        if (IsRequested)
+                        {
+                            data.DonationStatus = DonationStatus.Requested;
+                            data.RequestedBy = new User { Id = dto.RequestedBy.Id };
+                        }
+                        else
+                            data.DonationStatus = DonationStatus.Scheduled;
                     }
                     else
                     {
-                        data.DonationStatus = DonationStatus.PartialRequested;
-                        data.ModifiedBy = new User { Id = dto.RequestedBy.Id };
+                        if (IsRequested)
+                            data.DonationStatus = DonationStatus.PartialRequested;
+                        else
+                            data.DonationStatus = DonationStatus.PartialScheduled;
                     }
 
                     if (data.DonationDetails != null && itemId != Guid.Empty)
@@ -88,12 +95,16 @@ namespace JehovaJireh.Web.Services.Controllers
 
                         if (item != null)
                         {
-                            item.DonationStatus = DonationStatus.Requested;
-                            item.RequestedBy = new User { Id = dto.RequestedBy.Id };
-                            item.ModifiedBy = new User { Id = dto.RequestedBy.Id };
+                            item.ModifiedBy = new User { Id = dto.ModifiedBy.Id };
                             item.ModifiedOn = modifiedOn;
 
-                            //data.DonationDetails.Where(x => x.Id == itemId).Select(p => p == item);
+                            if (IsRequested)
+                            {
+                                item.DonationStatus = DonationStatus.Requested;
+                                item.RequestedBy = new User { Id = dto.RequestedBy.Id };
+                            }
+                            else
+                                item.DonationStatus = DonationStatus.Scheduled;
                         }
                     }
                 }

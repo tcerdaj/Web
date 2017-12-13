@@ -91,13 +91,15 @@ namespace JehovaJireh.Web.Services.Controllers
 				T data = new T();
 				data.InjectFrom<DeepCloneInjection>(dto);
 				repository.Create(data);
+                dto.InjectFrom<DeepCloneInjection>(data);
 			}
 			catch (System.Exception ex)
 			{
 				log.Error(ex);
 				throw ex;
 			}
-			return Ok();
+
+			return Ok(dto);
 		}
 
         // PUT: api/baseapi
@@ -115,7 +117,7 @@ namespace JehovaJireh.Web.Services.Controllers
 				log.Error(ex);
 				throw ex;
 			}
-			return Ok();
+			return Ok(dto);
 		}
 
 		// DELETE: api/baseapi
@@ -131,7 +133,7 @@ namespace JehovaJireh.Web.Services.Controllers
 				log.Error(ex);
 				throw ex;
 			}
-			return Ok();
+			return Ok(id);
 		}
 
 		// DELETE: api/baseapi
@@ -148,7 +150,7 @@ namespace JehovaJireh.Web.Services.Controllers
 				log.Error(ex);
 				throw ex;
 			}
-			return Ok();
+			return Ok(dto);
 		}
 	}
 }
