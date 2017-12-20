@@ -55,13 +55,12 @@
     </tr>
 </script>
 <script id="event-template" type="text/x-kendo-template">
-    <div class="movie-template">
-        <img class="drag-image" src="#= imageUrl #">
-        <p>
+    <div class="movie-template" style="padding:5px">
+        <img style="width: 115px;height:80px;" src="#= imageUrl #">
+        <p class="event-content">
             #: kendo.toString(start, "hh:mm") # - #: kendo.toString(end, "hh:mm") #
         </p>
-        <h3>#: title #</h3>
-        <p>#: description #</p>
+        <p class="event-content">#: title #</p>
     </div>
 </script>
     <script type="text/javascript">
@@ -221,17 +220,12 @@
                     event.id = event.taskID;
                     this.dataSource.remove(event);
                     this.dataSource.sync().then(function () {
-                        //retrieve grid dataItem
-                        var data = gridDataSource.data();
-                        var dataItem = getGridDataItem(event.donation, event.item, data);
-                        //change status to 2
-                        //refresh grid
-
-                        console.log("done");
+                        var itemId = dataItem.Item !== null ? dataItem.Item.Id : "00000000-0000-0000-0000-000000000000";
+                        dataItem.Donation.ModifiedBy = { Id: userId };
+                        updateDonationStatus(itemId, dataItem, true);
                     }, function (xhr, textStatus, errorThrown) {
-                        alert("Error.")
+                        openDialog("Error.", "An error occurred changing donation status.");
                     });
-                    
                 },
                 dataBound: function (e) {
                     //create drop area from current View
@@ -411,33 +405,33 @@
             }
 
            function createDropArea(scheduler) {
-                scheduler.view().content.kendoDropTargetArea({
+               var className = "";
+               scheduler.view().content.kendoDropTargetArea({
                     filter: ".k-scheduler-table td, .k-event",
                     dragenter: function (e) {
+                        className = e.dropTarget.prop("class");
                         e.draggable.hint.css("opacity", 0.3);
-                        e.dropTarget.removeClass("orange").addClass("purple"); //modify dropTarget element
+                        e.dropTarget.removeClass(className).addClass("purple"); //modify dropTarget element
                     },
                     dragleave: function (e) {
                         e.draggable.hint.css("opacity", 1); //modify the draggable hint
-                        e.dropTarget.removeClass("purple").addClass("orange"); //modify dropTarget element
-
+                        e.dropTarget.removeClass("purple").addClass(className); //modify dropTarget element
                     },
                     drop: function (e) {
 
                         var offset = $(e.dropTarget).offset();
                         var slot = scheduler.slotByPosition(offset.left, offset.top);
                         var dataItem = gridDataSource.getByUid(e.draggable.currentTarget.data("uid"));
-                        
+
                         if (dataItem && slot) {
                             var offsetMiliseconds = new Date().getTimezoneOffset() * 60000;
                             var newEvent = {
-                                id: null,
                                 title: dataItem.Title,
-                                end: new Date(moment(slot.endDate).add(3, 'hours')),
-                                start: slot.startDate,
+                                endDate: new Date(moment(slot.endDate).add(2, 'hours')),
+                                startDate: slot.startDate,
                                 isAllDay: slot.isDaySlot,
                                 description: dataItem.Description,
-                                imageUrl: dataItem.ImageUrl,
+                                imageUrl: dataItem.ImageUrl || "/img/no-photo.png",
                                 createdBy: { id: userId },
                                 createdOn: new Date(),
                                 startTimezone: "America/New_York",
@@ -445,15 +439,41 @@
                                 recurrenceId: null,
                                 recurrenceRule: null,
                                 recurrenceException: null,
-                                donation: dataItem.Donation,
-                                item: dataItem.Item
+                                donation: { Id: dataItem.Donation.Id },
+                                item: dataItem.Item !== null? { Id: dataItem.Item.Id } : null 
                             };
 
-                            scheduler.dataSource.add(newEvent);
-                            scheduler.dataSource.sync().then(function (e) {
-                                //gridDataSource.remove(dataItem);
-                            }, function (xhr, textStatus, errorThrown) {
-                                console.error(generalError);
+                            $.ajax({
+                                url: getBaseUrl() + "Scheduler/Create",
+                                contentType: "application/json; charset=utf-8",
+                                cache: false,
+                                crossDomain: true,
+                                xhrFields: {
+                                    withCredentials: false
+                                },
+                                type: "POST",
+                                data: JSON.stringify(newEvent),
+                                success: function (data) {
+                                    try {
+                                        newEvent.id = data.Id;
+                                        newEvent.start = newEvent.startDate;
+                                        newEvent.end = newEvent.endDate;
+                                        scheduler.dataSource.add(newEvent);//Add event to scheduler
+                                        var itemId = dataItem.Item !== null ? dataItem.Item.Id : "00000000-0000-0000-0000-000000000000";
+                                        dataItem.Donation.ModifiedBy = { Id: userId };
+                                        updateDonationStatus(itemId, dataItem, false);
+                                    } catch (e) {
+                                        scheduler.dataSource.read();
+                                        $("#grid").data("kendoGrid").dataSource.read();
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    try {
+                                        alert(xhr.responseJSON.Message);
+                                    } catch (e) {
+                                        alert("An error has occurred.");
+                                    }
+                                }
                             });
                         }
                     },
@@ -461,6 +481,36 @@
                });
             }
         });
+
+        function updateDonationStatus(itemId, dataItem, IsRequested) {
+            $.ajax({
+                url: getBaseUrl() + "Donations/" + itemId + "/UpdateDonationStatus?IsRequested=" + IsRequested || false,
+                contentType: "application/json; charset=utf-8",
+                cache: false,
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: false
+                },
+                type: "PUT",
+                data: JSON.stringify(dataItem.Donation),
+                success: function (result) {
+                    console.log("success");
+                    var grid = $("#grid").data("kendoGrid");
+
+                    if (!IsRequested)
+                        grid.dataSource.remove(dataItem);//remove row from grid
+                    else
+                        grid.dataSource.read();
+                },
+                error: function (xhr, status, error) {
+                    try {
+                        alert(xhr.responseJSON.Message);
+                    } catch (e) {
+                        alert("An error has occurred.");
+                    }
+                }
+            });
+        }
 
         function showDetails(e) {
             var pos = $(e.currentTarget).position();
@@ -497,6 +547,14 @@
         .drag-image {
             width: 116px;
             height: 116px;
+        }
+        .event-content {
+            display: inline-block;
+            width: 115px;
+            white-space: nowrap;
+            overflow: hidden !important;
+            text-overflow: ellipsis;
+            margin-bottom:0px;
         }
     </style>
 }

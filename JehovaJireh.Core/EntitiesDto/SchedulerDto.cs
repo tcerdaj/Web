@@ -19,5 +19,7 @@ namespace JehovaJireh.Core.EntitiesDto
         public virtual string RecurrenceException { get; set; }
         public virtual string RecurrenceRule { get; set; }
         public virtual bool IsAllDay { get; set; }
+        public virtual string StartTimezone { get; set; }
+        public virtual string EndTimezone { get; set; }
     }
 }

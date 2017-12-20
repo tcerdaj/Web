@@ -107,10 +107,12 @@
     <Compile Include="EntitiesDto\DonationImageDto.cs" />
     <Compile Include="EntitiesDto\DonationRequestedDto.cs" />
     <Compile Include="EntitiesDto\EntityBaseDto.cs" />
+    <Compile Include="EntitiesDto\ItemDto.cs" />
     <Compile Include="EntitiesDto\RequestDto.cs" />
     <Compile Include="EntitiesDto\RequestedByDto.cs" />
     <Compile Include="EntitiesDto\SchedulerDto.cs" />
     <Compile Include="EntitiesDto\UserDto.cs" />
+    <Compile Include="Entities\Item.cs" />
     <Compile Include="Entities\DonationDetails.cs" />
     <Compile Include="Entities\DonationImage.cs" />
     <Compile Include="Entities\DonationRequested.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\Scheduler.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="IRepositories\IDonationDetailsRepository.cs" />
     <Compile Include="IRepositories\ISchedulerRepository.cs" />
     <Compile Include="IRepositories\IDonationRepository.cs" />
     <Compile Include="IRepositories\IImageService.cs" />

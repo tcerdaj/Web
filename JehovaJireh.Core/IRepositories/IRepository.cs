@@ -14,5 +14,8 @@ namespace JehovaJireh.Core.IRepositories
 		void Create(T entity);
 		void Delete(T entity);
 		IQueryable<T> Query();
-	}
+        //void CloseSession();
+        //void FlushSession();
+        //void OpenSession();
+    }
 }

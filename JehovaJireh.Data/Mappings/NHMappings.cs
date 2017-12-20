@@ -75,8 +75,8 @@ namespace JehovaJireh.Data.Mappings
                 .KeyColumn("DonationId")
                 .Inverse()
                 .Cascade.All()
-                .LazyLoad()
-                .NotFound.Ignore();
+                .AsBag()
+                .Not.LazyLoad();
             References(x => x.RequestedBy)
                 .Column("RequestedBy")
                 .ForeignKey("RequestedBy"); 
@@ -99,14 +99,13 @@ namespace JehovaJireh.Data.Mappings
                 .GeneratedBy.Guid();
             References(x => x.Donation)
                 .Column("DonationId")
-                .ForeignKey()
-                .LazyLoad();
+                .ForeignKey();
             HasMany(x => x.Images)
                 .KeyColumn("ItemId")
                 .Inverse()
                 .Cascade.All()
-                .LazyLoad()
-                .NotFound.Ignore();
+                .AsBag()
+                .Not.LazyLoad(); ;
             Map(x => x.Line).Column("Line");
             Map(x => x.ItemType)
                 .CustomType<DonationType>();
@@ -163,11 +162,10 @@ namespace JehovaJireh.Data.Mappings
             References(x => x.CreatedBy)
                 .Column("CreatedBy")
                 .Not.Nullable()
-                .ForeignKey();
+                .ForeignKey("CreatedBy");
             References(x => x.ModifiedBy)
                 .Column("ModifiedBy")
-                .Nullable()
-                .ForeignKey();
+                .ForeignKey("ModifiedBy");
         }
     }
 
@@ -186,8 +184,7 @@ namespace JehovaJireh.Data.Mappings
 			Map(x => x.ModifiedOn);
             References(x => x.Item)
                 .Column("ItemId")
-                .ForeignKey()
-                .LazyLoad();
+                .ForeignKey();
             References(x => x.CreatedBy)
 				.Column("CreatedBy")
 				.ForeignKey();
@@ -216,6 +213,8 @@ namespace JehovaJireh.Data.Mappings
             Map(x => x.IsAllDay);
             Map(x => x.CreatedOn).Default("getdate()").Not.Nullable();
             Map(x => x.ModifiedOn).Nullable();
+            Map(x => x.StartTimezone).Nullable();
+            Map(x => x.EndTimezone).Nullable();
             References(x => x.Donation)
                 .Column("DonationId")
                 .Not.Nullable()

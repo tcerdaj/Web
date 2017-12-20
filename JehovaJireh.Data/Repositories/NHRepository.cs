@@ -47,15 +47,15 @@ namespace JehovaJireh.Data.Repositories
 			Stopwatch timespan = Stopwatch.StartNew();
 
             try
-			{
+            {
                 data = Session.Query<T>();
-                foreach (var obj in data)
-                    Session.Evict(obj);
+                //foreach (var obj in data)
+                //    Session.Evict(obj);
             }
-			catch (System.Exception ex)
-			{
-				HandleException(ex);
-			}
+            catch (System.Exception ex)
+            {
+                HandleException(ex);
+            }
 
 			return data;
 		}
@@ -98,9 +98,9 @@ namespace JehovaJireh.Data.Repositories
 			}
 			finally
 			{
-				timespan.Stop();
-				//log.GetFinished(Id.ToString(), timespan.Elapsed);
-			}
+                timespan.Stop();
+                //log.GetFinished(Id.ToString(), timespan.Elapsed);
+            }
 			return (T)item;
 		}
 
@@ -112,10 +112,9 @@ namespace JehovaJireh.Data.Repositories
 			{
 				using (var tx = Session.BeginTransaction())
 				{
-					Session.Save(entity);
-                    Session.Flush();
-                    Session.Evict(entity);
+                    Session.Save(entity);
                     tx.Commit();
+                    Session.Evict(entity);
                 }
 			}
 			catch (System.Exception ex)
@@ -124,9 +123,10 @@ namespace JehovaJireh.Data.Repositories
 			}
 			finally
 			{
-				timespan.Stop();
-				//log.SaveInsertFinished(entity, timespan.Elapsed);
-			}
+
+                timespan.Stop();
+                //log.SaveInsertFinished(entity, timespan.Elapsed);
+            }
 		}
 
 		public void Delete(T entity)
@@ -139,9 +139,9 @@ namespace JehovaJireh.Data.Repositories
 				{
                     if (entity != null)
                     {
+                        Session.Evict(entity);
                         Session.Delete(entity);
                         tx.Commit();
-                        Session.Evict(entity);
                     }
                 }
 			}
@@ -151,9 +151,9 @@ namespace JehovaJireh.Data.Repositories
 			}
 			finally
 			{
-				timespan.Stop();
-				//log.DeleteFinished(entity);
-			}
+                timespan.Stop();
+                //log.DeleteFinished(entity);
+            }
 		}
 
 		public void DeleteById(IdT Id)
@@ -167,9 +167,9 @@ namespace JehovaJireh.Data.Repositories
                 if(entity != null)
                 using (var tx = Session.BeginTransaction())
 				{
-                    Session.Delete(entity);
-					tx.Commit();
-                    Session.Evict(entity);
+                   Session.Evict(entity);
+                   Session.Delete(entity);
+                   tx.Commit();
                 };
 			}
 			catch (System.Exception ex)
@@ -178,17 +178,17 @@ namespace JehovaJireh.Data.Repositories
 			}
 			finally
 			{
-				timespan.Stop();
+                timespan.Stop();
 				//log.DeleteFinished(entity);
 			}
 		}
 
 		public void Dispose()
 		{
-            //session.Close();
-		}
+           // Session.Flush();
+        }
 
-		public void Update(T entity)
+        public void Update(T entity)
 		{
 			//log.SaveStarted(entity);
 			Stopwatch timespan = Stopwatch.StartNew();
@@ -207,7 +207,7 @@ namespace JehovaJireh.Data.Repositories
 			}
 			finally
 			{
-				timespan.Stop();
+                timespan.Stop();
 				//log.SaveFinished(entity);
 			}
 		}
@@ -217,16 +217,55 @@ namespace JehovaJireh.Data.Repositories
 		{
 			object item = new object();
 
-			try
-			{
-				item = Session.Load<T>(Id);
-			}
-			catch (System.Exception ex)
-			{
-				HandleException(ex);
-			}
+            try
+            {
+                item = Session.Load<T>(Id);
+            }
+            catch (System.Exception ex)
+            {
+                HandleException(ex);
+            }
 
-			return (T)item;
+            return (T)item;
 		}
-	}
+
+        /// <summary>
+        /// Flushes the current active NHibernate session.
+        /// </summary>
+        //public void FlushSession()
+        //{
+        //    if (Session != null && this.Session.IsOpen)
+        //    {
+        //        this.Session.Flush();
+        //    }
+        //}
+
+        /// <summary>
+        /// Close the active NHibernate session
+        /// </summary>
+        //public void CloseSession()
+        //{
+        //    if (this.Session != null)
+        //    {
+        //        if (this.Session.IsOpen)
+        //        {
+        //            this.Session.Close();
+        //        }
+        //        this.Session.Dispose();
+        //    }
+        //}
+
+        //public void OpenSession()
+        //{
+        //    if (this.Session != null)
+        //    {
+        //        if (!this.Session.IsOpen)
+        //        {
+        //            this.Session.Connection.Open();
+        //        }
+        //    }
+        //}
+    }
+
+   
 }
