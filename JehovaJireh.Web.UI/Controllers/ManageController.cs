@@ -262,10 +262,7 @@ namespace JehovaJireh.Web.UI.Controllers
 			user.ChurchPhone = model.ChurchPhone;
 			user.Comments = model.Comments;
 			user.ModifiedOn = DateTime.UtcNow;
-
-			//user = (User)new User().InjectFrom<DeepCloneInjection>(model);
-			var imageUrl = string.Empty;
-			log.SaveStarted<User>(user);
+            user.ModifiedBy = new Core.Entities.User { Id = model.Id };
 
 			if (model.FileData != null)
 			{
@@ -276,14 +273,14 @@ namespace JehovaJireh.Web.UI.Controllers
 			
 			var result = await UserManager.UpdateAsync(user);
 			timespan.Stop();
-			log.SaveFinished(user, timespan.Elapsed);
 
 			if (result.Succeeded)
 			{
 				Session["UserSettings"] = user.ToJson();
 				return RedirectToAction("Index", new { Message = ManageMessageId.UpdateAccountSuccess });
 			}
-			AddErrors(result);
+
+            AddErrors(result);
 			return View(model);
 		}
 

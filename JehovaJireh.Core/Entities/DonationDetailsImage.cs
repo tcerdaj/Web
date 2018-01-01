@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace JehovaJireh.Core.Entities
 {
-	public class DonationImage:EntityBase<int>
+	public class DonationDetailsImage:EntityBase<int>
 	{
-		public virtual Donation Donation { get; set; }
+		public virtual DonationDetails Item { get; set; }
 		public virtual string ImageUrl { get; set; }
 	}
 }

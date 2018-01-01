@@ -105,7 +105,7 @@
       <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Omu.ValueInjecter">
-      <HintPath>..\..\..\..\..\..\Work\MyTutor\src\MyTutoring.Data\bin\Debug\Omu.ValueInjecter.dll</HintPath>
+      <HintPath>D:\Work\MyTutor\src\MyTutoring.Data\bin\Debug\Omu.ValueInjecter.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>

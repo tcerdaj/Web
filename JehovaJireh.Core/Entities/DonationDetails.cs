@@ -10,7 +10,7 @@ namespace JehovaJireh.Core.Entities
 	{
 		public DonationDetails()
 		{
-			this.Images = new List<DonationImage>();
+			this.Images = new List<DonationDetailsImage>();
         }
 		public virtual int Line { get; set; }
 		public virtual Donation Donation { get; set; }
@@ -18,6 +18,17 @@ namespace JehovaJireh.Core.Entities
 		public virtual User RequestedBy { get; set; }
 		public virtual string ItemName { get; set; }
 		public virtual DonationStatus DonationStatus { get; set; }
-		public virtual ICollection<DonationImage> Images { get; set; }
+		public virtual ICollection<DonationDetailsImage> Images { get; set; }
+
+        public virtual void AddImage(DonationDetailsImage image)
+        {
+            if (image != null)
+                this.Images.Add(image);
+        }
+        public virtual void RemoveImage(DonationDetailsImage image)
+        {
+            if (image != null)
+                this.Images.Remove(image);
+        }
     }
 }

@@ -12,10 +12,12 @@ namespace JehovaJireh.Core.EntitiesDto
 		public DonationDto()
 		{
 			this.DonationDetails = new List<DonationDetailsDto>();
+            this.Images = new List<DonationImageDto>();
 		}
 
 		public virtual RequestedByDto RequestedBy { get; set; }
-		public virtual string Title { get; set; }
+        public virtual RequestDto Request { get; set; }
+        public virtual string Title { get; set; }
 		public virtual string Description { get; set; }
 		public virtual decimal Amount { get; set; }
 		public virtual DateTime? ExpireOn { get; set; }
@@ -24,5 +26,6 @@ namespace JehovaJireh.Core.EntitiesDto
         public virtual int? RequestId { get; set; }
 
         public virtual ICollection<DonationDetailsDto> DonationDetails { get; set; }
-	}
+        public virtual ICollection<DonationImageDto> Images { get; set; }
+    }
 }

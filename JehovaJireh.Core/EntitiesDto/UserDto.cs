@@ -7,9 +7,10 @@ using JehovaJireh.Core.Entities;
 
 namespace JehovaJireh.Core.EntitiesDto
 {
-	public class UserDto: EntityBaseDto<int>
+	public class UserDto
 	{
 		#region Properties
+        public virtual int Id { get; set; }
 		public virtual string ImageUrl { get; set; }
 		public virtual string UserName { get; set; }
 		public virtual string FirstName { get; set; }
@@ -37,7 +38,11 @@ namespace JehovaJireh.Core.EntitiesDto
 		public virtual bool NeedToBeVisited { get; set; }
 		public virtual string Comments { get; set; }
 		public virtual DateTimeOffset LockoutEndDate { get; set; }
+        public virtual DateTime CreatedOn { get; set; }
+        public virtual DateTime? ModifiedOn { get; set; }
+        public virtual UserRefDto CreatedBy { get; set; }
+        public virtual UserRefDto ModifiedBy { get; set; }
 
-		#endregion
-	}
+        #endregion
+    }
 }

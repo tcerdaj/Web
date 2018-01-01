@@ -81,10 +81,9 @@ var MakeDonationViewModel = function (data) {
 			maxLength: 50
 		});
 
-		self.Description = ko.observable(data.Description || '').extend({
-			required: true,
-			maxLength: 180
-		});
+        self.Description = ko.observable(data.Description || '').extend({
+            required: true
+        });
 
 		itemTypes = data.ItemTypes;
 		self.Amount = ko.observable(data.Amount || 0.00).extend({ numeric: 2 });
@@ -97,18 +96,67 @@ var MakeDonationViewModel = function (data) {
 		self.onIsMoneyChange = function () {
 			if (!this.IsMoney())
 				this.Amount('');
-		};
+        };
+
+        self.HeaderMultiFileData = ko.observable({
+            dataURLArray: ko.observableArray(),
+            base64String: ko.observable()
+        });
 
 		//========**Computed properties**=============
-
-
+      
 
 		//========** Functions **=============
 
-		self.CanShowDetails = function () {
-			return self.Title !== '' && self.Description !== '';
-		};
+        self.CanShowDetails = ko.observable(false);
 
+        self.onClear = function (imageFile) {
+            if (confirm('Are you sure?')) {
+                imageFile.clear && imageFile.clear();
+            }
+        };
+
+        self.ImageCount = ko.computed(function () {
+            if (self.HeaderMultiFileData().fileArray)
+                return self.HeaderMultiFileData().fileArray().length;
+            else
+                return 0;
+        });
+
+        self.descriptionKeyup = function (data, event) {
+            console.log('key:' + event.key);
+
+            if (event.key === "Delete" || (event.key === "Backspace" && event.currentTarget.value.length === 1)) {
+                self.CanShowDetails(false);
+                return true;
+            }
+
+            if (self.Title() !== '' && event.key !== '' && !self.IsMoney())
+                self.CanShowDetails(true);
+            else
+                self.CanShowDetails(false);
+
+            return true;
+        };
+
+        self.titleKeyup = function (data, event) {
+            console.log('key:' + event.key);
+
+            if (event.key === "Enter")
+                return true;
+
+            if (event.key === "Delete" || (event.key === "Backspace"  &&  event.currentTarget.value === "")) {
+                self.CanShowDetails(false);
+                return true;
+            }
+
+            if (self.Description() !== '' && event.key !== '' && !self.IsMoney())
+                self.CanShowDetails(true);
+            else
+                self.CanShowDetails(false);
+
+            return true;
+        };
 
 		//========** Events **=============
 		// Operations
@@ -137,25 +185,34 @@ var MakeDonationViewModel = function (data) {
 	}
 
 	self.submit = function (e) {
-		var form = new FormData($('.page-make-donation.form-horizontal')[0]);
+        var form = new FormData($('.page-make-donation.form-horizontal')[0]);
+        var headerImages = [];
 		var details = [];
 		var index = 0;
 
 		this.DonationDetails().forEach(function (e) {
-			var u = ko.mapping.toJS(e); 
-			details.push({
-				Index: index,
-				ItemType: u.ItemType,
-				ItemName: u.ItemName,
-				ImageUrl: u.ImageUrl,
-				DonationStatus: u.DonationStatus,
-				WantThis: u.WantThis,
-				MultiFileData: u.MultiFileData.fileArray
-			});
-			index++;
-		});
+            var u = ko.mapping.toJS(e); 
+            if (u.ItemName !== undefined) {
+                details.push({
+                    Index: index,
+                    ItemType: u.ItemType,
+                    ItemName: u.ItemName,
+                    ImageUrl: u.ImageUrl,
+                    DonationStatus: u.DonationStatus,
+                    WantThis: u.WantThis,
+                    MultiFileData: u.MultiFileData.fileArray
+                });
+                index++;
+            }
+        });
 
-		form.append("details", JSON.stringify(details));
+        this.HeaderMultiFileData().fileArray().forEach(function (e) {
+            var u = ko.mapping.toJS(e);
+            headerImages.push(u);
+        });
+
+        form.append("details", JSON.stringify(details));
+        form.append("headerImages", JSON.stringify(headerImages));
 
 		//Ajax call to Insert the Employee
 		$.ajax({
@@ -169,7 +226,9 @@ var MakeDonationViewModel = function (data) {
 			timeout: 600000,
 			success: function (response) {
 				if (response.result === 'Redirect')
-					window.location = response.url;
+                    window.location = response.url;
+                if (response.result === 'Error')
+                    alert(response.Message);
 			},
 			error: function (ex) {
 				alert(ex.statusText);

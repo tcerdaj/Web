@@ -9,7 +9,7 @@ namespace JehovaJireh.Core.EntitiesDto
 {
 	public class DonationImageDto : EntityBaseDto<int>
 	{
-		public virtual DonationDetailsImageDto Item { get; set; }
+		public virtual DonationRefDto Donation { get; set; }
 		public virtual string ImageUrl { get; set; }
 	}
 }

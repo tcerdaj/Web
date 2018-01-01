@@ -47,11 +47,13 @@ namespace JehovaJireh.Data.Mappings
 			Map(x => x.ModifiedOn);
 			References(x => x.CreatedBy)
 				.Column("CreatedBy")
-				.ForeignKey();
+				.ForeignKey("CreatedBy")
+                .Cascade.Delete();
 			References(x => x.ModifiedBy)
 				.Column("ModifiedBy")
-				.ForeignKey();
-		}
+				.ForeignKey("ModifiedBy")
+                .Cascade.Delete(); 
+        }
 	}
 
 	public class DonationMap : ClassMap<Donation>
@@ -63,23 +65,28 @@ namespace JehovaJireh.Data.Mappings
 				.Column("DonationId")
 				.GeneratedBy.Increment();
 			Map(x => x.Title).Not.Nullable();
-			Map(x => x.Description);
+            Map(x => x.Description).Not.Nullable();
 			Map(x => x.Amount);
 			Map(x => x.ExpireOn);
 			Map(x => x.DonationStatus).CustomType<DonationStatus>().Not.Nullable();
-            Map(x => x.RequestId);
             Map(x => x.CreatedOn).Default("getdate()").Not.Nullable();
 			Map(x => x.ModifiedOn).Nullable();
 			Map(x => x.DonatedOn).Default("getdate()").Not.Nullable();
             HasMany(x => x.DonationDetails)
                 .KeyColumn("DonationId")
                 .Inverse()
-                .Cascade.All()
-                .AsBag()
-                .Not.LazyLoad();
+                .Cascade.All();
+            HasMany(x => x.Images)
+               .KeyColumn("DonationId")
+               .Inverse()
+               .Cascade.All();
             References(x => x.RequestedBy)
                 .Column("RequestedBy")
-                .ForeignKey("RequestedBy"); 
+                .ForeignKey("RequestedBy");
+            References(x => x.Request)
+               .Column("RequestId")
+               .ForeignKey("RequestId")
+               .Nullable();
             References(x => x.CreatedBy)
                 .Column("CreatedBy")
                 .ForeignKey("CreatedBy");
@@ -98,14 +105,11 @@ namespace JehovaJireh.Data.Mappings
                 .Column("ItemId")
                 .GeneratedBy.Guid();
             References(x => x.Donation)
-                .Column("DonationId")
-                .ForeignKey();
+                .Column("DonationId");
             HasMany(x => x.Images)
                 .KeyColumn("ItemId")
                 .Inverse()
-                .Cascade.All()
-                .AsBag()
-                .Not.LazyLoad(); ;
+                .Cascade.All();
             Map(x => x.Line).Column("Line");
             Map(x => x.ItemType)
                 .CustomType<DonationType>();
@@ -126,9 +130,9 @@ namespace JehovaJireh.Data.Mappings
         }
     }
 
-    public class DonationRequetedMap : ClassMap<DonationRequested>
+    public class DonationRequestedMap : ClassMap<DonationRequested>
     {
-        public DonationRequetedMap()
+        public DonationRequestedMap()
         {
             Table("vw_DonationRequested");
             ReadOnly();
@@ -182,9 +186,9 @@ namespace JehovaJireh.Data.Mappings
 			Map(x => x.ImageUrl);
 			Map(x => x.CreatedOn);
 			Map(x => x.ModifiedOn);
-            References(x => x.Item)
-                .Column("ItemId")
-                .ForeignKey();
+            References(x => x.Donation)
+                .Column("DonationId")
+                .ForeignKey("DonationId");
             References(x => x.CreatedBy)
 				.Column("CreatedBy")
 				.ForeignKey();
@@ -193,6 +197,29 @@ namespace JehovaJireh.Data.Mappings
 				.ForeignKey();
 		}
 	}
+
+    public class DonationDetailsImageMap : ClassMap<DonationDetailsImage>
+    {
+        public DonationDetailsImageMap()
+        {
+            Table("DonationDetailImages");
+            Id(x => x.Id)
+                .Column("DonationImageId")
+                .GeneratedBy.Increment();
+            Map(x => x.ImageUrl);
+            Map(x => x.CreatedOn);
+            Map(x => x.ModifiedOn);
+            References(x => x.Item)
+                .Column("ItemId")
+                .ForeignKey("ItemId");
+            References(x => x.CreatedBy)
+                .Column("CreatedBy")
+                .ForeignKey();
+            References(x => x.ModifiedBy)
+                .Column("ModifiedBy")
+                .ForeignKey();
+        }
+    }
 
     public class SchedulerMap : ClassMap<Scheduler>
     {

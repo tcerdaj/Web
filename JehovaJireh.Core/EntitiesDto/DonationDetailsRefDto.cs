@@ -7,11 +7,11 @@ using JehovaJireh.Core.Entities;
 
 namespace JehovaJireh.Core.EntitiesDto
 {
-	public class DonationDetailsDto : EntityBaseDto<Guid>
+	public class DonationDetailsRefDto : EntityBaseDto<Guid>
 	{
-		public DonationDetailsDto()
+		public DonationDetailsRefDto()
 		{
-			this.Images = new List<DonationDetailsImageDto>();
+			this.Images = new List<DonationDetailsImageRefDto>();
 		}
 
 		public virtual int Line { get; set; }
@@ -20,6 +20,6 @@ namespace JehovaJireh.Core.EntitiesDto
 		public virtual DonationType ItemType { get; set; }
 		public virtual string ItemName { get; set; }
 		public virtual DonationStatus DonationStatus { get; set; }
-		public virtual ICollection<DonationDetailsImageDto> Images { get; set; }
+		public virtual ICollection<DonationDetailsImageRefDto> Images { get; set; }
 	}
 }

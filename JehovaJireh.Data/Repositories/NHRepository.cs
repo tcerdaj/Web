@@ -112,9 +112,9 @@ namespace JehovaJireh.Data.Repositories
 			{
 				using (var tx = Session.BeginTransaction())
 				{
+                    Session.Evict(entity);
                     Session.Save(entity);
                     tx.Commit();
-                    Session.Evict(entity);
                 }
 			}
 			catch (System.Exception ex)

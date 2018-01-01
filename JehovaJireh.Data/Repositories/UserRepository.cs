@@ -45,7 +45,7 @@ namespace JehovaJireh.Data.Repositories
             }
             catch (System.Exception ex)
             {
-                throw;
+                throw ex;
             }
 
             return user;
@@ -105,7 +105,10 @@ namespace JehovaJireh.Data.Repositories
 			if ((object)user == null)
 				throw new ArgumentNullException("user");
 
-			this.Update(user);
+            Session.Clear();
+            Session.Flush();
+
+            this.Update(user);
 			return Task.FromResult(0);
 		}
 

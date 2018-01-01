@@ -87,12 +87,10 @@
 		<td class="status">
 			#: displayFieldTextByArray(DonationStatus, donationStatusArray)	 #
 		</td>
-		<td class="photo">
-			 <a class="pop" id="#= Line #" name="#= Line #" href="\\#"><img class="grid-photo" src="#:Images.length > 0 && Images[0].ImageUrl ? Images[0].ImageUrl: '/img/no-photo.png'#" alt="#: ItemName #" /></a>
-		</td>
         <td class="photo">
+            <a class="pop" id="#= Line #" name="#= Line #" href="\\#"><img class="grid-photo" src="#:Images.length > 0 && Images[0].ImageUrl ? Images[0].ImageUrl: '/img/no-photo.png'#" alt="#: ItemName #" /></a>
             #if(Images.length > 1 ){#
-              <a class="pop" id="#= Line #" href="\\#">#:Images.length # images</a>
+            <a class="pop" id="#= Line #" href="\\#">#:Images.length # images</a>
             #}
             else
             {#
@@ -202,7 +200,8 @@
 				sortable: true,
 				pageable: false,
 				detailTemplate: kendo.template($("#template").html()),
-				detailInit: detailInit,
+                detailInit: detailInit,
+                dataBound: onDataBoundMaster,
 				columns: [
 					{
 						field: "CreatedOn",
@@ -223,19 +222,25 @@
 					{
 						field: "Description",
 						title: "@Resources.Description",
-						width: "150px"
+						width: "100px"
 					},
 					{
 						field: "ExpireOn",
 						title: "@Resources.ExpireOn",
-						width: "120px",
+						width: "50px",
 						format: "{0:MM-dd-yyyy}"
 					},
 					{
                         field: "DonationStatus",
 						title: "@Resources.DonationStatus",
-						width: "80px",
+						width: "50px",
                         template:"#= displayFieldTextByArray(DonationStatus, donationStatusArray) #"
+                    },
+                    {
+                        field: "Images",
+						title: "@Resources.ImageUrl",
+						width: "50px",
+                        template: '#= buildImagesTemplate(Images,true) #'
                     },
                     {
 						title: "Action",
@@ -296,6 +301,120 @@
 		});
 	});
 
+    function onDataBoundMaster(arg) {
+        $('a[class="pop-master"]').on('click', function (s) {
+            var selector = $(s.currentTarget.parentElement.closest('tr'));
+            var selectedItem = $(grid).data("kendoGrid").dataItem(selector);
+
+            if (selectedItem !== undefined) {
+                //	I need to add this CarouselOptions
+                var images = selectedItem.Images;
+
+                var htmlstring = '<div id= "myCarousel" class="carousel slide" data-ride="carousel" >'
+                    + '	<ol class="carousel-indicators">';
+                for (var i = 0; i < images.length; i++) {
+                    if (i === 0)
+                        htmlstring += '<li data-target="#myCarousel" data-slide-to="' + i + '" class="active"></li>';
+                    else
+                        htmlstring += '<li data-target="#myCarousel" data-slide-to="' + i + '"></li>';
+                }
+
+                htmlstring += '	</ol>';
+                htmlstring += '<div class="carousel-inner">';
+                var image = { ImageUrl: "/img/no-photo.png" };
+
+                if (images.length == 0) {
+                    htmlstring += '<div class="item active">';
+                    htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
+                    htmlstring += '</div>';
+                } else {
+
+                    for (var i = 0; i < images.length; i++) {
+                        image = images[i];
+
+                        if (i === 0) {
+                            htmlstring += '<div class="item active">';
+                            htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
+                        }
+                        else {
+                            htmlstring += '<div class="item">';
+                            htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
+                        }
+
+                        htmlstring += '</div>';
+                    }
+                }
+
+                htmlstring += '	</div>';
+
+                if (images.length > 1) {
+                    htmlstring += '	  <a class="left carousel-control" href="#myCarousel" data-slide="prev">';
+                    htmlstring += '		<span class="glyphicon glyphicon-chevron-left"></span>';
+                    htmlstring += '		<span class="sr-only">Previous</span>';
+                    htmlstring += '	</a>';
+                    htmlstring += '	<a class="right carousel-control" href="#myCarousel" data-slide="next">';
+                    htmlstring += '		<span class="glyphicon glyphicon-chevron-right"></span>';
+                    htmlstring += '		<span class="sr-only">Next</span>';
+                    htmlstring += '	</a>';
+                }
+                htmlstring += '</div>';
+
+                $('.modal.modal-dialog').css('width', '60%');
+                if (images.length === 1)
+                    $(".modal-header h1").text("@Resources.ImageUrl" + " 1")
+                else
+                    $(".modal-header h1").text("@Resources.Photos" + " 1")
+
+                $('.carousel-list').empty();
+                $(htmlstring).appendTo($('.carousel-list'));
+
+                $('#imagemodal-carousel').modal('show');
+                $('#myCarousel').bind('slide.bs.carousel', function (e) {
+                    var img = $('.item.active img')[0].alt;
+                    var splitImg = img.split('Image');
+                    var imgNum = parseInt(splitImg[1]);
+                    var headertext = '';
+                    var count = images.length > 0 ? (images.length - 1) : 0;
+
+                    if (e.direction === "left") {
+                        if (imgNum !== count)
+                            headertext = "Photo " + (parseInt(splitImg[1]) + 2);
+                        else
+                            headertext = "Photo 1";
+                    }
+                    else
+                        headertext = "Photo " + (imgNum === 0 ? images.length : imgNum);
+
+                    $(".modal-header h1").text(headertext);
+                });
+            }
+            else {
+                $('.modal.modal-dialog').css('width', '20% !important');
+                $(".modal-header h1").text("@Resources.ImageUrl")
+                $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+                $('#imagemodal').modal('show');
+            }
+        });
+    }
+
+    function buildImagesTemplate(Images, isMasterRow) {
+        var template = "";
+        if (Images && Images.length > 0) {
+            template = '<a class="pop-master" href="#"><img class="grid-photo" src="' + (Images.length > 0 ? Images[0].ImageUrl : "/img/no-photo.png") + '" alt="Donation Image" /></a>';
+            if (Images.length > 1) {
+                template += '<a class="pop-master" href="#">' + Images.length + ' images</a>';
+            }
+            else {
+                template += '<a class="pop-master" href="#">' + Images.length + ' image</a>';
+            }
+        }
+        else {
+            template = '<img class="grid-photo" src="' + (Images.length > 0 ? Images[0].ImageUrl : "/img/no-photo.png") + '" alt="Donation Image" />';
+        }
+        return template;
+    }
+
+
     function buildMasterRowButton(user1, user2, isAuthenticated, donationStatus, DonationDetails, donationId){
         var hasRows = DonationDetails !== null && DonationDetails.length > 0 && DonationDetails[0].ItemName !== null;
         var str = '<a id="' + donationId + '" class="k-button k-button-icontext k-grid-edit" href="#" onclick="setDonationRequestedBy(this, ' + donationId + ');"><span class="k-icon k-i-cart"></span>@Resources.WantThis</a>';
@@ -326,7 +445,8 @@
 			}),
 			scrollable: false,
 			sortable: true,
-			pageable: true,
+            pageable: true,
+            dataBound: onDataBound,
 			rowTemplate: kendo.template($("#rowTemplate").html()),
 			selectable: "singe",
 			columns: [
@@ -335,122 +455,122 @@
 				{ field: "ItemName", title: "@Resources.ItemName", width: "110px" },
 				{ field: "DonationStatus", title: "@Resources.DonationStatus", width: "110px"},
                 { field: "Images", title: "@Resources.ImageUrl", width: "100px" },
-                { template: "#: Images.length #", title: " ", width: 110 },
                 { command: { text: "@Resources.WantThis", click: setDonationRequestedBy }, title: " ", width: "180px" }
 			]
 		});
 
-		$('a[class="pop"]').on('click', function (s) {
-			var selector = $(s.currentTarget.parentElement.closest('[data-role=grid]'));
-			var parentRow = selector.closest(".k-detail-row").prev();
-			var dataRow = $(grid).data("kendoGrid").dataItem(parentRow);
-			var selectedItem = undefined;
+        function onDataBound(arg) {
+            $('a[class="pop"]').on('click', function (s) {
+                var selector = $(s.currentTarget.parentElement.closest('[data-role=grid]'));
+                var parentRow = selector.closest(".k-detail-row").prev();
+                var dataRow = $(grid).data("kendoGrid").dataItem(parentRow);
+                var selectedItem = undefined;
 
-			if (dataRow !== null && dataRow.DonationDetails !== null) {
-                var rowIndex = this.id;
-                var results = $.grep(dataRow.DonationDetails, function (n, i) {
-                    return n.Line.toString() === rowIndex;
-                });
+                if (dataRow !== null && dataRow.DonationDetails !== null) {
+                    var rowIndex = this.id;
+                    var results = $.grep(dataRow.DonationDetails, function (n, i) {
+                        return n.Line.toString() === rowIndex;
+                    });
 
-                try {
-                    results = results[0];
-                } catch (e) {
-                    results === undefined;
+                    try {
+                        results = results[0];
+                    } catch (e) {
+                        results === undefined;
+                    }
+
+                    selectedItem = results;
                 }
 
-                selectedItem = results;
-			}
+                if (selectedItem !== undefined) {
+                    //	I need to add this CarouselOptions
+                    var images = selectedItem.Images;
 
-			if (selectedItem !== undefined) {
-				//	I need to add this CarouselOptions
-				var images = selectedItem.Images;
-
-				var htmlstring = '<div id= "myCarousel" class="carousel slide" data-ride="carousel" >'
-					+ '	<ol class="carousel-indicators">';
-				for (var i = 0; i < images.length; i++) {
-					if (i === 0)
-						htmlstring += '<li data-target="#myCarousel" data-slide-to="' + i + '" class="active"></li>';
-					else
-						htmlstring += '<li data-target="#myCarousel" data-slide-to="' + i + '"></li>';
-				}
-
-				htmlstring += '	</ol>';
-
-                htmlstring += '<div class="carousel-inner">';
-                var image = { ImageUrl: "/img/no-photo.png"};
-
-                if (images.length == 0) {
-                    htmlstring += '<div class="item active">';
-                    htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
-                    htmlstring += '</div>';
-                } else {
-
+                    var htmlstring = '<div id= "myCarousel" class="carousel slide" data-ride="carousel" >'
+                        + '	<ol class="carousel-indicators">';
                     for (var i = 0; i < images.length; i++) {
-                        image = images[i];
-
-                        if (i === 0) {
-
-                            htmlstring += '<div class="item active">';
-                            htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
-                        }
-                        else {
-                            htmlstring += '<div class="item">';
-                            htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
-                        }
-
-                        htmlstring += '</div>';
-                    }
-                }
-
-				htmlstring += '	</div>';
-
-				if (images.length > 1) {
-					htmlstring += '	  <a class="left carousel-control" href="#myCarousel" data-slide="prev">';
-					htmlstring += '		<span class="glyphicon glyphicon-chevron-left"></span>';
-					htmlstring += '		<span class="sr-only">Previous</span>';
-					htmlstring += '	</a>';
-					htmlstring += '	<a class="right carousel-control" href="#myCarousel" data-slide="next">';
-					htmlstring += '		<span class="glyphicon glyphicon-chevron-right"></span>';
-					htmlstring += '		<span class="sr-only">Next</span>';
-					htmlstring += '	</a>';
-				}
-				htmlstring += '</div>';
-
-				$('.modal.modal-dialog').css('width','60%');
-				if (images.length === 1)
-					$(".modal-header h1").text("@Resources.ImageUrl" + " 1")
-				else
-                    $(".modal-header h1").text("@Resources.Photos" + " 1")
-				$('.carousel-list').empty();
-				$(htmlstring).appendTo($('.carousel-list'));
-                $('#imagemodal-carousel').modal('show');
-                $('#myCarousel').bind('slide.bs.carousel', function (e) {
-                    var img = $('.item.active img')[0].alt;
-                    var splitImg = img.split('Image');
-                    var imgNum = parseInt(splitImg[1]);
-                    var headertext = '';
-                    var count = images.length > 0 ? (images.length - 1) : 0;
-
-                    if (e.direction === "left") {
-                        if (imgNum !== count)
-                            headertext = "Photo " + (parseInt(splitImg[1]) + 2);
+                        if (i === 0)
+                            htmlstring += '<li data-target="#myCarousel" data-slide-to="' + i + '" class="active"></li>';
                         else
-                            headertext = "Photo 1";
+                            htmlstring += '<li data-target="#myCarousel" data-slide-to="' + i + '"></li>';
                     }
-                    else
-                        headertext = "Photo " + (imgNum === 0 ? images.length : imgNum);
 
-                    $(".modal-header h1").text(headertext);
-                });
-			}
-			else
-			{
-				$('.modal.modal-dialog').css('width','20% !important');
-				$(".modal-header h1").text("@Resources.ImageUrl")
-				$('.imagepreview').attr('src', $(this).find('img').attr('src'));
-				$('#imagemodal').modal('show');
-			}
-		});
+                    htmlstring += '	</ol>';
+
+                    htmlstring += '<div class="carousel-inner">';
+                    var image = { ImageUrl: "/img/no-photo.png" };
+
+                    if (images.length == 0) {
+                        htmlstring += '<div class="item active">';
+                        htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
+                        htmlstring += '</div>';
+                    } else {
+
+                        for (var i = 0; i < images.length; i++) {
+                            image = images[i];
+
+                            if (i === 0) {
+
+                                htmlstring += '<div class="item active">';
+                                htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
+                            }
+                            else {
+                                htmlstring += '<div class="item">';
+                                htmlstring += '<img class="imagepreview"  src="' + image.ImageUrl + '" alt="Image' + i + '">';
+                            }
+
+                            htmlstring += '</div>';
+                        }
+                    }
+
+                    htmlstring += '	</div>';
+
+                    if (images.length > 1) {
+                        htmlstring += '	  <a class="left carousel-control" href="#myCarousel" data-slide="prev">';
+                        htmlstring += '		<span class="glyphicon glyphicon-chevron-left"></span>';
+                        htmlstring += '		<span class="sr-only">Previous</span>';
+                        htmlstring += '	</a>';
+                        htmlstring += '	<a class="right carousel-control" href="#myCarousel" data-slide="next">';
+                        htmlstring += '		<span class="glyphicon glyphicon-chevron-right"></span>';
+                        htmlstring += '		<span class="sr-only">Next</span>';
+                        htmlstring += '	</a>';
+                    }
+                    htmlstring += '</div>';
+
+                    $('.modal.modal-dialog').css('width', '60%');
+                    if (images.length === 1)
+                        $(".modal-header h1").text("@Resources.ImageUrl" + " 1")
+                    else
+                        $(".modal-header h1").text("@Resources.Photos" + " 1")
+                    $('.carousel-list').empty();
+                    $(htmlstring).appendTo($('.carousel-list'));
+                    $('#imagemodal-carousel').modal('show');
+                    $('#myCarousel').bind('slide.bs.carousel', function (e) {
+                        var img = $('.item.active img')[0].alt;
+                        var splitImg = img.split('Image');
+                        var imgNum = parseInt(splitImg[1]);
+                        var headertext = '';
+                        var count = images.length > 0 ? (images.length - 1) : 0;
+
+                        if (e.direction === "left") {
+                            if (imgNum !== count)
+                                headertext = "Photo " + (parseInt(splitImg[1]) + 2);
+                            else
+                                headertext = "Photo 1";
+                        }
+                        else
+                            headertext = "Photo " + (imgNum === 0 ? images.length : imgNum);
+
+                        $(".modal-header h1").text(headertext);
+                    });
+                }
+                else {
+                    $('.modal.modal-dialog').css('width', '20% !important');
+                    $(".modal-header h1").text("@Resources.ImageUrl")
+                    $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+                    $('#imagemodal').modal('show');
+                }
+            });
+        }
 	}
 
     function setDonationRequestedBy(e, id) {

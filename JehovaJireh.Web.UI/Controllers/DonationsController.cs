@@ -89,11 +89,17 @@ namespace JehovaJireh.Web.UI.Controllers
 
 			try
 			{
-				var donationDetailsJson = Request.Params["details"];
+                var HeaderImagesJson = Request.Params["headerImages"];
+                var donationDetailsJson = Request.Params["details"];
+
+                //Deserialization
+                var donationImages = JsonConvert.DeserializeObject<List<FileViewModel>>(HeaderImagesJson);
 				var donationDetails = JsonConvert.DeserializeObject<List<DonationDetailsViewModels>>(donationDetailsJson);
-				model.DonationDetails = donationDetails;
+                List<string> filesAdded = new List<string>();
+                model.DonationDetails = donationDetails;
 				var imageService = new ImageService(log);
 				ViewBag.StatusMessage = "";
+                
 
                 //Amount validation if money is on
                 if (model.IsMoney && model.Amount <= 0)
@@ -104,7 +110,7 @@ namespace JehovaJireh.Web.UI.Controllers
 
 				foreach (var line in model.DonationDetails)
 				{
-					List<string> filesAdded = new List<string>();
+					filesAdded = new List<string>();
 					foreach (var file in line.MultiFileData)
 					{
 						//check if the image already exist.
@@ -137,7 +143,31 @@ namespace JehovaJireh.Web.UI.Controllers
 					ModifiedOn = null
 				};
 
-				donation.DonationDetails = new List<DonationDetails>();
+
+                //Donation Images
+                filesAdded = new List<string>();
+                foreach (var file in donationImages)
+                {
+                    //check if the image already exist.
+                    var fileExist = filesAdded.Any(x => x == file.Name);
+                    if (!fileExist)
+                    {
+                        //upload image to azure
+                        var fileToUpload = file.GetFile(Request.Files);
+                        if (fileToUpload != null)
+                        {
+                            var imageUrl = await imageService.CreateUploadedImageAsync(fileToUpload, Guid.NewGuid().ToString(), true, 500, 500);
+                            donation.AddImage(new DonationImage() { Donation = donation, ImageUrl = imageUrl, CreatedBy = CurrentUser, CreatedOn = DateTime.Now, ModifiedOn = null });
+                            filesAdded.Add(file.Name);
+                        }
+                    }
+                }
+
+                if (model.DonationDetails != null && model.DonationDetails.Count() > 0)
+                    donation.DonationDetails = new List<DonationDetails>();
+                else
+                    donation.DonationDetails = null;
+
                 if (!model.IsMoney)
                 {
                     foreach (var item in model.DonationDetails)
@@ -159,7 +189,7 @@ namespace JehovaJireh.Web.UI.Controllers
                         foreach (var image in item.Images)
                         {
                             itemLine.Images.Add(
-                                new DonationImage
+                                new DonationDetailsImage
                                 {
                                     CreatedBy = CurrentUser,
                                     Item = itemLine,
@@ -183,7 +213,7 @@ namespace JehovaJireh.Web.UI.Controllers
 				ViewBag.StatusMessage = ex.Message;
 			}
 
-            return View(model);
+            return Json(new { result = "Error", Message = ViewBag.StatusMessage }); ;
 		}
 
         [HttpPut]

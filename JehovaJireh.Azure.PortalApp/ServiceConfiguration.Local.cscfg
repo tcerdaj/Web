@@ -12,5 +12,5 @@
     <Certificates>
       <Certificate name="Client-VPN" thumbprint="058EDE129CE47CDBFB1EBFDAF658EBAA1943EC07" thumbprintAlgorithm="sha1" />
     </Certificates>
-  </Role>
+  </Role> 
 </ServiceConfiguration>

@@ -29,8 +29,6 @@ namespace JehovaJireh.Web.UI.Models
 		[Required(ErrorMessageResourceType = typeof(Resources),
 			  ErrorMessageResourceName = "DescriptionRequired")]
 		[Display(Name = "Description", ResourceType = typeof(Resources))]
-		[StringLength(180, ErrorMessageResourceType = typeof(Resources),
-			  ErrorMessageResourceName = "C180Long")]
 		public string Description { get; set; }
 
         [DisplayFormat(DataFormatString ="{0:C0}", ApplyFormatInEditMode =true)]
@@ -57,7 +55,10 @@ namespace JehovaJireh.Web.UI.Models
 
 		[Display(Name = "DonationDetails", ResourceType = typeof(Resources))]
 		public ICollection<DonationDetailsViewModels> DonationDetails { get; set; }
-		public IEnumerable<SelectListItem> ItemTypes
+
+        public IEnumerable<HttpPostedFileWrapper> HeaderMultiFileData { get; set; }
+
+        public IEnumerable<SelectListItem> ItemTypes
 		{
 			get
 			{
