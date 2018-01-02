@@ -75,7 +75,9 @@ namespace JehovaJireh.Data.Mappings
             HasMany(x => x.DonationDetails)
                 .KeyColumn("DonationId")
                 .Inverse()
-                .Cascade.All();
+                .Cascade.All()
+                .AsBag()
+                .Not.LazyLoad();
             HasMany(x => x.Images)
                .KeyColumn("DonationId")
                .Inverse()
@@ -140,9 +142,11 @@ namespace JehovaJireh.Data.Mappings
             Map(x => x.Title);
             Map(x => x.Description);
             Map(x => x.ImageUrl);
-            References(x => x.Donation).Column("DonationId");
-            References(x => x.Item).Column("ItemId");
-            References(x => x.RequestedBy).Column("RequestedBy");
+            Map(x => x.DonationStatus)
+                .CustomType<DonationStatus>();
+            Map(x => x.DonationId);
+            Map(x => x.ItemId);
+            Map(x => x.RequestedBy);
         }
     }
     public class RequestMap : ClassMap<Request>
@@ -239,7 +243,7 @@ namespace JehovaJireh.Data.Mappings
             Map(x => x.RecurrenceRule);
             Map(x => x.IsAllDay);
             Map(x => x.CreatedOn).Default("getdate()").Not.Nullable();
-            Map(x => x.ModifiedOn).Nullable();
+            Map(x => x.ModifiedOn).Default("getdate()").Nullable();
             Map(x => x.StartTimezone).Nullable();
             Map(x => x.EndTimezone).Nullable();
             References(x => x.Donation)

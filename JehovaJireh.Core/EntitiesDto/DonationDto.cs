@@ -24,7 +24,7 @@ namespace JehovaJireh.Core.EntitiesDto
 		public virtual DateTime DonatedOn { get; set; }
 		public virtual DonationStatus DonationStatus { get; set; }
         public virtual int? RequestId { get; set; }
-
+        public virtual bool RemoveDonation { get; set; }
         public virtual ICollection<DonationDetailsDto> DonationDetails { get; set; }
         public virtual ICollection<DonationImageDto> Images { get; set; }
     }

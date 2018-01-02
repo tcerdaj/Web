@@ -11,11 +11,13 @@ namespace JehovaJireh.Core.EntitiesDto
     {
         public virtual int Id { get; set; }
         public virtual string Title { get; set; }
-        public virtual Donation Donation { get; set; }
-        public virtual DonationDetails Item { get; set; }
-        public virtual User RequestedBy { get; set; }
         public virtual string Description { get; set; }
+        public virtual int DonationId { get; set; }
+        public virtual Guid ItemId { get; set; }
+        public virtual int RequestedBy { get; set; }
+        public virtual DonationStatus DonationStatus { get; set; }
+        
         public virtual string ImageUrl { get; set; }
-        public virtual bool IsAnItem { get { return Item != null; } }
+        public virtual bool IsAnItem { get { return ItemId != Guid.Empty; } }
     }
 }

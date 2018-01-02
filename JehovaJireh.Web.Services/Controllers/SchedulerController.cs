@@ -40,12 +40,7 @@ namespace JehovaJireh.Web.Services.Controllers
             IEnumerable<SchedulerDto> dto;
             try
             {
-                var dta = repository.Query().Where(x => x.CreatedBy.Id == id && 
-                                     (x.Donation.DonationStatus == DonationStatus.Requested 
-                                        || x.Donation.DonationStatus == DonationStatus.PartialRequested
-                                        || x.Item.DonationStatus == DonationStatus.Requested
-                                        || x.Donation.DonationStatus == DonationStatus.PartialScheduled
-                                        || x.Item.DonationStatus == DonationStatus.Scheduled))
+                var dta = repository.Query().Where(x => x.CreatedBy.Id == id )
                                      .ToList();
                 dto = dta.Select(x => new SchedulerDto()
                                 .InjectFrom<DeepCloneInjection>(x))
@@ -67,6 +62,10 @@ namespace JehovaJireh.Web.Services.Controllers
             {
                 Scheduler data = new Scheduler();
                 data.InjectFrom<DeepCloneInjection>(dto);
+
+                if (dto.Item != null && dto.Item.Id == Guid.Empty)
+                    data.Item = null;
+
                 repository.Create(data);
                 dto.InjectFrom<DeepCloneInjection>(data);
             }
@@ -77,6 +76,8 @@ namespace JehovaJireh.Web.Services.Controllers
             }
             return Ok(dto);
         }
+
+
 
 
     }

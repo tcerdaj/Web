@@ -107,12 +107,11 @@ namespace JehovaJireh.Data.Repositories
 		public void Create(T entity)
 		{
 			//log.SaveInsertStarted(entity);
-			Stopwatch timespan = Stopwatch.StartNew();
+			
 			try
 			{
 				using (var tx = Session.BeginTransaction())
 				{
-                    Session.Evict(entity);
                     Session.Save(entity);
                     tx.Commit();
                 }
@@ -124,7 +123,6 @@ namespace JehovaJireh.Data.Repositories
 			finally
 			{
 
-                timespan.Stop();
                 //log.SaveInsertFinished(entity, timespan.Elapsed);
             }
 		}
@@ -132,17 +130,12 @@ namespace JehovaJireh.Data.Repositories
 		public void Delete(T entity)
 		{
 			//log.DeleteStarted(entity);
-			Stopwatch timespan = Stopwatch.StartNew();
 			try
 			{
 				using (var tx = Session.BeginTransaction())
 				{
-                    if (entity != null)
-                    {
-                        Session.Evict(entity);
-                        Session.Delete(entity);
-                        tx.Commit();
-                    }
+                    Session.Delete(entity);
+                    tx.Commit();
                 }
 			}
 			catch (System.Exception ex)
@@ -151,7 +144,6 @@ namespace JehovaJireh.Data.Repositories
 			}
 			finally
 			{
-                timespan.Stop();
                 //log.DeleteFinished(entity);
             }
 		}
@@ -164,10 +156,8 @@ namespace JehovaJireh.Data.Repositories
 
             try
 			{
-                if(entity != null)
                 using (var tx = Session.BeginTransaction())
 				{
-                   Session.Evict(entity);
                    Session.Delete(entity);
                    tx.Commit();
                 };

@@ -32,7 +32,7 @@
             #: Description #
         </td>
         <td class="country">
-            <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy(this, '#= Id #');"><span class="k-icon k-i-cart"></span>View Details</a>
+            <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="viewDetails(this, '#= Id #');"><span class="k-icon k-i-cart"></span>View Details</a>
         </td>
     </tr>
 </script>
@@ -51,7 +51,7 @@
         <td class="country">
             #: Description #
         </td>
-        <td class="country"><a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy(this, '#= Id #');"><span class="k-icon k-i-cart"></span>View Details</a></td>
+        <td class="country"><a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="viewDetails(this, '#= Id #');"><span class="k-icon k-i-cart"></span>View Details</a></td>
     </tr>
 </script>
 <script id="event-template" type="text/x-kendo-template">
@@ -61,11 +61,17 @@
             #: kendo.toString(start, "hh:mm") # - #: kendo.toString(end, "hh:mm") #
         </p>
         <p class="event-content">#: title #</p>
+        <p class="event-content">#: description #</p>
     </div>
 </script>
     <script type="text/javascript">
         var generalError = "An server error occurred and has been logged." +
             "\nPlease contact your administrator. " + "ServerException";
+
+        function viewDetails(ob, Id) {
+            alert(Id);
+        }
+
         $(function () {
             var userId = "@ViewBag.UserId";
             moment.tz.add('America/New_York|EST EDT|50 40|0101|1Lz50 1zb0 Op0');
@@ -136,7 +142,8 @@
                 transport: {
                     read: {
                         url: getBaseUrl() + kendo.format("Donations/{0}/RequestedBy", userId),
-                        dataType: "json"
+                        dataType: "json",
+                        cache: true
                     },
                     destroy: {
                         url: getBaseUrl() + kendo.format("Donations/{0}/RequestedBy", userId),
@@ -156,6 +163,9 @@
                 pageable: false,
                 rowTemplate: kendo.template($("#rowTemplate").html()),
                 altRowTemplate: kendo.template($("#altRowTemplate").html()),
+                onBound: function (e) {
+                    
+                },
                 columns: [
                     {
                         field: "ImageUrl",
@@ -217,15 +227,8 @@
                     e.preventDefault();
                     console.log("removing");
                     var event = e.event;
-                    event.id = event.taskID;
-                    this.dataSource.remove(event);
-                    this.dataSource.sync().then(function () {
-                        var itemId = dataItem.Item !== null ? dataItem.Item.Id : "00000000-0000-0000-0000-000000000000";
-                        dataItem.Donation.ModifiedBy = { Id: userId };
-                        updateDonationStatus(itemId, dataItem, true);
-                    }, function (xhr, textStatus, errorThrown) {
-                        openDialog("Error.", "An error occurred changing donation status.");
-                    });
+                    event.id = event.taskId;
+                    removeEvent(this.dataSource, event);
                 },
                 dataBound: function (e) {
                     //create drop area from current View
@@ -247,19 +250,14 @@
                     transport: {
                         read: {
                             url: getBaseUrl() + kendo.format("scheduler/{0}/createdBy", userId),
-                            xhrFields: {
-                                withCredentials: true
-                            },
                             dataType: "json",
                             contentType: "application/json",
-                            type: "GET"
+                            type: "GET",
+                            cache: false
                         },
                         update: {
                             url: function (model) {
                                 return getBaseUrl() + "scheduler/" + model.Id
-                            },
-                            xhrFields: {
-                                withCredentials: true
                             },
                             dataType: "json",
                             contentType: "application/json",
@@ -277,10 +275,7 @@
                             },
                         },
                         create: {
-                            url: getBaseUrl() + "scheduler",
-                            xhrFields: {
-                                withCredentials: true
-                            },
+                            url: getBaseUrl() + "scheduler/create",
                             contentType: "application/json",
                             //dataType: "json",
                             type: "POST",
@@ -289,13 +284,10 @@
                                 e.success(function (data) {
                                     console.log("Succcess");
                                     console.log("{ data: " + JSON.stringify(this.data) + "}");
-                                    //update donation
-                                    //Status scheduler 4
-                                    //refresh grid
                                 });
 
                                 e.error(function (data) {
-                                    console.log("error");
+                                    openDialog("Error", generalError);
                                 });
                             } 
                         },
@@ -303,22 +295,16 @@
                             url: function (model) {
                                 return getBaseUrl() + "scheduler/" + model.Id
                             },
-                            xhrFields: {
-                                withCredentials: true
-                            },
                             contentType: "application/json",
-                            type: "DELETE",
+                            type: "Delete",
                             complete: function (e) {
                                 //REFRESH THE GRID IN SUCCESS.
                                 e.success(function (data) {
                                     console.log("Succcess");
-                                    //update donation
-                                    //status requested 2
-                                    //refresh grid
                                 });
 
                                 e.error(function (data) {
-                                    console.log("error");
+                                    openDialog("Error", generalError);
                                 });
                             }
                         },
@@ -332,7 +318,7 @@
                         model: {
                             id: "Id",
                             fields: {
-                                taskID: { from: "Id", type: "number" },
+                                taskId: { from: "Id", type: "number" },
                                 title: { from: "Title", defaultValue: "No title", validation: { required: true } },
                                 start: { type: "date", from: "StartDate" },
                                 end: { type: "date", from: "EndDate" },
@@ -353,10 +339,10 @@
                         parse: function (response) {
                             $.each(response, function (idx, elem) {
                                 if (elem.StartDate && typeof elem.StartDate == "string") {
-                                    elem.StartDate = convertToJSONDate(elem.StartDate);
+                                    elem.StartDate = convertToJSONDate(elem.StartDate.replace("Z",""));
                                 }
                                 if (elem.EndDate && typeof elem.EndDate == "string") {
-                                    elem.EndDate = convertToJSONDate(elem.EndDate);
+                                    elem.EndDate = convertToJSONDate(elem.EndDate.replace("Z", ""));
                                 }
                             });
 
@@ -365,6 +351,34 @@
                     }
                 }
             });
+
+            function removeEvent(dataSource, event) {
+                $.ajax({
+                    url: kendo.format("{0}scheduler/{1}/", getBaseUrl(), event.id),
+                    datatype: "json",
+                    contentType: 'application/json',
+                    type: "Delete",
+                    success: function (result) {
+                        try {
+                            console.log("success");
+                            dataSource.remove(event);
+                            var itemId = event.item !== null ? event.item.Id : "00000000-0000-0000-0000-000000000000";
+                            var dataItem = {};
+                            dataItem.Donation = event.donation;
+                            dataItem.Donation.ModifiedBy = { Id: userId };
+                            dataItem.Donation.RemoveDonation = true;
+                            updateDonationStatus(itemId, dataItem, false);
+                        } catch (e) {
+                            console.error(e);
+                        } finally {
+                            $("#grid").data("kendoGrid").dataSource.read();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        openDialog("Error", generalError);
+                    }
+                });
+            }
 
             function updateDonation(donationId, itemId, status) {
                 if (donation !== null && donation !== '' && donation !== undefined)
@@ -439,8 +453,8 @@
                                 recurrenceId: null,
                                 recurrenceRule: null,
                                 recurrenceException: null,
-                                donation: { Id: dataItem.Donation.Id },
-                                item: dataItem.Item !== null? { Id: dataItem.Item.Id } : null 
+                                donation: { Id: dataItem.DonationId },
+                                item: { Id: dataItem.ItemId } 
                             };
 
                             $.ajax({
@@ -456,10 +470,12 @@
                                 success: function (data) {
                                     try {
                                         newEvent.id = data.Id;
+                                        newEvent.taskId = data.Id;
                                         newEvent.start = newEvent.startDate;
                                         newEvent.end = newEvent.endDate;
                                         scheduler.dataSource.add(newEvent);//Add event to scheduler
-                                        var itemId = dataItem.Item !== null ? dataItem.Item.Id : "00000000-0000-0000-0000-000000000000";
+                                        var itemId = dataItem.Item !== null ? dataItem.ItemId : "00000000-0000-0000-0000-000000000000";
+                                        dataItem.Donation = { Id: dataItem.DonationId };
                                         dataItem.Donation.ModifiedBy = { Id: userId };
                                         updateDonationStatus(itemId, dataItem, false);
                                     } catch (e) {
@@ -486,7 +502,7 @@
             $.ajax({
                 url: getBaseUrl() + "Donations/" + itemId + "/UpdateDonationStatus?IsRequested=" + IsRequested || false,
                 contentType: "application/json; charset=utf-8",
-                cache: false,
+                cache: true,
                 crossDomain: true,
                 xhrFields: {
                     withCredentials: false
