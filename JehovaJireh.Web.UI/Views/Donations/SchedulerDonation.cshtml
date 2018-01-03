@@ -21,9 +21,9 @@
         <tr data-uid="#: uid #">
             <td class="photo">
                 #if(ImageUrl === '' || ImageUrl === null){#
-                <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
+                   <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
                 #}else{#
-                <img class="drag-image" src="#: ImageUrl #" alt="#: Title #" />
+                   <img class="drag-image" src="#: Images[0].ImageUrl #" alt="#: Title #" />
                 #}#
             </td>
             <td class="details">
@@ -41,9 +41,9 @@
         <tr data-uid="#: uid #">
             <td class="photo">
                 #if(ImageUrl === '' || ImageUrl === null){#
-                <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
+                   <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
                 #}else{#
-                <img class="drag-image" src="#: ImageUrl #" alt="#: Title #" />
+                   <img class="drag-image" src="#: Images[0].ImageUrl #" alt="#: Title #" />
                 #}#
             </td>
             <td class="details">
@@ -69,16 +69,19 @@
         <div id="details-container">
             <h2>#= Title #</h2>
             <em>#= Description #</em>
+            #if(Images === null){#
             <div class="details-image-container">
-                <img src="#= ImageUrl === null? '/img/no-photo.png': ImageUrl #" alt="#= Title #" />
+                <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
             </div>
-            @*<dl>
-                <dt>
-
-                </dt>
-            </dl>*@
+            #}else{#
+                # for (var i = 0; i < data.length; i++) { #
+                    <div class="details-image-container">
+                        <img src="#= data[i].ImageUrl  #" alt="#= Title #" />
+                    </div>
+                # } #
+            #}#
         </div>
-    </script>
+</script>
     <script type="text/javascript">
         var generalError = "An server error occurred and has been logged." +
             "\nPlease contact your administrator. " + "ServerException",
@@ -215,7 +218,7 @@
 
             wnd = $("#details")
                 .kendoWindow({
-                    title: "Customer Details",
+                    title: "Donation Details",
                     modal: true,
                     visible: false,
                     resizable: false,
@@ -594,6 +597,22 @@
             overflow: hidden !important;
             text-overflow: ellipsis;
             margin-bottom: 0px;
+        }
+        #details-container {
+            padding: 10px;
+        }
+
+        #details-container h2 {
+            margin: 0;
+        }
+
+        #details-container em {
+            color: #8c8c8c;
+        }
+
+        #details-container dt {
+            margin: 0;
+            display: inline;
         }
     </style>
 }

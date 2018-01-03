@@ -1,4 +1,5 @@
 ﻿using JehovaJireh.Core.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,8 @@ namespace JehovaJireh.Core.EntitiesDto
         public virtual Guid ItemId { get; set; }
         public virtual int RequestedBy { get; set; }
         public virtual DonationStatus DonationStatus { get; set; }
-
         public virtual string ImageUrl { get; set; }
         public virtual bool IsAnItem { get { return ItemId != Guid.Empty; } }
+        public virtual IEnumerable<JsonConverterImageDto> Images { get; set; }
     }
 }

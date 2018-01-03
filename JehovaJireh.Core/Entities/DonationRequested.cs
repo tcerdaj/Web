@@ -1,4 +1,5 @@
 ﻿using JehovaJireh.Core.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,29 @@ namespace JehovaJireh.Core.EntitiesDto
         
         public virtual string ImageUrl { get; set; }
         public virtual bool IsAnItem { get { return ItemId != Guid.Empty; } }
+
+        private JsonSerializerSettings settings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            MissingMemberHandling = MissingMemberHandling.Ignore
+        };
+
+        public virtual IEnumerable<JsonConverterImage> Images
+        {
+            get
+            {
+                try
+                {
+                    var result = JsonConvert.DeserializeObject<List<JsonConverterImage>>(ImageUrl, settings);
+                    return result;
+                }
+                catch (System.Exception ex)
+                {
+                    Console.WriteLine("Error in DonationRequested line 25, Images Property: " + ex.Message);
+                    throw ex;
+                }
+            }
+        }
+
     }
 }

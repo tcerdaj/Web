@@ -98,30 +98,12 @@ var MakeDonationViewModel = function (data) {
 				this.Amount('');
         };
 
-        self.HeaderMultiFileData = ko.observable({
-            dataURLArray: ko.observableArray(),
-            base64String: ko.observable()
-        });
-
 		//========**Computed properties**=============
       
 
 		//========** Functions **=============
 
         self.CanShowDetails = ko.observable(false);
-
-        self.onClear = function (imageFile) {
-            if (confirm('Are you sure?')) {
-                imageFile.clear && imageFile.clear();
-            }
-        };
-
-        self.ImageCount = ko.computed(function () {
-            if (self.HeaderMultiFileData().fileArray)
-                return self.HeaderMultiFileData().fileArray().length;
-            else
-                return 0;
-        });
 
         self.descriptionKeyup = function (data, event) {
             console.log('key:' + event.key);
@@ -185,34 +167,25 @@ var MakeDonationViewModel = function (data) {
 	}
 
 	self.submit = function (e) {
-        var form = new FormData($('.page-make-donation.form-horizontal')[0]);
-        var headerImages = [];
+		var form = new FormData($('.page-make-donation.form-horizontal')[0]);
 		var details = [];
 		var index = 0;
 
 		this.DonationDetails().forEach(function (e) {
-            var u = ko.mapping.toJS(e); 
-            if (u.ItemName !== undefined) {
-                details.push({
-                    Index: index,
-                    ItemType: u.ItemType,
-                    ItemName: u.ItemName,
-                    ImageUrl: u.ImageUrl,
-                    DonationStatus: u.DonationStatus,
-                    WantThis: u.WantThis,
-                    MultiFileData: u.MultiFileData.fileArray
-                });
-                index++;
-            }
-        });
+			var u = ko.mapping.toJS(e); 
+			details.push({
+				Index: index,
+				ItemType: u.ItemType,
+				ItemName: u.ItemName,
+				ImageUrl: u.ImageUrl,
+				DonationStatus: u.DonationStatus,
+				WantThis: u.WantThis,
+				MultiFileData: u.MultiFileData.fileArray
+			});
+			index++;
+		});
 
-        this.HeaderMultiFileData().fileArray().forEach(function (e) {
-            var u = ko.mapping.toJS(e);
-            headerImages.push(u);
-        });
-
-        form.append("details", JSON.stringify(details));
-        form.append("headerImages", JSON.stringify(headerImages));
+		form.append("details", JSON.stringify(details));
 
 		//Ajax call to Insert the Employee
 		$.ajax({
@@ -226,9 +199,7 @@ var MakeDonationViewModel = function (data) {
 			timeout: 600000,
 			success: function (response) {
 				if (response.result === 'Redirect')
-                    window.location = response.url;
-                if (response.result === 'Error')
-                    alert(response.Message);
+					window.location = response.url;
 			},
 			error: function (ex) {
 				alert(ex.statusText);
