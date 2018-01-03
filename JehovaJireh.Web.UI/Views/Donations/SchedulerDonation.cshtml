@@ -7,6 +7,7 @@
 <div id="scheduler"></div>
 <h3>Drags events from the Grid to the Scheduler:</h3>
 <div id="grid"></div>
+<div id="details"></div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -16,57 +17,73 @@
     @Scripts.Render("~/bundles/donation/donationviewmodel")
     @Styles.Render("~/bundles/kendo-css")
     @Scripts.Render("~/bundles/kendo")
- <script id="rowTemplate" type="text/x-kendo-tmpl">
-    <tr data-uid="#: uid #">
-        <td class="photo">
-            #if(ImageUrl === '' || ImageUrl === null){#
-               <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
-            #}else{#
-               <img class="drag-image" src="#: ImageUrl #" alt="#: Title #" />
-            #}#
-        </td>
-        <td class="details">
-            <span class="title">#: Title #</span>
-        </td>
-        <td class="country">
-            #: Description #
-        </td>
-        <td class="country">
-            <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="viewDetails(this, '#= Id #');"><span class="k-icon k-i-cart"></span>View Details</a>
-        </td>
-    </tr>
-</script>
-<script id="altRowTemplate" type="text/x-kendo-tmpl">
-    <tr data-uid="#: uid #">
-        <td class="photo">
-            #if(ImageUrl === '' || ImageUrl === null){#
-               <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />   
-            #}else{#
-                <img class="drag-image" src="#: ImageUrl #" alt="#: Title #" />   
-            #}#
-        </td>
-        <td class="details">
-            <span class="title">#: Title #</span>
-        </td>
-        <td class="country">
-            #: Description #
-        </td>
-        <td class="country"><a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="viewDetails(this, '#= Id #');"><span class="k-icon k-i-cart"></span>View Details</a></td>
-    </tr>
-</script>
-<script id="event-template" type="text/x-kendo-template">
-    <div class="movie-template" style="padding:5px">
-        <img style="width: 115px;height:80px;" src="#= imageUrl #">
-        <p class="event-content">
-            #: kendo.toString(start, "hh:mm") # - #: kendo.toString(end, "hh:mm") #
-        </p>
-        <p class="event-content">#: title #</p>
-        <p class="event-content">#: description #</p>
-    </div>
-</script>
+    <script id="rowTemplate" type="text/x-kendo-tmpl">
+        <tr data-uid="#: uid #">
+            <td class="photo">
+                #if(ImageUrl === '' || ImageUrl === null){#
+                <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
+                #}else{#
+                <img class="drag-image" src="#: ImageUrl #" alt="#: Title #" />
+                #}#
+            </td>
+            <td class="details">
+                <span class="title">#: Title #</span>
+            </td>
+            <td class="country">
+                #: Description #
+            </td>
+            <td class="country">
+                <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="showDetails(this);"><span class="k-icon k-i-cart"></span>View Details</a>
+            </td>
+        </tr>
+    </script>
+    <script id="altRowTemplate" type="text/x-kendo-tmpl">
+        <tr data-uid="#: uid #">
+            <td class="photo">
+                #if(ImageUrl === '' || ImageUrl === null){#
+                <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
+                #}else{#
+                <img class="drag-image" src="#: ImageUrl #" alt="#: Title #" />
+                #}#
+            </td>
+            <td class="details">
+                <span class="title">#: Title #</span>
+            </td>
+            <td class="country">
+                #: Description #
+            </td>
+            <td class="country"><a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="showDetails(this);"><span class="k-icon k-i-cart"></span>View Details</a></td>
+        </tr>
+    </script>
+    <script id="event-template" type="text/x-kendo-template">
+        <div class="movie-template" style="padding:5px">
+            <img style="width: 115px;height:80px;" src="#= imageUrl #">
+            <p class="event-content">
+                #: kendo.toString(start, "hh:mm") # - #: kendo.toString(end, "hh:mm") #
+            </p>
+            <p class="event-content">#: title #</p>
+            <p class="event-content">#: description #</p>
+        </div>
+    </script>
+    <script type="text/x-kendo-template" id="gridDetailsTemplate">
+        <div id="details-container">
+            <h2>#= Title #</h2>
+            <em>#= Description #</em>
+            <div class="details-image-container">
+                <img src="#= ImageUrl === null? '/img/no-photo.png': ImageUrl #" alt="#= Title #" />
+            </div>
+            @*<dl>
+                <dt>
+
+                </dt>
+            </dl>*@
+        </div>
+    </script>
     <script type="text/javascript">
         var generalError = "An server error occurred and has been logged." +
-            "\nPlease contact your administrator. " + "ServerException";
+            "\nPlease contact your administrator. " + "ServerException",
+                wnd,
+                    detailsTemplate;
 
         function viewDetails(ob, Id) {
             alert(Id);
@@ -164,7 +181,7 @@
                 rowTemplate: kendo.template($("#rowTemplate").html()),
                 altRowTemplate: kendo.template($("#altRowTemplate").html()),
                 onBound: function (e) {
-                    
+
                 },
                 columns: [
                     {
@@ -195,6 +212,17 @@
                     }
                 ]
             });
+
+            wnd = $("#details")
+                .kendoWindow({
+                    title: "Customer Details",
+                    modal: true,
+                    visible: false,
+                    resizable: false,
+                    width: 'auto'
+                }).data("kendoWindow");
+
+            detailsTemplate = kendo.template($("#gridDetailsTemplate").html());
 
             var _grid = $(grid).data("kendoGrid");
 
@@ -289,7 +317,7 @@
                                 e.error(function (data) {
                                     openDialog("Error", generalError);
                                 });
-                            } 
+                            }
                         },
                         destroy: {
                             url: function (model) {
@@ -454,7 +482,7 @@
                                 recurrenceRule: null,
                                 recurrenceException: null,
                                 donation: { Id: dataItem.DonationId },
-                                item: { Id: dataItem.ItemId } 
+                                item: { Id: dataItem.ItemId }
                             };
 
                             $.ajax({
@@ -529,23 +557,28 @@
         }
 
         function showDetails(e) {
-            var pos = $(e.currentTarget).position();
-            var width = $(e.currentTarget).outerWidth();
-            e.preventDefault();
-
-            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var grid = $("#grid").data("kendoGrid");
+            var dataItem = grid.dataItem($(e).closest("tr"));
             wnd.content(detailsTemplate(dataItem));
-            wnd.center().open().element.closest(".k-window").css({
-                top: pos.top + "px",
-                left: pos.left + width + "px"
-            });
+            wnd.center().open();
 
-            wnd.element
-                .append($('<div class="k-edit-buttons k-state-default"><a role="button" class="k-button k-button-icontext close-button" href="#"><span class="k-icon k-i-close"></span>Close</a></div>'));
+            //var pos = $(e.currentTarget).position();
+            //var width = $(e.currentTarget).outerWidth();
+            //e.preventDefault();
 
-            $(".close-button").click(function () {
-                wnd.close();
-            });
+            //var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            //wnd.content(detailsTemplate(dataItem));
+            //wnd.center().open().element.closest(".k-window").css({
+            //    top: pos.top + "px",
+            //    left: pos.left + width + "px"
+            //});
+
+            //wnd.element
+            //    .append($('<div class="k-edit-buttons k-state-default"><a role="button" class="k-button k-button-icontext close-button" href="#"><span class="k-icon k-i-close"></span>Close</a></div>'));
+
+            //$(".close-button").click(function () {
+            //    wnd.close();
+            //});
         }
     </script>
     <style>
@@ -553,6 +586,12 @@
             background-color: #f35800;
             border-color: #f85a00;
         }
+        .details-image-container {
+            width: 100%;
+            height: auto;
+        }
+        .details-image-container img{max-width:450px;min-width:450px;}
+        
         .orange {
             background-color: white;
         }
@@ -560,17 +599,19 @@
         .purple {
             background-color: orange;
         }
+
         .drag-image {
             width: 116px;
             height: 116px;
         }
+
         .event-content {
             display: inline-block;
             width: 115px;
             white-space: nowrap;
             overflow: hidden !important;
             text-overflow: ellipsis;
-            margin-bottom:0px;
+            margin-bottom: 0px;
         }
     </style>
 }

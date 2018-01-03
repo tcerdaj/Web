@@ -12,130 +12,132 @@
     @Html.ActionLink(Resources.MakeADonation, "MakeADonation")
 </p>
 <div id="donationlist">
-	<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h1></h1>
-				</div>
-				<div class="modal-body">
-					<img src="" class="imagepreview" style="width: 100%;">
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="modal fade" id="imagemodal-carousel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h1></h1>
-				</div>
-				<div class="modal-body">
-					<div class="carousel-list"></div>
-				</div>
-				<div class="modal-footer">
-				</div>
-			</div>
-		</div>
-	</div>
-	<div id="grid"></div>
+    <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h1></h1>
+                </div>
+                <div class="modal-body">
+                    <img src="" class="imagepreview" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="imagemodal-carousel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h1></h1>
+                </div>
+                <div class="modal-body">
+                    <div class="carousel-list"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="grid"></div>
 </div>
 
 @section Scripts{
-   @Scripts.Render("~/bundles/jqueryval")
-   @Scripts.Render("~/bundles/areYouSure")
-   @Scripts.Render("~/bundles/knockout")
-   @Scripts.Render("~/bundles/moment")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/areYouSure")
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/moment")
 
-<script type="text/x-kendo-template" id="template">
-	<div class="tabstrip">
-		<ul>
-			<li class="k-state-active">
-				@Resources.DonationDetails
-			</li>
-			<li>
-				@Resources.ContactInfo
-			</li>
-		</ul>
-		<div>
-			<div class="donation-details"></div>
-		</div>
-		<div>
-			<div class='user-info'>
-				<ul>
-					<li><label>Name:</label>#= CreatedBy.FirstName # <a class="pop" href="\\#"><img style="height: 50px;" class="img-rounded  thumb" src="#= CreatedBy.ImageUrl #" /></a></li>
-					<li><label>Home Phone:</label>#= CreatedBy.PhoneNumber #</li>
-				</ul>
-			</div>
-		</div>
-	</div>
+    <script type="text/x-kendo-template" id="template">
+        <div class="tabstrip">
+            <ul>
+                <li class="k-state-active">
+                    @Resources.DonationDetails
+                </li>
+                <li>
+                    @Resources.ContactInfo
+                </li>
+            </ul>
+            <div>
+                <div class="donation-details"></div>
+            </div>
+            <div>
+                <div class='user-info'>
+                    <ul>
+                        <li><label>Name:</label>#= CreatedBy.FirstName # <a class="pop" href="\\#"><img style="height: 50px;" class="img-rounded  thumb" src="#= CreatedBy.ImageUrl #" /></a></li>
+                        <li><label>Home Phone:</label>#= CreatedBy.PhoneNumber #</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-</script>
-<script id="rowTemplate" type="text/x-kendo-tmpl">
-	<tr data-uid="#: uid #">
-        <td class="line">
-			<span class="title"> #: Line #</span>
-		</td>
-		<td class="itemType">
-			#: displayFieldTextByArray(ItemType, donationTypesArray)	 #
-		</td>
-		<td class="itemName">
-			#: ItemName	 #
-		</td>
-		<td class="status">
-			#: displayFieldTextByArray(DonationStatus, donationStatusArray)	 #
-		</td>
-        <td class="photo">
-            <a class="pop" id="#= Line #" name="#= Line #" href="\\#"><img class="grid-photo" src="#:Images.length > 0 && Images[0].ImageUrl ? Images[0].ImageUrl: '/img/no-photo.png'#" alt="#: ItemName #" /></a>
-            #if(Images.length > 1 ){#
-            <a class="pop" id="#= Line #" href="\\#">#:Images.length # images</a>
-            #}
-            else
-            {#
-            <a class="pop" id="#= Line #" href="\\#">#:Images.length # image</a>
-            #}#
-        </td>
-		<td class="command">
-			#if(CreatedBy.UserName !== "@User.Identity.Name" && DonationStatus === 0 && "@User.Identity.IsAuthenticated" === "True" ){#
-			   <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy(this, '#= Id #');"><span class="k-icon k-i-cart"></span>@Resources.WantThis</a>
-			#}#
-		</td>   
-</tr>
-</script>
-<script id="altRowTemplate" type="text/x-kendo-tmpl">
-	<tr class="k-alt" data-uid="#: uid #">
-		<td class="photo">
-			<img class="pop" src="../content/web/Employees/#:data.EmployeeID#.jpg" alt="#: data.EmployeeID #" />
-		</td>
-		<td class="details">
-			<span class="name">#: CreatedBy.FirstName# #: CreatedBy.LastName# </span>
-			<span class="title">Line: #: Line #</span>
-		</td>
-		<td class="country">
-			#: CreatedBy.Country #
-		</td>
-		<td class="employeeID">
-			#: CreatedBy.PhoneNumer #
-		</td>
-	</tr>
-</script>
-<script type="text/x-kendo-template" id="mydonationtemplate">
-	<div class="refreshBtnContainer">
-		<a href="\\#" class="k-pager-refresh k-link k-button" title="Refresh"><span class="k-icon k-i-reload"></span></a>
-	</div>
-	#if("@User.Identity.IsAuthenticated" ==="True"){#
-	<div class="toolbar">
-		<a id="miDonations" role="button" class="k-button k-button-icontext k-grid-save-changes" href="\\#"><span class="k-icon k-i-tri-state-null"></span>@Resources.MyDonations</a>
-		<a id="excludeMine" role="button" class="k-button k-button-icontext k-grid-save-changes" href="\\#"><span class="k-icon k-i-tri-state-null"></span>@Resources.ExcludeMyDonations</a>
-	</div>
-	#}#
-</script>
+    </script>
+    <script id="rowTemplate" type="text/x-kendo-tmpl">
+        <tr data-uid="#: uid #">
+            <td class="line">
+                <span class="title"> #: Line #</span>
+            </td>
+            <td class="itemType">
+                #: displayFieldTextByArray(ItemType, donationTypesArray)	 #
+            </td>
+            <td class="itemName">
+                #: ItemName	 #
+            </td>
+            <td class="status">
+                #: displayFieldTextByArray(DonationStatus, donationStatusArray)	 #
+            </td>
+            <td class="photo">
+                <a class="pop" id="#= Line #" name="#= Line #" href="\\#"><img class="grid-photo" src="#:Images.length > 0 && Images[0].ImageUrl ? Images[0].ImageUrl: '/img/no-photo.png'#" alt="#: ItemName #" /></a>
+                #if(Images.length > 1 ){#
+                <a class="pop" id="#= Line #" href="\\#">#:Images.length # images</a>
+                #}
+                else
+                {#
+                <a class="pop" id="#= Line #" href="\\#">#:Images.length # image</a>
+                #}#
+            </td>
+            <td class="command">
+                #if(CreatedBy.UserName !== "@User.Identity.Name" && DonationStatus === 0 && "@User.Identity.IsAuthenticated" === "True" ){#
+                <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy(this, '#= Id #');"><span class="k-icon k-i-cart"></span>@Resources.WantThis</a>
+                #}#
+            </td>
+        </tr>
+    </script>
+    <script id="altRowTemplate" type="text/x-kendo-tmpl">
+        <tr class="k-alt" data-uid="#: uid #">
+            <td class="photo">
+                <img class="pop" src="../content/web/Employees/#:data.EmployeeID#.jpg" alt="#: data.EmployeeID #" />
+            </td>
+            <td class="details">
+                <span class="name">#: CreatedBy.FirstName# #: CreatedBy.LastName# </span>
+                <span class="title">Line: #: Line #</span>
+            </td>
+            <td class="country">
+                #: CreatedBy.Country #
+            </td>
+            <td class="employeeID">
+                #: CreatedBy.PhoneNumer #
+            </td>
+        </tr>
+    </script>
+    <script type="text/x-kendo-template" id="mydonationtemplate">
+        <div class="refreshBtnContainer">
+            <a href="\\#" class="k-pager-refresh k-link k-button" title="Refresh"><span class="k-icon k-i-reload"></span></a>
+        </div>
+        #if("@User.Identity.IsAuthenticated" ==="True"){#
+        <div class="toolbar">
+            <a id="miDonations" role="button" class="k-button k-button-icontext k-grid-save-changes" href="\\#"><span class="k-icon k-i-tri-state-null"></span>@Resources.MyDonations</a>
+            <a id="excludeMine" role="button" class="k-button k-button-icontext k-grid-save-changes" href="\\#"><span class="k-icon k-i-tri-state-null"></span>@Resources.ExcludeMyDonations</a>
+        </div>
+        #}#
+    </script>
 
-<script>
-    var donationTypesArray = [], donationStatusArray = [];
-    var userId = "@ViewBag.UserId";
+    <script>
+        var donationTypesArray = [],
+              donationStatusArray = [],
+                 userId = "@ViewBag.UserId";
+
     $(document).keydown(function (e) {
         if (e.keyCode === 37) {
             // Previous
@@ -681,19 +683,24 @@
     }
 
 
-</script>
-<style>
-	.modal-header {padding:20px;}
-	.modal .modal-dialog {
-		width: 60%;
-	}
-	.grid-photo {
-		width: 100%;
-	}
-	.imagepreview {
-	width:100%;
-	height:100%;
-	}
-</style>
+    </script>
+    <style>
+        .modal-header {
+            padding: 20px;
+        }
+
+        .modal .modal-dialog {
+            width: 60%;
+        }
+
+        .grid-photo {
+            width: 100%;
+        }
+
+        .imagepreview {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 
 }
