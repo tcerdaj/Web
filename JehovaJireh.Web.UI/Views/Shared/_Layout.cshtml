@@ -88,27 +88,26 @@
 
             if (cart.is(":visible"))
                 $(".shopping-cart").hide();
-            else {
-                var cookieArray = getCookiesArray();
 
-                if (cookieArray) {
-                    var msg = "Your shopping car contains " + cookieArray.length + " item" + (cookieArray.length > 1 ? "s" : "");
-                    $(".gh-cart-c").attr('title', msg);
-                    $("#gh-cart-n").text(cookieArray.length);
+            var cookieArray = getCookiesArray();
+            if (cookieArray) {
+                var msg = "Your shopping car contains " + cookieArray.length + " item" + (cookieArray.length > 1 ? "s" : "");
+                $(".gh-cart-c").attr('title', msg);
+                $("#gh-cart-n").text(cookieArray.length);
 
-                    rebuildCartItems(cookieArray)
-                    if ('@ViewBag.Title' != '@Resources.SchedulerDonation') {
-                        checkoutbutton.removeClass("button-disabled").addClass("button");
-                        checkoutbutton.attr('href', '/Donations/SchedulerDonation');
-                    }
+                rebuildCartItems(cookieArray)
+
+                if ('@ViewBag.Title' != '@Resources.SchedulerDonation') {
+                    checkoutbutton.removeClass("button-disabled").addClass("button");
+                    checkoutbutton.attr('href', '/Donations/SchedulerDonation');
                 }
-                else {
-                    checkoutbutton.removeClass("button").addClass("button-disabled");
-                    checkoutbutton.attr('href', '#');
-                }
-
-                $(".shopping-cart").slideDown("slow");
             }
+            else {
+                checkoutbutton.removeClass("button").addClass("button-disabled");
+                checkoutbutton.attr('href', '#');
+            }
+
+            $(".shopping-cart").slideDown("slow");
         }
 
 		(function ($) {
