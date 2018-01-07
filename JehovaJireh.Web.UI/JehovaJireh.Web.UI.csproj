@@ -315,12 +315,16 @@
     <Content Include="audio\you-wouldnt-believe.mp3" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\cart-style.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\knockout-file-bindings.css" />
     <Content Include="favicon.ico" />
     <Content Include="fontawesome\css\font-awesome.css" />
     <Content Include="fontawesome\css\font-awesome.min.css" />
     <Content Include="fontawesome\fonts\fontawesome-webfont.svg" />
     <Content Include="fontawesome\HELP-US-OUT.txt" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -869,6 +873,7 @@
     <Content Include="js\kendo.web.min.js" />
     <Content Include="js\kendo.webcomponents.min.js" />
     <Content Include="js\kendo.window.min.js" />
+    <Content Include="js\main.js" />
     <Content Include="js\messages\kendo.messages.bg-BG.min.js" />
     <Content Include="js\messages\kendo.messages.cs-CZ.min.js" />
     <Content Include="js\messages\kendo.messages.da-DK.min.js" />
@@ -2023,6 +2028,11 @@
     <Content Include="fontawesome\scss\_screen-reader.scss" />
     <Content Include="fontawesome\scss\_stacked.scss" />
     <Content Include="fontawesome\scss\_variables.scss" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>

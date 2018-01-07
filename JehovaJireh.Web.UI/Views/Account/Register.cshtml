@@ -200,25 +200,29 @@
 	@Scripts.Render("~/bundles/maskedinput")
 	@Scripts.Render("~/bundles/account/registerviewmodel")
 
-	<script type="text/javascript">
+            <script type="text/javascript">
 		var mask = "(999) 999-9999";
 
-		$(document).ready(function () {
-			var data = function () { return @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)); }() || {};
-			Init(data);
+        $(document).ready(function () {
+            try {
+                var data = function () { return @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)); }() || {};
+			    Init(data);
 
-			$('.page-register.form-horizontal').areYouSure(
-				{
-					message: "Los cambios realizados aun no se han guardado."
-				}
-			);
+			    $('.page-register.form-horizontal').areYouSure(
+				     {
+				       message: "Los cambios realizados aun no se han guardado."
+				     }
+			    );
 
-			$("input[name = 'culture']").click(function () {
-				$(this).parents("form").submit(); // post form
-			});
+			    $("input[name = 'culture']").click(function () {
+				     $(this).parents("form").submit(); // post form
+			    });
 
-			$("#PhoneNumber").mask(mask);
-			$("#ChurchPhone").mask(mask);
+			    $("#PhoneNumber").mask(mask);
+			    $("#ChurchPhone").mask(mask);
+            } catch (e) {
+                openDialog("Error", "Error loading page.")
+            }
         });
-	</script>
+   </script>
 }

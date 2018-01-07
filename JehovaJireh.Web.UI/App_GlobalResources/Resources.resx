@@ -480,4 +480,7 @@
   <data name="SchedulerMessage" xml:space="preserve">
     <value>The deliveries must be planned for dates equal or greater than today s date.</value>
   </data>
+  <data name="AddDetails" xml:space="preserve">
+    <value>I Want to add Details to this Donation.</value>
+  </data>
 </root>

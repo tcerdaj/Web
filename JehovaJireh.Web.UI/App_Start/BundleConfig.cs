@@ -32,7 +32,11 @@ namespace JehovaJireh.Web.UI
 					  "~/Content/site.css",
 					   "~/Content/knockout-file-bindings.css"));
 
-			bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
+            bundles.Add(new StyleBundle("~/Content/fontawesome").Include(
+                      "~/Content/font-awesome.css"
+                      ));
+            
+            bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
 				     "~/Scripts/knockout-{version}.js",
 				     "~/Scripts/knockout-{version}.debug.js",
 					 "~/Scripts/knockout.validation.debug.js",

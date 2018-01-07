@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JehovaJireh.Core.Entities
+namespace JehovaJireh.Core.EntitiesDto
 {
     public class JsonConverterImageDto
     {

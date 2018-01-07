@@ -39,8 +39,11 @@ namespace JehovaJireh.Web.UI.Models
 		[Display(Name = "IsMoney", ResourceType = typeof(Resources))]
 		public bool IsMoney { get; set; }
 
+        [Display(Name = "AddDetails", ResourceType = typeof(Resources))]
+        public bool AddDetails { get; set; }
 
-		[Display(Name = "ExpireOn", ResourceType = typeof(Resources))]
+
+        [Display(Name = "ExpireOn", ResourceType = typeof(Resources))]
 		[DataType(DataType.Date, ErrorMessage = null, ErrorMessageResourceName = "DateInvalid", ErrorMessageResourceType = typeof(Resources))]
 		public DateTime ExpireOn { get; set; }
 

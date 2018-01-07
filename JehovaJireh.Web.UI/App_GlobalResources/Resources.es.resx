@@ -480,4 +480,7 @@
   <data name="SchedulerMessage" xml:space="preserve">
     <value>Las entragas deben planificarse para fechas igual o mayor a la fecha de hoy.</value>
   </data>
+  <data name="AddDetails" xml:space="preserve">
+    <value>Deseo Agregar Detalles a esta Donacion.</value>
+  </data>
 </root>

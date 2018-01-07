@@ -108,9 +108,9 @@ namespace JehovaJireh.Web.UI.Controllers
                     return View(model);
                 }
 
-				foreach (var line in model.DonationDetails)
+                filesAdded = new List<string>();
+                foreach (var line in model.DonationDetails)
 				{
-					filesAdded = new List<string>();
 					foreach (var file in line.MultiFileData)
 					{
 						//check if the image already exist.

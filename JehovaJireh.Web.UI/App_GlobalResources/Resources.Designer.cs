@@ -88,6 +88,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I Want to add Details to this Donation..
+        /// </summary>
+        public static string AddDetails {
+            get {
+                return ResourceManager.GetString("AddDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Image.
         /// </summary>
         public static string AddImage {

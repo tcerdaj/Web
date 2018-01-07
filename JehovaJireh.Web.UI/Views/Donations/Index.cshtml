@@ -566,7 +566,7 @@
                     });
                 }
                 else {
-                    $('.modal.modal-dialog').css('width', '20% !important');
+                    $('.modal.modal-dialog').css('width', '10% !important');
                     $(".modal-header h1").text("@Resources.ImageUrl")
                     $('.imagepreview').attr('src', $(this).find('img').attr('src'));
                     $('#imagemodal').modal('show');
@@ -576,9 +576,11 @@
 	}
 
     function setDonationRequestedBy(e, id) {
-        //TODO:
-        //1. Change Donation Status and assing RequestBy
-        //2. Refresh list.
+        var cart = $(".shopping-cart");
+
+        if (cart.is(":visible"))
+            $(".shopping-cart").hide();
+
         var isDonationLine = !$.isNumeric(id);
         var masterRow = isDonationLine ? $(e).parent().closest("tr.k-detail-row").prev(".k-master-row") :
             $(e).parent().closest("tr");
@@ -690,7 +692,7 @@
         }
 
         .modal .modal-dialog {
-            width: 60%;
+            /*width: 60%;*/
         }
 
         .grid-photo {

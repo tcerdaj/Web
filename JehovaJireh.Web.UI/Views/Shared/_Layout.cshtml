@@ -13,47 +13,103 @@
 
 </head>
 <body>
-	<div class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				@Html.ActionLink(@Resources.ApplicationName, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-			</div>
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li>@Html.ActionLink(Resources.Home, "Index", "Home")</li>
-					<li class="menu-item dropdown">
-						<a href='@Html.ActionLink("Index", "Donations")' class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">@Resources.Donations<b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li class="menu-item">@Html.ActionLink(Resources.ViewDonations, "Index", "Donations")</li>
-							<li class="menu-item">@Html.ActionLink(Resources.RequestList, "RequestList", "Donations")</li>
-							<li class="menu-item">@Html.ActionLink(Resources.SchedulerDonation, "SchedulerDonation", "Donations")</li>
-						</ul>
-					</li>
-					<li>@Html.ActionLink(Resources.About, "About", "Home")</li>
-					<li>@Html.ActionLink(Resources.Contact, "Contact", "Home")</li>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink(@Resources.ApplicationName, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink(Resources.Home, "Index", "Home")</li>
+                    <li class="menu-item dropdown">
+                        <a href='@Html.ActionLink("Index", "Donations")' class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">@Resources.Donations<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="menu-item">@Html.ActionLink(Resources.ViewDonations, "Index", "Donations")</li>
+                            <li class="menu-item">@Html.ActionLink(Resources.RequestList, "RequestList", "Donations")</li>
+                            <li class="menu-item">@Html.ActionLink(Resources.SchedulerDonation, "SchedulerDonation", "Donations")</li>
+                        </ul>
+                    </li>
+                    <li>@Html.ActionLink(Resources.About, "About", "Home")</li>
+                    <li>@Html.ActionLink(Resources.Contact, "Contact", "Home")</li>
                     <li>@Html.ActionLink(Resources.Chat, "Chat", "Home")</li>
-				</ul>
-				@Html.Partial("_LoginPartial")
-				@Html.Partial("_CulturePartial")
-			</div>
-		</div>
-	</div>
-	<div class="container body-content">
-		@Html.Partial("_PleaseWaitPartial")
-		@RenderBody()
-		<hr />
-		<footer>
-			<p>&copy; @DateTime.Now.Year - @Resources.ApplicationName</p>
-		</footer>
-	</div>
+                </ul>
+                @Html.Partial("_LoginPartial")
+                @Html.Partial("_CulturePartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
 
-	<script type="text/javascript">
+        @Html.Partial("_PleaseWaitPartial")
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - @Resources.ApplicationName</p>
+        </footer>
+    </div>
+    <div class="container">
+        <div class="shopping-cart" style="display:none">
+            <div class="shopping-cart-header">
+                <i class="fa fa-shopping-cart cart-icon"></i><span id="gh-cart-n-cart" class="badge">0</span>
+                <div class="shopping-cart-total">
+                    <span class="lighter-text">Total:</span>
+                    <span class="main-color-text">$0.00</span>
+                </div>
+            </div> <!--end shopping-cart-header -->
+            <ul class="shopping-cart-items"></ul>
+            @if (@ViewBag.Title == @Resources.SchedulerDonation)
+            {
+               <a id="checkoutbutton" href="#" class="button-disabled" >Checkout</a>
+            }
+            else
+            {
+                <a id="checkoutbutton" href="/Donations/SchedulerDonation" class="button">Checkout</a>
+            }
+        </div> <!--end shopping-cart -->
+    </div>
 
+    <script type="text/javascript">
+        String.prototype.trimToLength = function (m) {
+            return (this.length > m)
+                ? jQuery.trim(this).substring(0, m).split(" ").slice(0, -1).join(" ") + "..."
+                : this;
+        };
+
+        function showCart() {
+            var cart = $(".shopping-cart");
+            var sci = $(".shopping-cart-items");
+            var checkoutbutton = $("#checkoutbutton");
+            sci.empty();
+
+            if (cart.is(":visible"))
+                $(".shopping-cart").hide();
+            else {
+                var cookieArray = getCookiesArray();
+
+                if (cookieArray) {
+                    var msg = "Your shopping car contains " + cookieArray.length + " item" + (cookieArray.length > 1 ? "s" : "");
+                    $(".gh-cart-c").attr('title', msg);
+                    $("#gh-cart-n").text(cookieArray.length);
+
+                    rebuildCartItems(cookieArray)
+                    if ('@ViewBag.Title' != '@Resources.SchedulerDonation') {
+                        checkoutbutton.removeClass("button-disabled").addClass("button");
+                        checkoutbutton.attr('href', '/Donations/SchedulerDonation');
+                    }
+                }
+                else {
+                    checkoutbutton.removeClass("button").addClass("button-disabled");
+                    checkoutbutton.attr('href', '#');
+                }
+
+                $(".shopping-cart").slideDown("slow");
+            }
+        }
 
 		(function ($) {
 			$("input[name = 'culture']").click(function () {
@@ -65,11 +121,24 @@
             });
 
             //update shopping car
-            var cName = "", cValue = "";
+            var cookieArray = getCookiesArray();
+            if (cookieArray) {
+                var msg = "Your shopping car contains " + cookieArray.length + " item" + (cookieArray.length > 1 ? "s" : "");
+                $(".gh-cart-c").attr('title', msg);
+                $("#gh-cart-n").text(cookieArray.length);
+
+                rebuildCartItems(cookieArray)
+            }
+
+             //var cookie = readCookie(cookieName);
+		})(jQuery);
+
+        function getCookiesArray() {
+             var cName = "", cValue = "";
             document.cookie.split(/; */).forEach(function (cookieraw) {
                 var cookie = cookieraw.split('=');
                 if (cookie[0].indexOf("car") > -1)
-                    cName = cookie[0];//print it 
+                    cName = cookie[0];//print it
             });
 
             var userName = '@User.Identity.IsAuthenticated' == 'True' ? '@User.Identity.Name' : '';
@@ -79,26 +148,41 @@
                 cookieName = "car_" + userName;
             else
                 cookieName = "car_" + cName;
-                
+
             var cookieArray = JSON.parse(readCookie(cookieName));
-            if (cookieArray) {
-                var msg = "Your shopping car contains " + cookieArray.length + " item" + (cookieArray.length > 1 ? "s" : "");
-                $(".gh-cart-c").attr('title', msg);
-                $("#gh-cart-n").text(cookieArray.length);
+            return cookieArray;
+        }
+
+        function rebuildCartItems(data) {
+            var sci = $(".shopping-cart-items");
+            sci.empty();
+
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                var imageUrl = data[i].Images && data[i].Images.length > 0 ? data[i].Images[0].ImageUrl : "/img/no-photo.png";
+                var li = '<li class="clearfix" title="' + item.Title +'">'+
+                    '<img class="image-item" src= "' + imageUrl + '" alt= "'+ item.Title + '" />'+
+                    '<span class="item-name" >' + item.Title.trimToLength(10) + '&#160</span>'+
+                             '<span class="item-price">$0.00</span>'+
+                             '<span class="item-quantity">Quantity: 01</span>'+
+                    '</li >';
+                sci.append(li);
             }
 
-             //var cookie = readCookie(cookieName);
-		})(jQuery);
+            $("#gh-cart-n-cart").text(data.length);
+        }
 
 		function getCurrentCulture()
 		{
 			console.log("@System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant()");
         }
-	</script>
-	@Scripts.Render("~/bundles/bootstrap")
+
+    </script>
+    @Scripts.Render("~/bundles/bootstrap")
     @Styles.Render("~/bundles/kendo-css")
     @Scripts.Render("~/bundles/kendo")
-    
-	@RenderSection("scripts", required: false)
+    @Styles.Render("~/Content/fontawesome")
+
+    @RenderSection("scripts", required: false)
 </body>
 </html>

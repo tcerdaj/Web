@@ -23,7 +23,8 @@
                 #if(ImageUrl === '' || ImageUrl === null){#
                    <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
                 #}else{#
-                   <img class="drag-image" src="#: Images[0].ImageUrl #" alt="#: Title #" />
+                    <img class="drag-image" src="#: Images[0].ImageUrl #" alt="#: Title #" />
+                    <div>#: Images.length # Images</div>
                 #}#
             </td>
             <td class="details">
@@ -44,6 +45,7 @@
                    <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
                 #}else{#
                    <img class="drag-image" src="#: Images[0].ImageUrl #" alt="#: Title #" />
+                   <a class="po" href="\\#">#: Images.length # Images</a>
                 #}#
             </td>
             <td class="details">
@@ -57,7 +59,7 @@
     </script>
     <script id="event-template" type="text/x-kendo-template">
         <div class="movie-template" style="padding:5px">
-            <img style="width: 115px;height:80px;" src="#= imageUrl #">
+            <img style="width: 115px;height:80px;" src="#= images[0].ImageUrl || '/img/no-photo.png' #">
             <p class="event-content">
                 #: kendo.toString(start, "hh:mm") # - #: kendo.toString(end, "hh:mm") #
             </p>
@@ -74,9 +76,9 @@
                 <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
             </div>
             #}else{#
-                # for (var i = 0; i < data.length; i++) { #
-                    <div class="details-image-container">
-                        <img src="#= data[i].ImageUrl  #" alt="#= Title #" />
+                # for (var i = 0; i < Images.length; i++) { #
+                    <div class="details-image-container" style="margin-bottom:15px;">
+                        <img src="#= Images[i].ImageUrl  #" alt="#= Title #" />
                     </div>
                 # } #
             #}#
@@ -86,10 +88,70 @@
         var generalError = "An server error occurred and has been logged." +
             "\nPlease contact your administrator. " + "ServerException",
                 wnd,
-                    detailsTemplate;
+                detailsTemplate;
 
-        function viewDetails(ob, Id) {
-            alert(Id);
+        var userName = '@User.Identity.Name';
+        var cookieName = kendo.format("car_{0}", userName);
+        
+        function showDetails(e) {
+            var grid = $("#grid").data("kendoGrid");
+            var dataItem = grid.dataItem($(e).closest("tr"));
+            wnd.content(detailsTemplate(dataItem));
+            wnd.center().open();
+        }
+
+        function addItemToCookie(obj) {
+            var cookie = readCookie(cookieName);
+            var cookieArray = cookie !== null ? JSON.parse(cookie) : [];
+
+            if (obj !== null) {
+                cookieArray.pushIfNotExist(obj, function (e) {
+                    return e.DonationId === obj.DonationId && e.ItemId === obj.ItemId;
+                });
+            } else {
+                eraseCookie(cookieName);
+                return;
+            }
+
+            createCookie(cookieName, JSON.stringify(cookieArray), 5);
+            var msg = kendo.format("Your shopping car contains {0} item{1}", cookieArray.length, cookieArray.length > 1 ? "s" : "");
+            $(".gh-cart-c").attr('title', msg);
+            $("#gh-cart-n").text(cookieArray.length);
+        }
+
+
+        function refreshCart(data) {
+            var cart = $(".shopping-cart");
+            if (cart.is(":visible"))
+                $(".shopping-cart").hide();
+
+            if (data.length === 0) {
+                var msg = kendo.format("Your shopping car contains {0} item{1}", data.length, data.length > 1 ? "s" : "");
+                $(".fa.fa-shopping-cart.cart-icon").attr('title', msg);
+                $("#gh-cart-n").text(data.length);
+                eraseCookie(cookieName);
+                return;
+            }
+
+            eraseCookie(cookieName);
+
+            for (var i = 0; i < data.length; i++) {
+                var event = data[i];
+                var obj = { UserName: userName, Line: (i + 1), DonationId: event.DonationId, ItemId: event.ItemId, Title: event.Title, Description: event.Description, ImageUrl: event.ImageUrl, Images: event.Images };
+                addItemToCookie(obj);
+            }
+        }
+
+        function removeItemFromCookie(obj) {
+            var cookie = readCookie(cookieName);
+            var cookieArray = cookie ? JSON.parse(cookie) : [];
+            cookieArray.removeIfExist(obj, function (e) {
+                return e.DonationId === obj.DonationId && e.ItemId === obj.ItemId;
+            });
+            createCookie(cookieName, JSON.stringify(cookieArray), 5);
+            var msg = kendo.format("Your shopping car contains {0} item{1}", cookieArray.length, cookieArray.length > 1 ? "s" : "");
+            $(".gh-cart-c").attr('title', msg);
+            $("#gh-cart-n").text(cookieArray.length);
         }
 
         $(function () {
@@ -183,8 +245,8 @@
                 pageable: false,
                 rowTemplate: kendo.template($("#rowTemplate").html()),
                 altRowTemplate: kendo.template($("#altRowTemplate").html()),
-                onBound: function (e) {
-
+                dataBound: function (e) {
+                    refreshCart(this.dataItems());
                 },
                 columns: [
                     {
@@ -361,6 +423,7 @@
                                 recurrenceException: { from: "RecurrenceException" },
                                 createdBy: { from: "CreatedBy", defaultValue: { Id: userId } },
                                 imageUrl: { from: "ImageUrl" },
+                                images: {type:"object",from: "Images"},
                                 isAllDay: { type: "boolean", from: "IsAllDay" },
                                 createdOn: { type: "date" },
                                 donation: { from: "Donation", type: "object", validation: { required: true }},
@@ -384,6 +447,10 @@
             });
 
             function removeEvent(dataSource, event) {
+                var itemId = event.item !== null ? event.item.Id : "00000000-0000-0000-0000-000000000000";
+                var cookie = readCookie(cookieName);
+                var cookieArray = cookie ? JSON.parse(cookie) : [];
+
                 $.ajax({
                     url: kendo.format("{0}scheduler/{1}/", getBaseUrl(), event.id),
                     datatype: "json",
@@ -393,7 +460,6 @@
                         try {
                             console.log("success");
                             dataSource.remove(event);
-                            var itemId = event.item !== null ? event.item.Id : "00000000-0000-0000-0000-000000000000";
                             var dataItem = {};
                             dataItem.Donation = event.donation;
                             dataItem.Donation.ModifiedBy = { Id: userId };
@@ -403,6 +469,7 @@
                             console.error(e);
                         } finally {
                             $("#grid").data("kendoGrid").dataSource.read();
+                           
                         }
                     },
                     error: function (xhr, status, error) {
@@ -467,6 +534,8 @@
                         var offset = $(e.dropTarget).offset();
                         var slot = scheduler.slotByPosition(offset.left, offset.top);
                         var dataItem = gridDataSource.getByUid(e.draggable.currentTarget.data("uid"));
+                        var cookie = readCookie(cookieName);
+                        var cookieArray = cookie ? JSON.parse(cookie) : [];
 
                         if (dataItem && slot) {
                             var offsetMiliseconds = new Date().getTimezoneOffset() * 60000;

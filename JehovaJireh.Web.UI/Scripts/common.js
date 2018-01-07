@@ -122,6 +122,13 @@ Array.prototype.pushIfNotExist = function (element, comparer) {
     }
 };
 
+Array.prototype.removeIfExist = function (element, comparer) {
+    if (this.inArray(comparer)) {
+        this.slice(this.indexOf(element, 1));
+    }
+};
+
+
 function openDialog(title, htmlMessage) {
 
     var applySetup = $("#dialog").length === 0;
@@ -146,3 +153,5 @@ function openDialog(title, htmlMessage) {
 
     dialog.data("kendoDialog").open();
 }
+
+
