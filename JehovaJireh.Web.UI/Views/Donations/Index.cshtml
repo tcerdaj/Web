@@ -577,6 +577,7 @@
 
     function setDonationRequestedBy(e, id) {
         var cart = $(".shopping-cart");
+        $('#grid').busyIndicator(true);
 
         if (cart.is(":visible"))
             $(".shopping-cart").hide();
@@ -641,6 +642,7 @@
                 type: "PUT",
                 data: JSON.stringify(dataItem),
                 success: function (result) {
+                    $('#grid').busyIndicator(false);
                     console.log("success");
                     createCookie(cookieName, JSON.stringify(cookieArray), 5);
                     var msg = kendo.format("Your shopping car contains {0} item{1}", cookieArray.length, cookieArray.length > 1 ? "s" : "");
@@ -651,6 +653,7 @@
                     _grid.dataSource.fetch();
                 },
                 error: function (xhr, status, error) {
+                    $('#grid').busyIndicator(false);
                     try {
                         alert(xhr.responseJSON.Message);
                     } catch (e) {

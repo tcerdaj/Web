@@ -450,6 +450,7 @@
                 var itemId = event.item !== null ? event.item.Id : "00000000-0000-0000-0000-000000000000";
                 var cookie = readCookie(cookieName);
                 var cookieArray = cookie ? JSON.parse(cookie) : [];
+                $('#scheduler').busyIndicator(true);
 
                 $.ajax({
                     url: kendo.format("{0}scheduler/{1}/", getBaseUrl(), event.id),
@@ -469,11 +470,12 @@
                             console.error(e);
                         } finally {
                             $("#grid").data("kendoGrid").dataSource.read();
-                           
+                            $('#scheduler').busyIndicator(false);
                         }
                     },
                     error: function (xhr, status, error) {
                         openDialog("Error", generalError);
+                        $('#scheduler').busyIndicator(false);
                     }
                 });
             }

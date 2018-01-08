@@ -128,6 +128,16 @@ Array.prototype.removeIfExist = function (element, comparer) {
     }
 };
 
+!function ($) {
+    $.extend($.fn, {
+        busyIndicator: function (c) {
+            b = $(this);
+            var d = b.find(".k-loading-mask");
+            c ? d.length || (d = $("<div class='k-loading-mask'><span class='k-loading-text'>Loading...</span><div class='k-loading-image'/><div class='k-loading-color'/></div>").width(b.outerWidth()).height(b.outerHeight()).prependTo(b)) : d && d.remove()
+        }
+    });
+}(jQuery);
+
 
 function openDialog(title, htmlMessage) {
 
