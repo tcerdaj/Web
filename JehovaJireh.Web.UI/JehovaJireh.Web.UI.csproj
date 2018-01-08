@@ -313,10 +313,13 @@
   <ItemGroup>
     <Content Include="audio\echoed-ding.mp3" />
     <Content Include="audio\you-wouldnt-believe.mp3" />
-    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\cart-style.css" />
-    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\knockout-file-bindings.css" />
     <Content Include="favicon.ico" />
@@ -327,9 +330,13 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\Site.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Img\ajax_loader_blue_64.gif" />
-    <Content Include="Img\no-photo.png" />
+    <Content Include="Img\no-photo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="js\angular.min.js" />
     <Content Include="js\cultures\kendo.culture.af-ZA.min.js" />
     <Content Include="js\cultures\kendo.culture.af.min.js" />
@@ -2038,7 +2045,9 @@
     </None>
     <None Include="Properties\PublishProfiles\JehovaJireh - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\common.js" />
+    <Content Include="Scripts\common.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
