@@ -1993,6 +1993,16 @@
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\knockout.viewmodel.2.0.3.js" />
     <Content Include="Scripts\knockout.viewmodel.2.0.3.min.js" />
+    <Content Include="SSCT\css\reset.css" />
+    <Content Include="SSCT\css\style.css" />
+    <Content Include="SSCT\img\cd-cart.svg" />
+    <Content Include="SSCT\img\cd-hamburger-menu.svg" />
+    <Content Include="SSCT\img\cd-logo.svg" />
+    <Content Include="SSCT\img\cd-remove-item.svg" />
+    <Content Include="SSCT\img\thumb.jpg" />
+    <Content Include="SSCT\index.html" />
+    <Content Include="SSCT\js\main.js" />
+    <Content Include="SSCT\js\modernizr.js" />
     <Content Include="webcam\jquery-webcam.js" />
     <Content Include="webcam\jquery-webcam.min.js" />
     <Content Include="webcam\jquery.webcam.js" />
@@ -2581,6 +2591,13 @@
     <Content Include="webcam\webcam.jquery.json" />
     <Content Include="Views\Donations\RequestList.cshtml" />
     <Content Include="Views\Home\Chat.cshtml" />
+    <Content Include="SSCT\.DS_Store" />
+    <Content Include="SSCT\js\.DS_Store" />
+    <Content Include="SSCT\partials\_layout.scss" />
+    <Content Include="SSCT\partials\_mixins.scss" />
+    <Content Include="SSCT\partials\_variables.scss" />
+    <Content Include="SSCT\readme.pdf" />
+    <Content Include="SSCT\scss\style.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

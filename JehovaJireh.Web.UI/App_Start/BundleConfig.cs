@@ -35,7 +35,15 @@ namespace JehovaJireh.Web.UI
             bundles.Add(new StyleBundle("~/Content/fontawesome").Include(
                       "~/Content/font-awesome.css"
                       ));
-            
+
+            bundles.Add(new StyleBundle("~/SSCT/css").Include(
+                    "~/SSCT/css/reset.css",
+                    "~/SSCT/css/style.css"
+                    ));
+
+            bundles.Add(new ScriptBundle("~/SSCT/main").Include(
+                      "~/SSCT/js/main.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
 				     "~/Scripts/knockout-{version}.js",
 				     "~/Scripts/knockout-{version}.debug.js",

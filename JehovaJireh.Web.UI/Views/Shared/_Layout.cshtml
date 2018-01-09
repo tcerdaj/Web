@@ -3,77 +3,165 @@
 <!DOCTYPE html>
 <html lang="@CultureHelper.GetCurrentNeutralCulture()" dir="@(CultureHelper.IsRighToLeft() ? "rtl" : "ltr")">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@ViewBag.Title - @Resources.ApplicationName</title>
-	@Styles.Render("~/Content/css")
-	@Scripts.Render("~/bundles/modernizr")
-	@Scripts.Render("~/bundles/jquery")
-	@Scripts.Render("~/bundles/common")
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - @Resources.ApplicationName</title>
+    @*@Styles.Render("~/Content/css")*@
+    @Styles.Render("~/SSCT/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/common")
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink(@Resources.ApplicationName, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink(Resources.Home, "Index", "Home")</li>
-                    <li class="menu-item dropdown">
-                        <a href='@Html.ActionLink("Index", "Donations")' class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">@Resources.Donations<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li class="menu-item">@Html.ActionLink(Resources.ViewDonations, "Index", "Donations")</li>
-                            <li class="menu-item">@Html.ActionLink(Resources.RequestList, "RequestList", "Donations")</li>
-                            <li class="menu-item">@Html.ActionLink(Resources.SchedulerDonation, "SchedulerDonation", "Donations")</li>
-                        </ul>
-                    </li>
-                    <li>@Html.ActionLink(Resources.About, "About", "Home")</li>
-                    <li>@Html.ActionLink(Resources.Contact, "Contact", "Home")</li>
-                    <li>@Html.ActionLink(Resources.Chat, "Chat", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-                @Html.Partial("_CulturePartial")
+    <header>
+        <div id="logo"><img src="~/Img/jehova jireh logo.png" alt="Homepage" style="border-radius:50%;"></div>
+        <div id="cd-hamburger-menu"><a class="cd-img-replace" href="#0">Menu</a></div>
+        <div id="cd-cart-trigger"><a class="cd-img-replace" href="#0">Cart</a></div>
+    </header>
+    <nav id="main-nav">
+        <ul>
+            <li><a href="#0">Home</a></li>
+            <li><a href="#0">About</a></li>
+            <li><a class="current" href="#0">Services</a></li>
+            <li><a href="#0">Gallery</a></li>
+            <li><a href="#0">Contact</a></li>
+        </ul>
+    </nav>
+    <main>
+        <ul id="cd-gallery-items" class="cd-container">
+            <li>
+                <img src="img/thumb.jpg" alt="Preview image">
+            </li>
+            <li>
+                <img src="img/thumb.jpg" alt="Preview image">
+            </li>
+            <li>
+                <img src="img/thumb.jpg" alt="Preview image">
+            </li>
+            <li>
+                <img src="img/thumb.jpg" alt="Preview image">
+            </li>
+            <li>
+                <img src="img/thumb.jpg" alt="Preview image">
+            </li>
+            <li>
+                <img src="img/thumb.jpg" alt="Preview image">
+            </li>
+            <li>
+                <img src="img/thumb.jpg" alt="Preview image">
+            </li>
+            <li>
+                <img src="img/thumb.jpg" alt="Preview image">
+            </li>
+            <li>
+                <img src="img/thumb.jpg" alt="Preview image">
+            </li>
+        </ul> <!-- cd-gallery-items -->
+    </main>
+    <div id="cd-shadow-layer"></div>
+    <div id="cd-cart">
+        <h2>Cart</h2>
+        <ul class="cd-cart-items">
+            <li>
+                <span class="cd-qty">1x</span> Product Name
+                <div class="cd-price">$9.99</div>
+                <a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
+            </li>
+            <li>
+                <span class="cd-qty">2x</span> Product Name
+                <div class="cd-price">$19.98</div>
+                <a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
+            </li>
+            <li>
+                <span class="cd-qty">1x</span> Product Name
+                <div class="cd-price">$9.99</div>
+                <a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
+            </li>
+        </ul> <!-- cd-cart-items -->
+        <div class="cd-cart-total">
+            <p>Total <span>$39.96</span></p>
+        </div> <!-- cd-cart-total -->
+        <a href="#0" class="checkout-btn">Checkout</a>
+
+        <p class="cd-go-to-cart"><a href="#0">Go to cart page</a></p>
+    </div> <!-- cd-cart -->
+
+
+
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink(@Resources.ApplicationName, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink(Resources.Home, "Index", "Home")</li>
+                        <li class="menu-item dropdown">
+                            <a href='@Html.ActionLink("Index", "Donations")' class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">@Resources.Donations<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li class="menu-item">@Html.ActionLink(Resources.ViewDonations, "Index", "Donations")</li>
+                                <li class="menu-item">@Html.ActionLink(Resources.RequestList, "RequestList", "Donations")</li>
+                                <li class="menu-item">@Html.ActionLink(Resources.SchedulerDonation, "SchedulerDonation", "Donations")</li>
+                            </ul>
+                        </li>
+                        <li>@Html.ActionLink(Resources.About, "About", "Home")</li>
+                        <li>@Html.ActionLink(Resources.Contact, "Contact", "Home")</li>
+                        <li>@Html.ActionLink(Resources.Chat, "Chat", "Home")</li>
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+                    @Html.Partial("_CulturePartial")
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container body-content">
+        <div class="container body-content">
 
-        @Html.Partial("_PleaseWaitPartial")
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - @Resources.ApplicationName</p>
-        </footer>
-    </div>
-    <div class="container">
-        <div class="shopping-cart" style="display:none">
-            <div class="shopping-cart-header">
-                <i class="fa fa-shopping-cart cart-icon"></i><span id="gh-cart-n-cart" class="badge">0</span>
-                <div class="shopping-cart-total">
-                    <span class="lighter-text">Total:</span>
-                    <span class="main-color-text">$0.00</span>
-                </div>
-            </div> <!--end shopping-cart-header -->
-            <ul class="shopping-cart-items"></ul>
-            @if (@ViewBag.Title == @Resources.SchedulerDonation)
-            {
-               <a id="checkoutbutton" href="#" class="button-disabled" >Checkout</a>
-            }
-            else
-            {
-                <a id="checkoutbutton" href="/Donations/SchedulerDonation" class="button">Checkout</a>
-            }
-        </div> <!--end shopping-cart -->
-    </div>
+            @Html.Partial("_PleaseWaitPartial")
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - @Resources.ApplicationName</p>
+            </footer>
+        </div>
+        <div class="container">
+            <div class="shopping-cart" style="display:none">
+                <div class="shopping-cart-header">
+                    <i class="fa fa-shopping-cart cart-icon"></i><span id="gh-cart-n-cart" class="badge">0</span>
+                    <div class="shopping-cart-total">
+                        <span class="lighter-text">Total:</span>
+                        <span class="main-color-text">$0.00</span>
+                    </div>
+                </div> <!--end shopping-cart-header -->
+                <ul class="shopping-cart-items"></ul>
+                @if (@ViewBag.Title == @Resources.SchedulerDonation)
+                {
+                   <a id="checkoutbutton" href="#" class="button-disabled" >Checkout</a>
+                }
+                else
+                {
+                    <a id="checkoutbutton" href="/Donations/SchedulerDonation" class="button">Checkout</a>
+                }
+            </div> <!--end shopping-cart -->
+        </div>*@
 
     <script type="text/javascript">
+        $(function () {
+            $(window).scroll(function () {
+                if ($(window).scrollTop() >= 100) {
+                    $('header').addClass('scrolled');
+                    $("#logo img").addClass('img-scrolled');
+                }
+                else {
+                    $('header').removeClass('scrolled');
+                    $("#logo img").removeClass('img-scrolled');
+                }
+            });
+        });
 
         $(document).mouseup(function (e) {
             var container = $(".shopping-cart");
@@ -189,7 +277,8 @@
         }
 
     </script>
-    @Scripts.Render("~/bundles/bootstrap")
+    @*@Scripts.Render("~/bundles/bootstrap")*@
+    @Scripts.Render("~/SSCT/main")
     @Styles.Render("~/bundles/kendo-css")
     @Scripts.Render("~/bundles/kendo")
     @Styles.Render("~/Content/fontawesome")
