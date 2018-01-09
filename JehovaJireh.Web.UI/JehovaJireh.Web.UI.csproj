@@ -334,6 +334,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Img\ajax_loader_blue_64.gif" />
+    <Content Include="Img\jehova jireh logo 2.PNG" />
+    <Content Include="Img\jehova jireh logo.PNG" />
+    <Content Include="Img\JehovaJirehLogo.JPG" />
     <Content Include="Img\no-photo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
