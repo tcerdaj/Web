@@ -94,7 +94,7 @@ header {
 }
 @media only screen and (min-width: 1200px) {
   #logo {
-    padding-top: 20px;
+    /*padding-top: 20px;*/
     position: absolute;
     /* logo left margin on Dekstop */
     left: 2.4em;
@@ -460,11 +460,31 @@ xkeyframes
     transition: 0.2s all ease-in-out;
 }
 
-.img-scrolled {
-    width: 42px;
-    transition: 0.35s all ease;
+.shrink {
+    transition: all .2s ease-in-out;
 }
+.shrink:hover{
+    -webkit-transform: scale(0.8);
+    -ms-transform: scale(0.8);
+    transform: scale(0.8);
+}
+
+.img-scrolled {
+    -webkit-transform: scale(1.0);
+    -ms-transform: scale(1.0);
+    transform: scale(1.0);
+} 
 
 .scrolled #main-nav {
     line-height: 0;
 }
+
+.grow {
+    transition: all .2s ease-in-out;
+}
+
+    .grow:hover {
+        transform: scale(1.1);
+    }
+
+    .logo-scrolled{width:72px;}

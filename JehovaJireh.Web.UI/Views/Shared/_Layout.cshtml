@@ -15,7 +15,7 @@
 </head>
 <body>
     <header>
-        <div id="logo"><img src="~/Img/jehova jireh logo.png" alt="Homepage" style="border-radius:50%;"></div>
+        <div id="logo"><img src="~/Img/jehova jireh logo.png" class="shrink" alt="Homepage" style="border-radius:50%;"></div>
         <div id="cd-hamburger-menu"><a class="cd-img-replace" href="#0">Menu</a></div>
         <div id="cd-cart-trigger"><a class="cd-img-replace" href="#0">Cart</a></div>
     </header>
@@ -77,7 +77,7 @@
                 <span class="cd-qty">1x</span> Product Name
                 <div class="cd-price">$9.99</div>
                 <a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
-            </li>
+            </li>   
         </ul> <!-- cd-cart-items -->
         <div class="cd-cart-total">
             <p>Total <span>$39.96</span></p>
@@ -151,17 +151,26 @@
 
     <script type="text/javascript">
         $(function () {
+            fixScroll();
             $(window).scroll(function () {
-                if ($(window).scrollTop() >= 100) {
-                    $('header').addClass('scrolled');
-                    $("#logo img").addClass('img-scrolled');
-                }
-                else {
-                    $('header').removeClass('scrolled');
-                    $("#logo img").removeClass('img-scrolled');
-                }
+                fixScroll();
             });
         });
+
+        function fixScroll() {
+            if ($(window).scrollTop() >= 100) {
+                $('header').addClass('scrolled');
+                //$("#logo img").animate({ width: 42 }
+                //    , 50);
+                $("#logo").addClass("logo-scrolled");
+                $(".shrink").addClass('img-scrolled');
+            }
+            else {
+                $('header').removeClass('scrolled');
+                $(".shrink").removeClass('img-scrolled');
+                $("#logo").removeClass("logo-scrolled");
+            }
+        }
 
         $(document).mouseup(function (e) {
             var container = $(".shopping-cart");
