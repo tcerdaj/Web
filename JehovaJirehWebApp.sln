@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JehovaJireh.Web.Tests", "JehovaJireh.Web.Tests\JehovaJireh.Web.Tests.csproj", "{821AE296-C908-43CD-A55C-317629406EDA}"
 EndProject
@@ -33,6 +33,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tables", "Tables", "{2F65B0
 		Request.txt = Request.txt
 		Scheduler.txt = Scheduler.txt
 		Users.txt = Users.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{015BDB47-1698-4466-B5DC-AAC1BE805C3F}"
+	ProjectSection(SolutionItems) = preProject
+		D:\Work\MyTutor\src\MyTutoring.UI\bin\Omu.ValueInjecter.dll = D:\Work\MyTutor\src\MyTutoring.UI\bin\Omu.ValueInjecter.dll
 	EndProjectSection
 EndProject
 Global
@@ -86,7 +91,8 @@ Global
 		{2F65B058-269D-4441-A484-B16B1176E6AA} = {A8BD3C59-7D40-4935-8FAF-D815E2762D6B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.0\lib\NET4;packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.WindowsAzure.TransientFaultHandling.5.1.1212.0\lib\NET4;packages\EnterpriseLibrary.WindowsAzure.TransientFaultHandling.5.1.1212.0\DesignTime
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.0\lib\NET4;packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.WindowsAzure.TransientFaultHandling.5.1.1212.0\lib\NET4;packages\EnterpriseLibrary.WindowsAzure.TransientFaultHandling.5.1.1212.0\DesignTime
+		SolutionGuid = {3787FA05-8851-46BA-98FE-47BD861EDAF0}
 	EndGlobalSection
 EndGlobal
