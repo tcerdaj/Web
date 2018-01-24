@@ -77,7 +77,7 @@ textarea {
     position: relative;
     border-radius: 3px;
     padding: 20px;
-    .shopping-cart-header
+    /*.shopping-cart-header
 
 {
     border-bottom: 1px solid #E8E8E8;
@@ -86,39 +86,8 @@ textarea {
 
 {
     float: right;
-}
+}*/
 
-}
-
-.shopping-cart-items {
-    padding-top: 20px;
-    li
-
-{
-    margin-bottom: 18px;
-}
-
-img {
-    float: left;
-    margin-right: 12px;
-}
-
-.item-name {
-    display: block;
-    padding-top: 10px;
-    font-size: 16px;
-}
-
-.item-price {
-    color: $main-color;
-    margin-right: 8px;
-}
-
-.item-quantity {
-    color: $light-text;
-}
-
-}
 }
 
 .shopping-cart {

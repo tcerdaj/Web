@@ -15,18 +15,53 @@
 </head>
 <body>
     <header>
-        <div id="logo"><img src="~/Img/jehova jireh logo.png" class="shrink" alt="Homepage" style="border-radius:50%;"></div>
+        <div id="logo" title="Iglesia Cristiana Jehova Jireh">
+           <img src="~/Img/jehova jireh logo.png" class="shrink" alt="Homepage">
+        </div>
         <div id="cd-hamburger-menu"><a class="cd-img-replace" href="#0">Menu</a></div>
         <div id="cd-cart-trigger"><a class="cd-img-replace" href="#0">Cart</a></div>
     </header>
     <nav id="main-nav">
-        <ul>
-            <li><a href="#0">Home</a></li>
-            <li><a href="#0">About</a></li>
-            <li><a class="current" href="#0">Services</a></li>
-            <li><a href="#0">Gallery</a></li>
-            <li><a href="#0">Contact</a></li>
-        </ul>
+            <ul>
+                <li>
+                    <div>
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        @Html.ActionLink(@Resources.ApplicationName, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    </div>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <button onclick="myFunction()" class="dropbtn">Language</button>
+                        <div id="myDropdown" class="dropdown-content">
+                            @Html.Partial("_CulturePartial")
+                        </div>
+                    </div>
+                </li>
+                <li><a href="#0">Home</a></li>
+                <li><a href="#0">About</a></li>
+                <li><a class="current" href="#0">Services</a></li>
+                <li><a href="#0">Gallery</a></li>
+                <li><a href="#0">Contact</a></li>
+                <li class="login-container">
+                    <div style="line-height:1">
+                        <div style="height: auto;width: auto;padding: 0;" class="image-container">
+                            <img class="image" src="~/Img/no-photo.png" />
+                            <div class="middle" style="width:100%;height:100%;">
+                                <div class="text">
+                                    <a href="#" style="padding-top:7px;height:50%;line-height:1;width:100%">
+                                        Close
+                                    </a>
+                                    <a href="#" style="padding-top:7px;height:50%;line-height:1;width:100%">View</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
     </nav>
     <main>
         <ul id="cd-gallery-items" class="cd-container">
@@ -77,18 +112,13 @@
                 <span class="cd-qty">1x</span> Product Name
                 <div class="cd-price">$9.99</div>
                 <a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
-            </li>   
+            </li>
         </ul> <!-- cd-cart-items -->
         <div class="cd-cart-total">
             <p>Total <span>$39.96</span></p>
         </div> <!-- cd-cart-total -->
-        <a href="#0" class="checkout-btn">Checkout</a>
-
-        <p class="cd-go-to-cart"><a href="#0">Go to cart page</a></p>
+        <a href="#0" class="checkout-btn">Schedule</a>
     </div> <!-- cd-cart -->
-
-
-
     @*<div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -148,7 +178,28 @@
                 }
             </div> <!--end shopping-cart -->
         </div>*@
+    <script>
+        /* When the user clicks on the button,
+        toggle between hiding and showing the dropdown content */
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
 
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropbtn')) {
+
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
     <script type="text/javascript">
         $(function () {
             fixScroll();
@@ -220,12 +271,13 @@
         }
 
 		(function ($) {
-			$("input[name = 'culture']").click(function () {
-				var cookieName = "culture";
+            var cookieName = "culture";
+            $("input[name = 'culture']").parent().click(function () {
 				eraseCookie(cookieName);
-				createCookie(cookieName, (this).value, 5);
+                createCookie(cookieName, $(this).children("input").val(), 5);
+                updateLanguageLabel();
 				$(this).parents("#culture-form").submit(); // post form
-				$('a[href="/Manage"]')[0].css('float','left');
+                //$('a[href="/Manage"]')[0].css('float', 'left');
             });
 
             //update shopping car
@@ -238,8 +290,14 @@
                 rebuildCartItems(cookieArray)
             }
 
+
+            updateLanguageLabel();
              //var cookie = readCookie(cookieName);
 		})(jQuery);
+
+        function updateLanguageLabel() {
+            $(".dropbtn").text($("input[name = 'culture']:checked").next().text());
+        }
 
         function getCookiesArray() {
              var cName = "", cValue = "";
