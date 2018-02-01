@@ -32,7 +32,7 @@ namespace JehovaJireh.Web.UI.Controllers
 		//		Response.RedirectToRoute(RouteData.Values);
 		//	}
 
-
+            //test
 		//	// Modify current thread's cultures            
 		//	Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(cultureName);
 		//	Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
