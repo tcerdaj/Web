@@ -375,6 +375,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BibleController.cs" />
     <Compile Include="Controllers\DonationsController.cs" />
     <Compile Include="Controllers\ErorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
