@@ -147,6 +147,12 @@ namespace JehovaJireh.Data.Mappings
             Map(x => x.DonationId);
             Map(x => x.ItemId);
             Map(x => x.RequestedBy);
+            Map(x => x.CreatedBy);
+            Map(x => x.FirstName);
+            Map(x => x.LastName);
+            Map(x => x.Email);
+            Map(x => x.Phone);
+            Map(x => x.UserImageUrl);
         }
     }
     public class RequestMap : ClassMap<Request>
@@ -169,7 +175,6 @@ namespace JehovaJireh.Data.Mappings
             Map(x => x.ModifiedOn);
             References(x => x.CreatedBy)
                 .Column("CreatedBy")
-                .Not.Nullable()
                 .ForeignKey("CreatedBy");
             References(x => x.ModifiedBy)
                 .Column("ModifiedBy")
@@ -253,15 +258,15 @@ namespace JehovaJireh.Data.Mappings
             References(x => x.Item)
                 .Column("ItemId")
                 .Nullable()
-                .ForeignKey("ItemId");
+                .ForeignKey();
             References(x => x.CreatedBy)
                 .Column("CreatedBy")
                 .Not.Nullable()
-                .ForeignKey("CreatedBy");
+                .ForeignKey();
             References(x => x.ModifiedBy)
                 .Column("ModifiedBy")
                 .Nullable()
-                .ForeignKey("ModifiedBy");
+                .ForeignKey();
         }
     }
 }

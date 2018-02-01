@@ -58,7 +58,7 @@
         </tr>
     </script>
     <script id="event-template" type="text/x-kendo-template">
-        <div class="movie-template" style="padding:5px">
+        <div class="movie-template" style="padding:5px;cursor:pointer" onclick="showEventDetails('#= uid #')">
             <img style="width: 115px;height:80px;" src="#= images[0].ImageUrl || '/img/no-photo.png' #">
             <p class="event-content">
                 #: kendo.toString(start, "hh:mm") # - #: kendo.toString(end, "hh:mm") #
@@ -68,35 +68,79 @@
         </div>
     </script>
     <script type="text/x-kendo-template" id="gridDetailsTemplate">
-        <div id="details-container">
-            <h2>#= Title #</h2>
-            <em>#= Description #</em>
-            #if(Images === null){#
-            <div class="details-image-container">
-                <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
-            </div>
-            #}else{#
+        <div id="tabstrip">
+            <ul>
+                <li class="k-state-active">
+                    <span>Donation</span>
+                </li>
+                <li>
+                    <span>Contact me</span>
+                </li>
+            </ul>
+            <div id="details-container">
+                <h3>Title: #= Title #</h3>
+                <p><em>Description: #= Description #</em></p>
+                #if(Images === null){#
+                <div class="details-image-container">
+                    <img class="drag-image" src="/img/no-photo.png" alt="#: Title #" />
+                </div>
+                #}else{#
                 # for (var i = 0; i < Images.length; i++) { #
-                    <div class="details-image-container" style="margin-bottom:15px;">
-                        <img src="#= Images[i].ImageUrl  #" alt="#= Title #" />
-                    </div>
+                <div class="details-image-container" style="margin-bottom:15px;">
+                    <img src="#= Images[i].ImageUrl  #" alt="#= Title #" />
+                </div>
                 # } #
-            #}#
+                #}#
+            </div>
+            <div id="contactme">
+                <img src="#= UserImageUrl #" alt="Contact me" />
+                <p>Name: #= FirstName # #= LastName #</p>
+                <p>Email: #= Email #</p>
+                <p>Phone: #= Phone #</p>
+            </div>
         </div>
 </script>
     <script type="text/javascript">
         var generalError = "An server error occurred and has been logged." +
             "\nPlease contact your administrator. " + "ServerException",
-                wnd,
+                wnd,    
                 detailsTemplate;
 
         var userName = '@User.Identity.Name';
         var cookieName = kendo.format("car_{0}", userName);
-        
+        function showEventDetails(uid) {
+            var dataItem = getItemByArray(uid, $(scheduler).data("kendoScheduler").data());
+            var createdBy = dataItem.item != null ? dataItem.item.CreatedBy : dataItem.donation.CreatedBy; 
+            dataItem.FirstName = createdBy.FirstName;
+            dataItem.LastName = createdBy.LastName;
+            dataItem.Email = createdBy.Email;
+            dataItem.Phone = createdBy.PhoneNumber;
+            dataItem.UserImageUrl = createdBy.ImageUrl;
+            dataItem.Title = dataItem.title;
+            dataItem.Description = dataItem.description;
+            dataItem.Images = dataItem.images;
+
+            wnd.content(detailsTemplate(dataItem));
+            $("#tabstrip").kendoTabStrip({
+                animation: {
+                    open: {
+                        effects: "fadeIn"
+                    }
+                }
+            });
+            wnd.center().open();
+        }
         function showDetails(e) {
             var grid = $("#grid").data("kendoGrid");
             var dataItem = grid.dataItem($(e).closest("tr"));
             wnd.content(detailsTemplate(dataItem));
+            $("#tabstrip").kendoTabStrip({
+                animation: {
+                    open: {
+                        effects: "fadeIn"
+                    }
+                }
+            });
             wnd.center().open();
         }
 
@@ -453,7 +497,7 @@
                 $('#scheduler').busyIndicator(true);
 
                 $.ajax({
-                    url: kendo.format("{0}scheduler/{1}/", getBaseUrl(), event.id),
+                    url: kendo.format("{0}scheduler/{1}/Delete", getBaseUrl(), event.id),
                     datatype: "json",
                     contentType: 'application/json',
                     type: "Delete",
@@ -538,7 +582,7 @@
                         var dataItem = gridDataSource.getByUid(e.draggable.currentTarget.data("uid"));
                         var cookie = readCookie(cookieName);
                         var cookieArray = cookie ? JSON.parse(cookie) : [];
-
+                        var createdBy = { Id: dataItem.CreatedBy, FirstName: dataItem.FirstName, LastName: dataItem.LastName, Email: dataItem.Email, Phone: dataItem.Phone, ImageUrl: dataItem.UserImageUrl };
                         if (dataItem && slot) {
                             var offsetMiliseconds = new Date().getTimezoneOffset() * 60000;
                             var newEvent = {
@@ -555,12 +599,13 @@
                                 recurrenceId: null,
                                 recurrenceRule: null,
                                 recurrenceException: null,
-                                donation: { Id: dataItem.DonationId },
-                                item: { Id: dataItem.ItemId }
+                                images:dataItem.Images,
+                                donation: { Id: dataItem.DonationId, CreatedBy: createdBy },
+                                item: { Id: dataItem.ItemId, CreatedBy: createdBy }
                             };
 
                             $.ajax({
-                                url: getBaseUrl() + "Scheduler/Create",
+                                url: getBaseUrl() + "Scheduler/Post",
                                 contentType: "application/json; charset=utf-8",
                                 cache: false,
                                 crossDomain: true,
@@ -634,10 +679,39 @@
             var grid = $("#grid").data("kendoGrid");
             var dataItem = grid.dataItem($(e).closest("tr"));
             wnd.content(detailsTemplate(dataItem));
+            $("#tabstrip").kendoTabStrip({
+                animation: {
+                    open: {
+                        effects: "fadeIn"
+                    }
+                }
+            });
             wnd.center().open();
         }
     </script>
     <style>
+        #contactme {min-width:450px;}
+        #contactme img {margin-bottom:5px;}
+        #tabstrip h2 {
+            font-weight: lighter;
+            font-size: 5em;
+            line-height: 1;
+            padding: 0 0 0 30px;
+            margin: 0;
+        }
+
+        #tabstrip h2 span {
+            background: none;
+            padding-left: 5px;
+            font-size: .3em;
+            vertical-align: top;
+        }
+
+        #tabstrip p {
+            margin: 0;
+            padding: 0;
+        }
+
         td[role=gridcell].selected {
             background-color: #f35800;
             border-color: #f85a00;
@@ -671,11 +745,13 @@
         }
         #details-container {
             padding: 10px;
+            max-height:500px;
         }
 
-        #details-container h2 {
-            margin: 0;
-        }
+            #details-container h3, #details-container p {
+                margin: 0;
+                max-width:500px;
+            }
 
         #details-container em {
             color: #8c8c8c;

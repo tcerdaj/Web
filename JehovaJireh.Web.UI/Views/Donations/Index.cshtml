@@ -44,10 +44,15 @@
 </div>
 
 @section Scripts{
-    @Scripts.Render("~/bundles/jqueryval")
+
+    @Styles.Render("~/bundles/kendo-css")
+    @Scripts.Render("~/bundles/kendo")
+    @Styles.Render("~/Content/fontawesome")
+
     @Scripts.Render("~/bundles/areYouSure")
     @Scripts.Render("~/bundles/knockout")
     @Scripts.Render("~/bundles/moment")
+    
 
     <script type="text/x-kendo-template" id="template">
         <div class="tabstrip">
@@ -71,7 +76,6 @@
                 </div>
             </div>
         </div>
-
     </script>
     <script id="rowTemplate" type="text/x-kendo-tmpl">
         <tr data-uid="#: uid #">
@@ -90,16 +94,16 @@
             <td class="photo">
                 <a class="pop" id="#= Line #" name="#= Line #" href="\\#"><img class="grid-photo" src="#:Images.length > 0 && Images[0].ImageUrl ? Images[0].ImageUrl: '/img/no-photo.png'#" alt="#: ItemName #" /></a>
                 #if(Images.length > 1 ){#
-                <a class="pop" id="#= Line #" href="\\#">#:Images.length # images</a>
+                   <a class="pop" id="#= Line #" href="\\#">#:Images.length # images</a>
                 #}
                 else
                 {#
-                <a class="pop" id="#= Line #" href="\\#">#:Images.length # image</a>
+                   <a class="pop" id="#= Line #" href="\\#">#:Images.length # image</a>
                 #}#
             </td>
             <td class="command">
                 #if(CreatedBy.UserName !== "@User.Identity.Name" && DonationStatus === 0 && "@User.Identity.IsAuthenticated" === "True" ){#
-                <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy(this, '#= Id #');"><span class="k-icon k-i-cart"></span>@Resources.WantThis</a>
+                   <a class="k-button k-button-icontext k-grid-edit" href="\\#" onclick="setDonationRequestedBy(this, '#= Id #');"><span class="k-icon k-i-cart"></span>@Resources.WantThis</a>
                 #}#
             </td>
         </tr>
@@ -177,7 +181,6 @@
                             });
                         }
                     },
-                    pageSize: 20,
 					pageSize: 20,
 					serverPaging: false,
                     serverSorting: false,
@@ -200,7 +203,8 @@
 				toolbar: kendo.template($("#mydonationtemplate").html()),
 				height: 550,
 				sortable: true,
-				pageable: false,
+                pageable: false,
+                resizable: true,
 				detailTemplate: kendo.template($("#template").html()),
                 detailInit: detailInit,
                 dataBound: onDataBoundMaster,
@@ -577,27 +581,30 @@
 
     function setDonationRequestedBy(e, id) {
         var cart = $(".shopping-cart");
+        var grid = $('#grid').data("kendoGrid");
         $('#grid').busyIndicator(true);
 
         if (cart.is(":visible"))
             $(".shopping-cart").hide();
 
         var isDonationLine = !$.isNumeric(id);
-        var masterRow = isDonationLine ? $(e).parent().closest("tr.k-detail-row").prev(".k-master-row") :
-            $(e).parent().closest("tr");
+        var masterRow = isDonationLine ? $(e).parent().closest("tr.k-detail-row").prev(".k-master-row") : $(e).parent().closest("tr");
+        var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
+            return $(row).data("uid");
+        });
+
         var userName = '@User.Identity.Name';
         var cookieName = kendo.format("car_{0}", userName);
         var cookie = readCookie(cookieName);
         var cookieArray = cookie ? JSON.parse(cookie) : [];
-        var grid = $("#grid").data("kendoGrid");
         var dataItem = grid.dataItem(masterRow);
         var donationId = dataItem.Id;
         var itemId = isDonationLine ? id : "00000000-0000-0000-0000-000000000000";
         var item = dataItem.DonationDetails.length > 0 ? $.grep(dataItem.DonationDetails, function (n, i) { return n.Id == itemId })[0] : null;
-        var imageUrl = item && item.Images.length > 0 ? item.Images[0].ImageUrl : "";
+        var images = item && item.Images && item.Images.length > 0 ? item.Images : dataItem.Images && dataItem.Images.length > 0 ? dataItem.Images : [];
         var title = isDonationLine && item ? item.ItemName : dataItem.Title;
         var description = isDonationLine && item ? item.ItemName : dataItem.Description;
-        var obj = { UserName: userName, Line: cookieArray.length + 1, DonationId: donationId, ItemId: itemId, Title: title, Description: description, ImageUrl: imageUrl };
+        var obj = { UserName: userName, Line: cookieArray.length + 1, DonationId: donationId, ItemId: itemId, Title: title, Description: description, Images: images, ImageUrl: images.length > 0? images[0].ImageUrl: "" };
         var alreadyExist = false;
 
         cookieArray.pushIfNotExist(obj, function (e) {
@@ -606,6 +613,7 @@
         });
 
         if (alreadyExist) {
+            $('#grid').busyIndicator(false);
             alert('This item already exist in you shooping cart');
         }
         else {
@@ -648,9 +656,15 @@
                     var msg = kendo.format("Your shopping car contains {0} item{1}", cookieArray.length, cookieArray.length > 1 ? "s" : "");
                     $(".gh-cart-c").attr('title', msg);
                     $("#gh-cart-n").text(cookieArray.length);
-                    var _grid = $('#grid').data("kendoGrid");
-                    _grid.dataSource.read();
-                    _grid.dataSource.fetch();
+                    
+                    dataItem.set("DonationStatus", result.DonationStatus);
+                    dataItem.set("DonationDetails", result ? result.DonationDetails : null);
+                    grid.one("dataBound", function () {
+                        grid.expandRow(grid.tbody.children().filter(function (idx, row) {
+                            return $.inArray($(row).data("uid"), expanded) >= 0;
+                        }));
+                    });
+                    grid.refresh();
                 },
                 error: function (xhr, status, error) {
                     $('#grid').busyIndicator(false);

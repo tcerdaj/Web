@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentNHibernate.Cfg;
+using FluentNHibernate.Cfg.Db;
 using JehovaJireh.Core.IRepositories;
+using JehovaJireh.Data.Listeners;
 using NHibernate;
+using NHibernate.Event;
 
 namespace JehovaJireh.Data
 {
@@ -47,5 +51,31 @@ namespace JehovaJireh.Data
 		{
 			_transaction = _session.BeginTransaction();
 		}
-	}
+        
+        protected static IPersistenceConfigurer SetupDatabase()
+        {
+            var connectinString = JehovaJireh.Configuration.CloudConfiguration.GetConnectionString("SQLConnectionString");
+            return MsSqlConfiguration.MsSql2008
+                .UseOuterJoin()
+                .ConnectionString(x => x.Is(connectinString))
+                .ShowSql();
+        }
+        public static ISessionFactory BuildSessionFactory()
+        {
+            NHibernate.Cfg.Configuration cfg = Fluently.Configure()
+                .Database(SetupDatabase)
+                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NHUnitOfWork>())
+                .ExposeConfiguration(c =>
+                {
+                    c.SetProperty(@"nhibernate-logger", @"JehovaJireh.Infrastructure.Logging.NLogNHibernateFactory, JehovaJireh.Infrastructure"); //TODO: WHY DOESNT THIS WORK?
+                })
+                .BuildConfiguration();
+            cfg.EventListeners.PreUpdateEventListeners =
+                new IPreUpdateEventListener[] { new AuditEventListener() };
+            cfg.EventListeners.PreInsertEventListeners =
+                new IPreInsertEventListener[] { new AuditEventListener() };
+            return cfg.BuildSessionFactory();
+        }
+
+    }
 }

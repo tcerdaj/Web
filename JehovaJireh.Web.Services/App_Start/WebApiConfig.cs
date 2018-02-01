@@ -35,8 +35,11 @@ namespace JehovaJireh.Web.Services
 			config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = 
 				Newtonsoft.Json.PreserveReferencesHandling.Objects;
 
-			//Remove Existing Handler and add custom
-			config.Services.Replace(typeof(IExceptionHandler), new OopsExceptionHandler());
+            var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
+            config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
+
+            //Remove Existing Handler and add custom
+            config.Services.Replace(typeof(IExceptionHandler), new OopsExceptionHandler());
 
             // Setting Cors
             //var cors = new EnableCorsAttribute(origins: "http://localhost:53371", headers: "*", methods: "GET,POST,DELETE,PUT");
@@ -48,10 +51,16 @@ namespace JehovaJireh.Web.Services
 			config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-				name: "DefaultApi",
-				routeTemplate: "{controller}/{id}/{action}",
-				defaults: new { id = RouteParameter.Optional, action = RouteParameter.Optional }
-			);
-		}
+                name: "IdActionApi",
+                routeTemplate: "{controller}/{id}/{action}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "ActionIdApi",
+                routeTemplate: "{controller}/{action}",
+                defaults: new {action= "Get" }
+            );
+        }
 	}
 }

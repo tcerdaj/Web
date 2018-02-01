@@ -59,9 +59,9 @@ namespace JehovaJireh.Web.UI.Helpers
 				var url = new UrlHelper(htmlHelper.ViewContext.RequestContext);
 				string imgHtml = imgTag.ToString(TagRenderMode.SelfClosing);
 				var anchorBuilder = new TagBuilder("a");
-				anchorBuilder.MergeAttribute("href", url.Action(action,controllerName, routeValues));
+				anchorBuilder.MergeAttribute("href", action.Contains("#") && controllerName.Contains("#")? "#" : url.Action(action,controllerName, routeValues));
 				anchorBuilder.MergeAttribute("class", "avatar-image-container");
-				anchorBuilder.MergeAttribute("title", "Manage");
+				anchorBuilder.MergeAttribute("title", "Click to Manage");
 				anchorBuilder.InnerHtml = imgHtml; // include the <img> tag inside
 				string anchorHtml = anchorBuilder.ToString(TagRenderMode.Normal);
 				return new HtmlString(anchorHtml);

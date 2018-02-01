@@ -2598,6 +2598,7 @@
     <Content Include="SSCT\partials\_variables.scss" />
     <Content Include="SSCT\readme.pdf" />
     <Content Include="SSCT\scss\style.scss" />
+    <Content Include="Views\Shared\_UserManagePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

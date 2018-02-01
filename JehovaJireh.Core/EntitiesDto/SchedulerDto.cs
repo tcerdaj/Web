@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace JehovaJireh.Core.EntitiesDto
 {
-    public class SchedulerDto:EntityBaseDto<int>
+    public class SchedulerDto
     {
+        public virtual int Id { get; set; }
         public virtual DonationDto Donation { get; set; }
         public virtual DonationDetailsDto Item { get; set; }
         public virtual string Title { get; set; }
@@ -24,6 +25,11 @@ namespace JehovaJireh.Core.EntitiesDto
         public virtual bool IsAllDay { get; set; }
         public virtual string StartTimezone { get; set; }
         public virtual string EndTimezone { get; set; }
+        public virtual DateTime CreatedOn { get; set; }
+        public virtual DateTime? ModifiedOn { get; set; }
+        public virtual UserRefDto CreatedBy { get; set; }
+        public virtual UserRefDto ModifiedBy { get; set; }
+
         public virtual List<JsonConverterImageDto> Images {
             get
             {

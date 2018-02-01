@@ -16,6 +16,11 @@ namespace JehovaJireh.Web.Services.Controllers
 		private readonly IRepository<T, IdT> repository;
 		private readonly ILogger log;
 
+        public BaseController()
+        {
+           
+        }
+
 		public BaseController(IRepository<T, IdT> repository, ILogger log)
 		{
 			this.repository = repository;
@@ -27,8 +32,9 @@ namespace JehovaJireh.Web.Services.Controllers
 			get { return repository; }
 		}
 
-		// GET api/baseapi      
-		public virtual IEnumerable<DTO> Get()
+        // GET api/baseapi      
+        [ActionName("Get")]
+        public virtual IEnumerable<DTO> Get()
 		{
 			IEnumerable<DTO> dto;
 			try
@@ -73,6 +79,8 @@ namespace JehovaJireh.Web.Services.Controllers
 				var dta = repository.GetById(id);
                 if (dta != null)
                     dto = (DTO)dto.InjectFrom<DeepCloneInjection>(dta);
+                else
+                    dto = default(DTO);
 			}
 			catch (System.Exception ex)
 			{

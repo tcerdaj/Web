@@ -1,4 +1,5 @@
-﻿@using JehovaJireh.Web.UI.Helpers
+﻿@using Microsoft.AspNet.Identity
+@using JehovaJireh.Web.UI.Helpers
 @using JehovaJireh.Web.UI.App_GlobalResources
 <!DOCTYPE html>
 <html lang="@CultureHelper.GetCurrentNeutralCulture()" dir="@(CultureHelper.IsRighToLeft() ? "rtl" : "ltr")">
@@ -6,178 +7,77 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - @Resources.ApplicationName</title>
-    @*@Styles.Render("~/Content/css")*@
-    @Styles.Render("~/SSCT/css")
+    @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/common")
-
 </head>
 <body>
-    <header>
-        <div id="logo" title="Iglesia Cristiana Jehova Jireh">
-           <img src="~/Img/jehova jireh logo.png" class="shrink" alt="Homepage">
-        </div>
-        <div id="cd-hamburger-menu"><a class="cd-img-replace" href="#0">Menu</a></div>
-        <div id="cd-cart-trigger"><a class="cd-img-replace" href="#0">Cart</a></div>
-    </header>
-    <nav id="main-nav">
-            <ul>
-                <li>
-                    <div>
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        @Html.ActionLink(@Resources.ApplicationName, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                    </div>
-                </li>
-                <li>
-                    <div class="dropdown">
-                        <button onclick="myFunction()" class="dropbtn">Language</button>
-                        <div id="myDropdown" class="dropdown-content">
-                            @Html.Partial("_CulturePartial")
-                        </div>
-                    </div>
-                </li>
-                <li><a href="#0">Home</a></li>
-                <li><a href="#0">About</a></li>
-                <li><a class="current" href="#0">Services</a></li>
-                <li><a href="#0">Gallery</a></li>
-                <li><a href="#0">Contact</a></li>
-                <li class="login-container">
-                    <div style="line-height:1">
-                        <div style="height: auto;width: auto;padding: 0;" class="image-container">
-                            <img class="image" src="~/Img/no-photo.png" />
-                            <div class="middle" style="width:100%;height:100%;">
-                                <div class="text">
-                                    <a href="#" style="padding-top:7px;height:50%;line-height:1;width:100%">
-                                        Close
-                                    </a>
-                                    <a href="#" style="padding-top:7px;height:50%;line-height:1;width:100%">View</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-    </nav>
-    <main>
-        <ul id="cd-gallery-items" class="cd-container">
-            <li>
-                <img src="img/thumb.jpg" alt="Preview image">
-            </li>
-            <li>
-                <img src="img/thumb.jpg" alt="Preview image">
-            </li>
-            <li>
-                <img src="img/thumb.jpg" alt="Preview image">
-            </li>
-            <li>
-                <img src="img/thumb.jpg" alt="Preview image">
-            </li>
-            <li>
-                <img src="img/thumb.jpg" alt="Preview image">
-            </li>
-            <li>
-                <img src="img/thumb.jpg" alt="Preview image">
-            </li>
-            <li>
-                <img src="img/thumb.jpg" alt="Preview image">
-            </li>
-            <li>
-                <img src="img/thumb.jpg" alt="Preview image">
-            </li>
-            <li>
-                <img src="img/thumb.jpg" alt="Preview image">
-            </li>
-        </ul> <!-- cd-gallery-items -->
-    </main>
-    <div id="cd-shadow-layer"></div>
-    <div id="cd-cart">
-        <h2>Cart</h2>
-        <ul class="cd-cart-items">
-            <li>
-                <span class="cd-qty">1x</span> Product Name
-                <div class="cd-price">$9.99</div>
-                <a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
-            </li>
-            <li>
-                <span class="cd-qty">2x</span> Product Name
-                <div class="cd-price">$19.98</div>
-                <a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
-            </li>
-            <li>
-                <span class="cd-qty">1x</span> Product Name
-                <div class="cd-price">$9.99</div>
-                <a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
-            </li>
-        </ul> <!-- cd-cart-items -->
-        <div class="cd-cart-total">
-            <p>Total <span>$39.96</span></p>
-        </div> <!-- cd-cart-total -->
-        <a href="#0" class="checkout-btn">Schedule</a>
-    </div> <!-- cd-cart -->
-    @*<div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink(@Resources.ApplicationName, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink(Resources.Home, "Index", "Home")</li>
-                        <li class="menu-item dropdown">
-                            <a href='@Html.ActionLink("Index", "Donations")' class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">@Resources.Donations<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li class="menu-item">@Html.ActionLink(Resources.ViewDonations, "Index", "Donations")</li>
-                                <li class="menu-item">@Html.ActionLink(Resources.RequestList, "RequestList", "Donations")</li>
-                                <li class="menu-item">@Html.ActionLink(Resources.SchedulerDonation, "SchedulerDonation", "Donations")</li>
-                            </ul>
-                        </li>
-                        <li>@Html.ActionLink(Resources.About, "About", "Home")</li>
-                        <li>@Html.ActionLink(Resources.Contact, "Contact", "Home")</li>
-                        <li>@Html.ActionLink(Resources.Chat, "Chat", "Home")</li>
-                    </ul>
-                    @Html.Partial("_LoginPartial")
-                    @Html.Partial("_CulturePartial")
-                </div>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink(@Resources.ApplicationName, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink(Resources.Home, "Index", "Home")</li>
+                    <li class="menu-item dropdown">
+                        <a href='@Html.ActionLink("Index", "Donations")' class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">@Resources.Donations<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="menu-item">@Html.ActionLink(Resources.ViewDonations, "Index", "Donations")</li>
+                            <li class="menu-item">@Html.ActionLink(Resources.RequestList, "RequestList", "Donations")</li>
+                            <li class="menu-item">@Html.ActionLink(Resources.SchedulerDonation, "SchedulerDonation", "Donations")</li>
+                        </ul>
+                    </li>
+                    <li>@Html.ActionLink(Resources.About, "About", "Home")</li>
+                    <li>
+                    <li>@Html.ActionLink(Resources.Contact, "Contact", "Home")</li>
+                    <li>@Html.ActionLink(Resources.Chat, "Chat", "Home")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
             </div>
         </div>
-        <div class="container body-content">
+    </div>
+    <div class="container body-content">
 
-            @Html.Partial("_PleaseWaitPartial")
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - @Resources.ApplicationName</p>
-            </footer>
-        </div>
-        <div class="container">
-            <div class="shopping-cart" style="display:none">
-                <div class="shopping-cart-header">
-                    <i class="fa fa-shopping-cart cart-icon"></i><span id="gh-cart-n-cart" class="badge">0</span>
-                    <div class="shopping-cart-total">
-                        <span class="lighter-text">Total:</span>
-                        <span class="main-color-text">$0.00</span>
-                    </div>
-                </div> <!--end shopping-cart-header -->
-                <ul class="shopping-cart-items"></ul>
-                @if (@ViewBag.Title == @Resources.SchedulerDonation)
+        @Html.Partial("_PleaseWaitPartial")
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - @Resources.ApplicationName</p>
+        </footer>
+    </div>
+    <div class="container">
+        <div class="shopping-cart" style="display:none">
+            <div class="shopping-cart-header">
+                <i class="fa fa-shopping-cart cart-icon"></i><span id="gh-cart-n-cart" class="badge">0</span>
+                <div class="shopping-cart-total">
+                    <span class="lighter-text">Total:</span>
+                    <span class="main-color-text">$0.00</span>
+                </div>
+            </div> <!--end shopping-cart-header -->
+            <ul class="shopping-cart-items"></ul>
+            @if (@ViewBag.Title == @Resources.SchedulerDonation)
+            {
+                <a id="checkoutbutton" href="#" class="button-disabled">Checkout</a>
+            }
+            else
+            {
+                <a id="checkoutbutton" href="/Donations/SchedulerDonation" class="button">Checkout</a>
+            }
+            <div class="user-manage" style="display:none">
+                @if (User.Identity.IsAuthenticated)
                 {
-                   <a id="checkoutbutton" href="#" class="button-disabled" >Checkout</a>
+                    @Html.Partial("_UserManagePartial")
                 }
-                else
-                {
-                    <a id="checkoutbutton" href="/Donations/SchedulerDonation" class="button">Checkout</a>
-                }
-            </div> <!--end shopping-cart -->
-        </div>*@
+            </div>
+        </div> <!--end shopping-cart -->
+    </div>
     <script>
         /* When the user clicks on the button,
         toggle between hiding and showing the dropdown content */
@@ -187,8 +87,7 @@
 
         // Close the dropdown if the user clicks outside of it
         window.onclick = function (event) {
-            if (!event.target.matches('.dropbtn')) {
-
+            if (!$(event.target).hasClass('dropbtn')) {
                 var dropdowns = document.getElementsByClassName("dropdown-content");
                 var i;
                 for (i = 0; i < dropdowns.length; i++) {
@@ -205,6 +104,10 @@
             fixScroll();
             $(window).scroll(function () {
                 fixScroll();
+            });
+
+            $('.avatar-image-container').click(function (e) {
+                showCart(this);
             });
         });
 
@@ -238,10 +141,18 @@
                 : this;
         };
 
-        function showCart() {
+        function showCart(tag) {
             var cart = $(".shopping-cart");
             var sci = $(".shopping-cart-items");
             var checkoutbutton = $("#checkoutbutton");
+            var isAvatar = tag.className !== "gh-cart-i";
+            var offset = $(tag).offset();
+            cart.css('left', offset.left)
+            cart.css('width', isAvatar ? '331px' : '320px');
+            $('.shopping-cart-header').css('display', isAvatar ? 'none' : 'block');
+            $('.shopping-cart-items').css('display', isAvatar ? 'none' : 'block');
+            $('.user-manage').css('display', isAvatar ? 'block' : 'none');
+            checkoutbutton.css('display', isAvatar ? 'none' : 'block');
             sci.empty();
             $("#gh-cart-n-cart").text(0);
 
@@ -268,6 +179,10 @@
 
                 $(".shopping-cart").slideDown("slow");
             }
+        }
+
+        function showUserMange() {
+            $(".user-manage").slideDown("slow");
         }
 
 		(function ($) {
@@ -344,12 +259,7 @@
         }
 
     </script>
-    @*@Scripts.Render("~/bundles/bootstrap")*@
-    @Scripts.Render("~/SSCT/main")
-    @Styles.Render("~/bundles/kendo-css")
-    @Scripts.Render("~/bundles/kendo")
-    @Styles.Render("~/Content/fontawesome")
-
+    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
 </html>

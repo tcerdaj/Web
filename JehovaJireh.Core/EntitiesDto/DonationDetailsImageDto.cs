@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace JehovaJireh.Core.EntitiesDto
 {
-    public class DonationDetailsImageDto: EntityBaseDto<int>
+    public class DonationDetailsImageDto
     {
+        public virtual int Id { get; set; }
         public virtual DonationDetailsRefDto Item { get; set; }
         public virtual string ImageUrl { get; set; }
+        public virtual DateTime CreatedOn { get; set; }
+        public virtual DateTime? ModifiedOn { get; set; }
+        public virtual UserRefDto CreatedBy { get; set; }
+        public virtual UserRefDto ModifiedBy { get; set; }
     }
 }

@@ -16,20 +16,26 @@ namespace JehovaJireh.Data.Repositories
 	public class NHRepository<T, IdT> : IRepository<T, IdT>
 	{
 		private readonly ILogger log;
-		private readonly ISession session;
+		private ISession session;
 		private readonly ExceptionManager exManager;
+        private ISessionFactory sessionFactory;
 
-		public ISession Session
+        public ISession Session
 		{
-			get { return session; }
+			get
+            {
+                session = !session.IsOpen ? sessionFactory.OpenSession(): session;
+                return session;
+            }
 		}
 
 		public NHRepository(ISession session, ExceptionManager exManager, ILogger log)
 		{
-			this.session = session;
+            this.session = session;
 			this.exManager = exManager;
 			this.log = log;
-		}
+            this.sessionFactory = NHUnitOfWork.BuildSessionFactory();
+        }
 
 		public NHRepository(ISession session)
 		{
@@ -175,7 +181,7 @@ namespace JehovaJireh.Data.Repositories
 
 		public void Dispose()
 		{
-           // Session.Flush();
+           Session.Dispose();
         }
 
         public void Update(T entity)

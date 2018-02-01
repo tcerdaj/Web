@@ -20,8 +20,8 @@ namespace JehovaJireh.Core.EntitiesDto
 
 		public virtual DateTime CreatedOn { get; set; }
 		public virtual DateTime? ModifiedOn { get; set; }
-		public virtual UserDto CreatedBy { get; set; }
-		public virtual UserDto ModifiedBy { get; set; }
+		public virtual UserRefDto CreatedBy { get; set; }
+		public virtual UserRefDto ModifiedBy { get; set; }
 
 		public virtual string ToJsonBase()
 		{

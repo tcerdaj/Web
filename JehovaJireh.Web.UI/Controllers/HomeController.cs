@@ -7,6 +7,7 @@ using JehovaJireh.Web.UI.App_GlobalResources;
 using MvcSiteMapProvider;
 using MvcSiteMapProvider.Web.Mvc.Filters;
 using JehovaJireh.Core.IRepositories;
+using JehovaJireh.Web.UI.Models;
 
 namespace JehovaJireh.Web.UI.Controllers
 {
@@ -15,7 +16,8 @@ namespace JehovaJireh.Web.UI.Controllers
 	{
         public ActionResult Index()
 		{
-			return View();
+            IndexViewModel m = new IndexViewModel();
+            return View(m);
 		}
 
 		public ActionResult About()

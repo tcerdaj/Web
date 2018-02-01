@@ -16,8 +16,6 @@ namespace JehovaJireh.Core.EntitiesDto
 		public virtual string FirstName { get; set; }
 		public virtual string LastName { get; set; }
 		public virtual string Gender { get; set; }
-		public virtual string PasswordHash { get; set; }
-		public virtual string SecurityStamp { get; set; }
 		public virtual string Email { get; set; }
 		public virtual string Address { get; set; }
 		public virtual string City { get; set; }
@@ -28,7 +26,6 @@ namespace JehovaJireh.Core.EntitiesDto
 		public virtual bool LockoutEnabled { get; set; }
 		public virtual bool TwoFactorEnabled { get; set; }
 		public virtual int FailedCount { get; set; }
-		public virtual string ConfirmationToken { get; set; }
 		public virtual bool IsConfirmed { get; set; }
 		public virtual bool IsChurchMember { get; set; }
 		public virtual string ChurchName { get; set; }

@@ -23,8 +23,9 @@ namespace JehovaJireh.Web.UI.Controllers
 		private ApplicationSignInManager _signInManager;
 		private ApplicationUserManager _userManager;
 		private ILogger log;
+        private const string USERSETTINGS = "UserSettings";
 
-		public ManageController()
+        public ManageController()
 		{
 			var container = MvcApplication.BootstrapContainer();
 			log = container.Resolve<ILogger>();
@@ -115,9 +116,18 @@ namespace JehovaJireh.Web.UI.Controllers
 			return RedirectToAction("ManageLogins", new { Message = message });
 		}
 
-		//
-		// GET: /Manage/AddPhoneNumber
-		public ActionResult AddPhoneNumber()
+        // POST: /Account/LogOff
+        public ActionResult LogOff()
+        {
+            log.LogOff(User.Identity.Name);
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            Session[USERSETTINGS] = string.Empty;
+            return RedirectToAction("Index", "Home");
+        }
+
+        //
+        // GET: /Manage/AddPhoneNumber
+        public ActionResult AddPhoneNumber()
 		{
 			return View();
 		}

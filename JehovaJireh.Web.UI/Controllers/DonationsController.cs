@@ -86,6 +86,12 @@ namespace JehovaJireh.Web.UI.Controllers
             //TODO:
             //Save to database
             if (!ModelState.IsValid) return View(model);
+            List<HttpPostedFile> files = new List<HttpPostedFile>();
+
+            foreach (var f in Request.Files)
+            {
+                files.Add(f as HttpPostedFile);
+            }
 
 			try
 			{
@@ -146,20 +152,16 @@ namespace JehovaJireh.Web.UI.Controllers
 
                 //Donation Images
                 filesAdded = new List<string>();
-                foreach (var file in donationImages)
+                foreach (var fileWrapper in model.HeaderMultiFileData)
                 {
                     //check if the image already exist.
-                    var fileExist = filesAdded.Any(x => x == file.Name);
+                    var fileExist = filesAdded.Any(x => x == fileWrapper.FileName);
                     if (!fileExist)
                     {
-                        //upload image to azure
-                        var fileToUpload = file.GetFile(Request.Files);
-                        if (fileToUpload != null)
-                        {
-                            var imageUrl = await imageService.CreateUploadedImageAsync(fileToUpload, Guid.NewGuid().ToString(), true, 500, 500);
-                            donation.AddImage(new DonationImage() { Donation = donation, ImageUrl = imageUrl, CreatedBy = CurrentUser, CreatedOn = DateTime.Now, ModifiedOn = null });
-                            filesAdded.Add(file.Name);
-                        }
+                        var file = fileWrapper as HttpPostedFileBase;
+                        var imageUrl = await imageService.CreateUploadedImageAsync(file, Guid.NewGuid().ToString(), true, 500, 500);
+                        donation.AddImage(new DonationImage() { Donation = donation, ImageUrl = imageUrl, CreatedBy = CurrentUser, CreatedOn = DateTime.Now, ModifiedOn = null });
+                        filesAdded.Add(fileWrapper.FileName);
                     }
                 }
 
@@ -285,6 +287,7 @@ namespace JehovaJireh.Web.UI.Controllers
                 }
 
                 Request data = new Request();
+                CurrentUser = userRepository.GetByUserName(User.Identity.Name);
                 data.InjectFrom<DeepCloneInjection>(model);
                 data.CreatedBy = CurrentUser;
                 data.CreatedOn = DateTime.Now;
