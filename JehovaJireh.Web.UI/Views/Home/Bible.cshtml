@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Bible";
+}
+
+<h2>Bible Study</h2>
+<h3>Juan 5:39 Reina-Valera 1960 (RVR1960)</h3>
+<p>39 Escudriñad las Escrituras; porque a vosotros os parece que en ellas tenéis la vida eterna; y ellas son las que dan testimonio de mí;</p>
+<div class="combobox-content" style="display:none">
+    <h4>Pick a language</h4>
+    <input id="language" style="width: 100%;" />
+    <div class="hint">Hint: type "Espanol"</div>
+</div>
+@section Scripts{
+    @Styles.Render("~/bundles/kendo-css")
+    @Scripts.Render("~/bundles/kendo")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#language").kendoComboBox({
+            dataTextField: "language_family_name",
+            dataValueField: "language_family_code",
+            dataSource: {
+                transport: {
+                    read: {
+                        dataType: "json",
+                        url: getBaseUrl() + "bible/languages",
+                    }
+                }
+            },
+            filter: "contains",
+            suggest: true
+        });
+        $('.combobox-content').show();
+    });
+</script>
+}

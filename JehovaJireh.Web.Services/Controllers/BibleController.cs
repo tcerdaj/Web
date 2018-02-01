@@ -9,9 +9,11 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace JehovaJireh.Web.Services.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class BibleController : ApiController
     {
         private static string apiKey = "";
@@ -71,17 +73,17 @@ namespace JehovaJireh.Web.Services.Controllers
         /// <summary>
         /// User needs to select a book of the Bible and a chapter. Retrieve a list of books for this Bible.
         /// </summary>
-        /// <param name="dam_ide"></param>
+        /// <param name="dam_id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<HttpResponseMessage> Books(string dam_ide)
+        public async Task<HttpResponseMessage> Books(string dam_id)
         {
             HttpResponseMessage response = null;
             try
             {
                 var controller = "library";
                 var action = "book";
-                var parameters = string.Format("&dam_id={0}", dam_ide);
+                var parameters = string.Format("&dam_id={0}", dam_id);
                 response = await GetAsync(controller, action, parameters);
             }
             catch (System.Exception)
@@ -94,19 +96,19 @@ namespace JehovaJireh.Web.Services.Controllers
         /// <summary>
         /// Retrieve the text for that book/chapter.
         /// </summary>
-        /// <param name="dam_ide"></param>
+        /// <param name="dam_id"></param>
         /// <param name="book_id"></param>
         /// <param name="chapter_id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<HttpResponseMessage> Chapter(string dam_ide, string book_id, string chapter_id)
+        public async Task<HttpResponseMessage> Chapter(string dam_id, string book_id, string chapter_id)
         {
             HttpResponseMessage response = null;
             try
             {
                 var controller = "text";
                 var action = "verse";
-                var parameters = string.Format("&dam_id={0}&book_id={1}&chapter_id={2}", dam_ide, book_id, chapter_id);
+                var parameters = string.Format("&dam_id={0}&book_id={1}&chapter_id={2}", dam_id, book_id, chapter_id);
                 response = await GetAsync(controller, action, parameters);
             }
             catch (System.Exception ex)
@@ -141,19 +143,19 @@ namespace JehovaJireh.Web.Services.Controllers
         /// <summary>
         /// Retrieve the path to the audio file for this book and chapter.
         /// </summary>
-        /// <param name="dam_ide"></param>
+        /// <param name="dam_id"></param>
         /// <param name="book_id"></param>
         /// <param name="chapter_id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<HttpResponseMessage> Path(string dam_ide, string book_id, string chapter_id)
+        public async Task<HttpResponseMessage> Path(string dam_id, string book_id, string chapter_id)
         {
             HttpResponseMessage response = null;
             try
             {
                 var controller = "audio";
                 var action = "path";
-                var parameters = string.Format("&dam_id={0}&book_id={1}&chapter_id={2}", dam_ide, book_id, chapter_id);
+                var parameters = string.Format("&dam_id={0}&book_id={1}&chapter_id={2}", dam_id, book_id, chapter_id);
                 response = await GetAsync(controller, action, parameters);
             }
             catch (System.Exception ex)
@@ -166,17 +168,17 @@ namespace JehovaJireh.Web.Services.Controllers
         /// <summary>
         /// Retrieve and display copyright information for the volume.
         /// </summary>
-        /// <param name="dam_ide"></param>
+        /// <param name="dam_id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<HttpResponseMessage> Copyright(string dam_ide)
+        public async Task<HttpResponseMessage> Copyright(string dam_id)
         {
             HttpResponseMessage response = null;
             try
             {
                 var controller = "library";
                 var action = "metadata";
-                var parameters = string.Format("&dam_id={0}", dam_ide);
+                var parameters = string.Format("&dam_id={0}", dam_id);
                 response = await GetAsync(controller, action, parameters);
             }
             catch (System.Exception)
@@ -193,8 +195,6 @@ namespace JehovaJireh.Web.Services.Controllers
                 HttpResponseMessage responseMessage = null;
                 client.DefaultRequestHeaders.Add("Authorization", "Token " + apiKey);
                 responseMessage = await client.GetAsync(string.Format("{0}{1}/{2}?key={3}{4}&v=2", endPoint, controller, action, apiKey, parameters));
-                string responseBody = await responseMessage.Content.ReadAsStringAsync();
-                responseMessage.Content = new StringContent(responseBody.Replace("/", ""), System.Text.Encoding.UTF8, "application/json");
                 responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 return responseMessage;
             }

@@ -205,6 +205,15 @@ namespace JehovaJireh.Web.UI.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bible.
+        /// </summary>
+        public static string Bible {
+            get {
+                return ResourceManager.GetString("Bible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Biography.
         /// </summary>
         public static string Biography {

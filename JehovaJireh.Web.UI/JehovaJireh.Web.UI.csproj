@@ -2599,6 +2599,7 @@
     <Content Include="SSCT\readme.pdf" />
     <Content Include="SSCT\scss\style.scss" />
     <Content Include="Views\Shared\_UserManagePartial.cshtml" />
+    <Content Include="Views\Home\Bible.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

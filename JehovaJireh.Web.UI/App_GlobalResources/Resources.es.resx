@@ -483,4 +483,7 @@
   <data name="AddDetails" xml:space="preserve">
     <value>Deseo Agregar Detalles a esta Donacion.</value>
   </data>
+  <data name="Bible" xml:space="preserve">
+    <value>La Biblia</value>
+  </data>
 </root>
