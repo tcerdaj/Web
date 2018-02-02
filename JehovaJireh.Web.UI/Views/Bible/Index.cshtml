@@ -1,0 +1,213 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Bible Study</h2>
+<h3>Juan 5:39 Reina-Valera 1960 (RVR1960)</h3>
+<p>39 Escudriñad las Escrituras; porque a vosotros os parece que en ellas tenéis la vida eterna; y ellas son las que dan testimonio de mí;</p>
+<div class="section-content" style="display:none">
+    <h3>Please pick your prefered language</h3>
+    @*<script id="bw-widget-src" src="//es.bibles.org/widget/client"></script>
+        <script>
+            BIBLESEARCH.widget({
+                "selected": "spa-RVR1960",
+                "versions": "spa-RVR1960"
+            });
+        </script>*@
+    
+    <div>
+        <label for="language">Language</label>
+        <input id="language"  style="width: 100%;" />
+    </div>
+
+    <div>
+        <label for="version">Version</label>
+        <input id="version" style="width: 100%;" />
+    </div>
+ </div>
+        @section Scripts{
+            @Styles.Render("~/Content/flag")
+            @Styles.Render("~/bundles/kendo-css")
+            @Scripts.Render("~/bundles/kendo")
+            @Styles.Render("~/Content/fontawesome")
+
+
+
+<script type="text/javascript">
+                var languages = [];
+                $(document).ready(function () {
+
+                    //$.when(fillLanguages()).done(function () {
+                    //    for (var i = 0; i < languages.length; i++) {
+                    //        var lang = languages[i];
+                    //        var li = $('<li><a href="/Bible/Version?language_family_code=' + lang.language_family_code + '">' + lang.language_family_name + '</a></li>').appendTo($('#fieldlist'));
+                    //    }
+                    //});
+
+                        var lang = $("#language").kendoComboBox({
+                            dataTextField: "language_family_name",
+                            dataValueField: "language_family_code",
+                            headerTemplate: '<div class="dropdown-header k-widget k-header">' +
+                            '<span>Flag</span>' +
+                            '<span>Language</span>' +
+                            '</div>',
+                            footerTemplate: 'Total #: instance.dataSource.total() # items found',
+                            template: '<span class="k-state-default"><h3>#: data.language_family_name #</h3><p>#: data.language_family_english #</p></span>',
+                            dataSource: {
+                                transport: {
+                                    read: {
+                                        dataType: "json",
+                                        url: getBaseUrl() + "bible/languages",
+                                    }
+                                }
+                            },
+                            filter: "startswith",
+                            height: 400,
+                            width:500
+                        }).data('kendoComboBox');
+
+                        var dataSource = new kendo.data.DataSource({
+                            serverFiltering: false,
+                            transport: {
+                                read: {
+                                    dataType: "json",
+                                    url: function (m) {
+                                        return getBaseUrl() + "bible/versions"
+                                    },
+                                }
+                            }
+                        });
+
+                       var version = $("#version").kendoComboBox({
+                           dataTextField: "version_name",
+                           dataValueField: "version_code",
+                           //cascadeFrom: "language",
+                           headerTemplate: '<div class="dropdown-header k-widget k-header">' +
+                           '<span>Bible Version</span>' +
+                           '</div>',
+                           footerTemplate: 'Total #: instance.dataSource.total() # items found',
+                           template:
+                           '<span class="k-state-default"><h3>#: data.version_code # #: data.version_name #</h3><p>#: data.english_name #</p></span>',
+                           dataSource: dataSource,
+                           filter: "startswith",
+                           height: 400,
+                           minLength: 3,
+                           autoWidth: true,
+                       }).data('kendoComboBox');
+
+                       $('.section-content').show();
+                });
+                var fillLanguages = function () {
+                    return $.ajax({
+                        url: getBaseUrl() + "bible/languages",
+                        datatype: "json",
+                        type: "GET",
+                        success: function (result) {
+                            console.log("success");
+                            languages = result;
+                        },
+                        error: function (xhr, status, error) {
+                            alert(xhr.responseTest);
+                        }
+                    });
+                };
+                function playSound() {
+                    var url = '@Url.Action("PlaySoundAsync", "Home")';
+                    $.post(url, function (data) {
+                        alert('updated');
+                    });
+                }
+
+</script>
+            <style>
+                #fieldlist {
+                    height: auto;
+                    -webkit-columns: 5;
+                    -moz-columns: 5;
+                    columns: 5;
+                    -moz-column-fill: balance;
+                    column-fill: balance;
+                }
+
+                /*#fieldlist li {
+                        list-style: none;
+                        padding-bottom: 1.5em;
+                        text-align: left;
+                    }
+
+                .dropdown-header {
+                    border-width: 0 0 1px 0;
+                    text-transform: uppercase;
+                }
+
+                    .dropdown-header > span {
+                        display: inline-block;
+                        padding: 10px;
+                    }
+
+                        .dropdown-header > span:first-child {
+                            width: 50px;
+                        }
+
+                .k-list-container > .k-footer {
+                    padding: 10px;
+                }
+
+                #language-list .k-item {
+                    line-height: 1em;
+                    min-width: 300px;
+                }
+
+                .k-material #language-list .k-item,
+                .k-material #language-list .k-item.k-state-hover,
+                .k-materialblack #language-list .k-item,
+                .k-materialblack #language-list .k-item.k-state-hover {
+                    padding-left: 5px;
+                    border-left: 0;
+                }
+
+                #language-list .k-item > span {
+                    -webkit-box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    box-sizing: border-box;
+                    display: inline-block;
+                    vertical-align: top;
+                    margin: 20px 10px 10px 5px;
+                }
+
+                    #language-list .k-item > span:first-child {
+                        -moz-box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+                        -webkit-box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+                        box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+                        margin: 10px;
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                        background-size: 100%;
+                        background-repeat: no-repeat;
+                    }
+
+                #language-list h3 {
+                    font-size: 1.2em;
+                    font-weight: normal;
+                    margin: 0 0 1px 0;
+                    padding: 0;
+                }
+
+                #language-list p {
+                    margin: 0;
+                    padding: 0;
+                    font-size: .8em;
+                }*/
+
+                .demo-hint {
+                    line-height: 22px;
+                    color: #aaa;
+                    font-style: italic;
+                    font-size: .9em;
+                    padding-top: 1em;
+                }
+            </style>
+        }
+

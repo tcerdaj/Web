@@ -47,6 +47,24 @@ namespace JehovaJireh.Web.Services.Controllers
             return response;
         }
 
+        [HttpGet]
+        public async Task<HttpResponseMessage> Versions()
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var controller = "library";
+                var action = "version";
+                var parameters = string.Format("&media=audio");
+                response = await GetAsync(controller, action, parameters);
+            }
+            catch (System.Exception)
+            {
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+            return response;
+        }
+
         /// <summary>
         /// User needs to select a Bible. Retrieve a list of volumes available in that language. Group these volumes into Bibles by the first 6 characters of the DAM ID.
         /// </summary>
@@ -70,6 +88,8 @@ namespace JehovaJireh.Web.Services.Controllers
             return response;
         }
 
+
+      
         /// <summary>
         /// User needs to select a book of the Bible and a chapter. Retrieve a list of books for this Bible.
         /// </summary>
