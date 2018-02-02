@@ -49,10 +49,13 @@ namespace JehovaJireh.Web.UI.Controllers
             return View();
         }
 
-        public ActionResult Bible()
+        public ActionResult Bible(string view = null, string param = null)
         {
             ViewBag.Message = "Your Bible page.";
+            ViewBag.View = view;
+            ViewBag.Param = param;
             return View();
         }
+
     }
 }

@@ -66,6 +66,23 @@ var donationTypes = function () {
 	});
 };
 
+
+var getLanguages = function () {
+    return $.ajax({
+        url: getBaseUrl() + "bible/languages",
+        datatype: "json",
+        contentType: 'application/json',
+        type: "GET",
+        success: function (result) {
+            console.log("success");
+        },
+        error: function (xhr, status, error) {
+            alert(xhr.responseTest);
+        }
+    });
+};
+
+
 function displayFieldTextByArray(id, array) {
 	var result = null;
 	if (!(id === undefined || id === "" || id === null || id === "00000000-0000-0000-0000-000000000000") && !(array === undefined || array === "" || array === null)) {

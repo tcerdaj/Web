@@ -323,6 +323,18 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\knockout-file-bindings.css" />
     <Content Include="favicon.ico" />
+    <Content Include="Content\flags\blank.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\flags\flags.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\flags\flags.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\flags\flags.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="fontawesome\css\font-awesome.css" />
     <Content Include="fontawesome\css\font-awesome.min.css" />
     <Content Include="fontawesome\fonts\fontawesome-webfont.svg" />
@@ -334,6 +346,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Img\ajax_loader_blue_64.gif" />
+    <Content Include="Img\blank.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Img\jehova jireh logo 2.PNG" />
     <Content Include="Img\jehova jireh logo.PNG" />
     <Content Include="Img\JehovaJirehLogo.JPG" />
@@ -2053,6 +2068,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\flags\README.md" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -2604,7 +2620,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="styles\fontawesome\" />
-    <Folder Include="Views\Base\" />
     <Folder Include="Views\Services\" />
   </ItemGroup>
   <ItemGroup>

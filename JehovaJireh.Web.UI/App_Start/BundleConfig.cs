@@ -32,6 +32,9 @@ namespace JehovaJireh.Web.UI
 					  "~/Content/site.css",
 					   "~/Content/knockout-file-bindings.css"));
 
+            bundles.Add(new StyleBundle("~/Content/flag").Include(
+                      "~/Content/flags/flags.css"));
+
             bundles.Add(new StyleBundle("~/Content/fontawesome").Include(
                       "~/Content/font-awesome.css"
                       ));
