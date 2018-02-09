@@ -23,8 +23,11 @@ namespace JehovaJireh.Web.UI
 					  "~/Scripts/bootstrap.js",
 					  "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/searchable").Include(
+                      "~/Scripts/jquery.searchable-1.0.0.min.js"));
 
-			bundles.Add(new ScriptBundle("~/bundles/common").Include(
+
+            bundles.Add(new ScriptBundle("~/bundles/common").Include(
 					  "~/Scripts/common.js"));
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(

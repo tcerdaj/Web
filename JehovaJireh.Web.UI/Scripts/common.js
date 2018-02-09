@@ -102,6 +102,16 @@ function getItemByArray(uid, array) {
     }
     return result !== null ? (result.length > 0 ? result[0]: null ) : null;
 }
+function getArrayByCollectionCode(uid, array) {
+    var result = null;
+    if (!(uid === undefined || uid === "" || uid === null || uid === "00000000-0000-0000-0000-000000000000") && !(array === undefined || array === "" || array === null)) {
+        result = $.grep(array, function (n, i) {
+            return n.collection_code === uid;
+        });
+    }
+    return result;
+}
+
 
 function findMemberFromList(id, array) {
     var result = null;
