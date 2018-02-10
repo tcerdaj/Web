@@ -16,7 +16,7 @@
 <div class="search-bar">
     <div class="btn-group" role="group" aria-label="...">
         <button id="lang" type="button" class="btn btn-lg btn-danger">Language</button>
-        <button id="version" type="button" class="btn btn-lg btn-danger">Version</button>
+        @*<button id="version" type="button" class="btn btn-lg btn-danger">Version</button>*@
     </div>
 </div>
 
@@ -106,12 +106,8 @@
                 },
                 height: 300,
                 selectable: "single",
-                sortable: true,
                 scrollable: true,
                 change: onChange,
-                dataBound:function (arg) {
-                    
-                },
                 columns: [{
                     title: "Language",
                     field:"language_family_code",
@@ -119,20 +115,23 @@
                     footerTemplate: "Items: <span id='countLang'>#: kendo.toString(count, 'language_family_code')# </span>"
                 }]
             }).data("kendoGrid");
-            var hcount = 0;
-            var scount = 0;
-            grid.table.searchable({
-                striped: true,
-                searchType: 'default',
-                searchField: '#search',
-                selector: 'tbody tr',
-                childSelector: 'td'
-            });
 
             $("#search").on("keyup", function () {
                 var g = $(this).val().replace(/[Ａ-Ｚａ-ｚ０-９]/g, function (s) {
                     return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
                 }).toLowerCase();
+
+                var filter = {
+                    logic: "or",
+                    filters: [
+                        { field: "language_family_code", operator: "contains", value: g },
+                        { field: "language_family_name", operator: "contains", value: g },
+                        { field: "language_family_english", operator: "contains", value: g },
+                    ]
+                };
+
+                grid.dataSource.filter(filter);
+
                 $(".row").each(function () {
                     //s is the value within tr
                     var s = $(this).text().toLowerCase();
@@ -151,8 +150,19 @@
         var selected = $.map(this.select(), function (item) {
             return $(item).text();
         });
+
+        $('#book').popover('hide');
+        $('#book').remove();
+
         var language_family_code = selected.join().split("-")[0].trim();
-        var elem = $('#version');
+        var prevElem = $('#lang');
+        var elem = $('<button id="version" type="button" class="btn btn-lg btn-danger">Version</button>');
+
+        if ($('#version').length === 0)
+            prevElem.after(elem);
+        else
+            elem = $('#version');
+
         var langpopover = $('.popover.fade.bottom.in').length === 2 ? $('.popover.fade.bottom.in:eq(0)') : $('.popover.fade.bottom.in');
         var offset = langpopover.offset();
         var width = langpopover.width();
@@ -227,15 +237,6 @@
                     }
                 },
                 height: 300,
-                dataBound: function (e) {
-                    grid.table.searchable({
-                        striped: true,
-                        searchType: 'default',
-                        searchField: '#search-version',
-                        selector: 'tbody tr',
-                        childSelector: 'td'
-                    });
-                },
                 selectable: "single",
                 sortable: true,
                 scrollable: true,
@@ -252,6 +253,18 @@
                 var g = $(this).val().replace(/[Ａ-Ｚａ-ｚ０-９]/g, function (s) {
                     return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
                 }).toLowerCase();
+
+                var filter = {
+                    logic: "or",
+                    filters: [
+                        { field: "volume_name", operator: "contains", value: g},
+                        { field: "version_code", operator: "contains", value: g },
+                        { field: "version_name", operator: "contains", value: g },
+                    ]
+                };
+
+                grid.dataSource.filter(filter);
+
                 $(".row").each(function () {
                     //s is the value within tr
                     var s = $(this).text().toLowerCase();
@@ -275,16 +288,21 @@
         var selected = $.map(this.select(), function (item) {
             return $(item).text();
         });
+        //destroy popover
+      
+
         var dam_id = selected.join().split("-")[0].trim();
         var prevElem = $('#version');
         var elem = $('<button id="book" type="button" class="btn btn-lg btn-danger">Book</button>');
+        var propover = $('.popover.fade.bottom.in');
 
-        if ($("#book").length === 0)
+        if ($('#book').length === 0)
             prevElem.after(elem);
         else
             elem = $('#book');
 
-        var langpopover = $('.popover.fade.bottom.in').length === 2 ? $('.popover.fade.bottom.in:eq(1)') : $('.popover.fade.bottom.in');
+        var elemIndex = (propover.length > 0 && propover.length <= 2 ? propover.length - 1 : 1).toString();
+        var langpopover = $('.popover.fade.bottom.in:eq(' + elemIndex + ')');
         var offset = langpopover.offset();
         var width = langpopover.width();
 
@@ -313,8 +331,7 @@
             content: container.html(),
             placement: 'bottom'
         });
-
-
+        
         $(elem).on('shown.bs.popover', function (e) {
             // do something…
             //generate kendo grid
@@ -351,13 +368,7 @@
                 },
                 height: 300,
                 dataBound: function (e) {
-                    grid.table.searchable({
-                        striped: true,
-                        searchType: 'default',
-                        searchField: '#search-book',
-                        selector: 'tbody tr',
-                        childSelector: 'td'
-                    });
+                    
                 },
                 selectable: "single",
                 sortable: true,
@@ -370,11 +381,23 @@
                     footerTemplate: "Items: <span id='countBoo'>#: kendo.toString(count, 'book_id')# </span>"
                 }]
             }).data("kendoGrid");
-
+          
             $("#search-book").on("keyup", function () {
                 var g = $(this).val().replace(/[Ａ-Ｚａ-ｚ０-９]/g, function (s) {
                     return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
                 }).toLowerCase();
+
+                var filter = {
+                    logic: "or",
+                    filters: [
+                        { field: "book_id", operator: "contains", value: g },
+                        { field: "book_name", operator: "contains", value: g },
+                        { field: "dam_id", operator: "contains", value: g },
+                    ]
+                };
+
+                grid.dataSource.filter(filter);
+
                 $(".row").each(function () {
                     //s is the value within tr
                     var s = $(this).text().toLowerCase();
@@ -386,9 +409,8 @@
             var width = $('.popover.fade.bottom.in:eq(2)').css('width');
             $(this).css('width', width);
         });
-
+       
         $(elem).popover('show');
-
         $('.popover.fade.bottom.in:eq(2)').offset({
             "top": offset.top, "left": (offset.left + width + 10)
         });
