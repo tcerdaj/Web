@@ -151,6 +151,9 @@
             return $(item).text();
         });
 
+        $('#chapter').popover('hide');
+        $('#chapter').remove();
+
         $('#book').popover('hide');
         $('#book').remove();
 
@@ -215,6 +218,9 @@
                         field: "volume_name",
                         dir: "asc"
                     },
+                    dataBound: function (d) {
+                       
+                    },
                     schema: {
                         model: {
                             fields: {
@@ -245,7 +251,7 @@
                     field: "version_code",
                     title: "Version",
                     template: '#= dam_id # - #= version_name # (#= collection_code #)',
-                    footerTemplate: "Items: <span id='countVer'>#: kendo.toString(count, 'version_code')# </span>"
+                    footerTemplate: "Items: <span id='countVer'> #:kendo.toString(count,'version_code')# </span>"
                 }]
             }).data("kendoGrid");
 
@@ -275,6 +281,8 @@
 
             var width = $('.popover.fade.bottom.in:eq(1)').css('width');
             $(this).css('width', width);
+            var data = grid.dataSource.data();
+            $('#countVer').text(data.length);
         });
 
         $(elem).popover('show');
@@ -284,12 +292,18 @@
         });
     }
 
+    function getFooterCount(aggregate, fieldName) {
+        return kendo.toString(aggregate, fieldName);
+    }
+
     function onVersionChange(arg) {
         var selected = $.map(this.select(), function (item) {
             return $(item).text();
         });
         //destroy popover
       
+        $('#chapter').popover('hide');
+        $('#chapter').remove();
 
         var dam_id = selected.join().split("-")[0].trim();
         var prevElem = $('#version');
@@ -367,9 +381,7 @@
                     }
                 },
                 height: 300,
-                dataBound: function (e) {
-                    
-                },
+                change: onBookChange,
                 selectable: "single",
                 sortable: true,
                 scrollable: true,
@@ -377,7 +389,7 @@
                 columns: [{
                     field: "book_id",
                     title: "Book",
-                    template: '#= book_id # - #= book_name # (#= number_of_chapters # chapters) - #= dam_id # ',
+                    template: '#= book_name # - ( #= number_of_chapters # | #= dam_id # | #= book_id # )',
                     footerTemplate: "Items: <span id='countBoo'>#: kendo.toString(count, 'book_id')# </span>"
                 }]
             }).data("kendoGrid");
@@ -412,6 +424,68 @@
        
         $(elem).popover('show');
         $('.popover.fade.bottom.in:eq(2)').offset({
+            "top": offset.top, "left": (offset.left + width + 10)
+        });
+    }
+
+    function onBookChange(arg) {
+        var selected = $.map(this.select(), function (item) {
+            return $(item).text();
+        });
+
+        var chapters = selected.join().split("-")[1].trim().replace('(', '').replace(')', '').split('|')[0].trim();
+        var dam_id = selected.join().split("-")[1].trim().replace('(', '').replace(')', '').split('|')[1].trim();
+        var book_id = selected.join().split("-")[1].trim().replace('(', '').replace(')', '').split('|')[2].trim();
+        var prevElem = $('#book');
+        var elem = $('<button id="chapter" type="button" class="btn btn-lg btn-danger">Chapter</button>');
+        var propover = $('.popover.fade.bottom.in');
+
+        if ($('#chapter').length === 0)
+            prevElem.after(elem);
+        else
+            elem = $('#chapter');
+
+        var elemIndex = (propover.length > 0 && propover.length <= 3 ? propover.length - 1 : 2).toString();
+        var langpopover = $('.popover.fade.bottom.in:eq(' + elemIndex + ')');
+        var offset = langpopover.offset();
+        var width = langpopover.width();
+        var height = langpopover.height();
+
+        //container
+        var container = $("<div style='overflow-y: auto;height: 356px; width: 268px;'></div>");
+        var exist = $("#fieldlist-chapter").length > 0;
+        var details = $("#fieldlist-chapter").length === 0 ? $("<ul id='fieldlist-chapter' style='font-size:25px;padding-left: 10px;padding-right:10px;'></ul>") : $("#fieldlist-chapter");
+        $("#fieldlist-chapter li").empty()
+
+        for (var i = 0; i < parseInt(chapters); i++) {
+            var chapter_id = i + 1;
+            var li = $(kendo.format('<li><a href="/Bible/Chapter?dam_id={0}&book_id={1}&chapter_id={2}">{2}</a></li>', dam_id, book_id, chapter_id));
+            li.appendTo(details);
+        }
+
+        if (!exist) {
+            container.append(details);
+            $(elem).popover({
+                container: 'body',
+                title: 'Select a chapter',
+                html: true,
+                content: container.html(),
+                placement: 'bottom'
+            });
+
+            $(elem).popover('show');
+           
+        }
+
+        $(elem).on('shown.bs.popover', function (e) {
+            var width = $('.popover.fade.bottom.in:eq(2)').css('width');
+            $(this).css('width', width);
+            $('#chapter').css('width', width);
+        });
+        
+        $('.popover.fade.bottom.in:eq(3)').css('width', width);
+        $('.popover.fade.bottom.in:eq(3)').css('height', height);
+        $('.popover.fade.bottom.in:eq(3)').offset({
             "top": offset.top, "left": (offset.left + width + 10)
         });
     }
@@ -525,6 +599,16 @@
 </script>
     <style>
         #fieldlist {
+            height: auto;
+            -webkit-columns: 5;
+            -moz-columns: 5;
+            columns: 5;
+            -moz-column-fill: balance;
+            column-fill: balance;
+            list-style: none;
+        }
+
+        #fieldlist-chapter {
             height: auto;
             -webkit-columns: 5;
             -moz-columns: 5;
