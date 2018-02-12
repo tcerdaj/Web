@@ -38,20 +38,43 @@
 
     <script type="text/javascript">
         var languages = [];
+        var cookieName = "bibleParams";
         $('.search-bar').busyIndicator(true);
 
         $(document).ready(function () {
-            $.when(fillLanguages()).done(function () {
-                for (var i = 0; i < languages.length; i++) {
-                    var lang = languages[i];
-                    var li = $('<li><a href="/Bible/Volume?lang=' + lang.language_family_code + '">' + lang.language_family_name + '</a></li>');
-                    li.appendTo($('#fieldlist'));
-                }
-            });
-            $('.section-content').show();
-            init();
+            var myParams = readCookie(cookieName);
+
+            if (myParams === null || myParams === undefined || myParams === '') {
+                $.when(fillLanguages()).done(function () {
+                    for (var i = 0; i < languages.length; i++) {
+                        var lang = languages[i];
+                        var li = $('<li><a href="/Bible/Volume?lang=' + lang.language_family_code + '">' + lang.language_family_name + '</a></li>');
+                        li.appendTo($('#fieldlist'));
+                    }
+                });
+                $('.section-content').show();
+                init();
+            }
+            else {
+                //build buttons
+
+            }
         });
         //functions
+        function rememberMySelection(mySelection) {
+            var grid = $("#table").data("kendoGrid");
+            var langSelected = grid.dataItem(grid.select());
+
+            grid = $("#table-version").data("kendoGrid");
+            var verSelected = grid.dataItem(grid.select());
+
+            grid = $("#table-book").data("kendoGrid");
+            var bookSelected = grid.dataItem(grid.select());
+            var data = { "lang": langSelected, "version": verSelected, "book": bookSelected, "selection": JSON.parse(mySelection) };
+
+            eraseCookie(cookieName);
+            createCookie(cookieName, JSON.stringify(data), 5);
+        }
         function init() {
             //container
             var container = $("<div>");
@@ -357,8 +380,15 @@
 
             for (var i = 0; i < parseInt(chapters); i++) {
                 var chapter_id = i + 1;
-                var li = $(kendo.format('<li><a href="/Bible/Chapter?dam_id={0}&book_id={1}&chapter_id={2}">{2}</a></li>', dam_id, book_id, chapter_id));
-                li.appendTo(details);
+                var mySelection = {
+                    'dam_id': dam_id,
+                    'book_id': book_id,
+                    'chapter_id': chapter_id
+                };
+              
+                var json = JSON.stringify(mySelection);
+                var li = "<li><a class='chapters' href='#' id='selection_" + json + "'>" + chapter_id + "</a></li>";
+                $(li).appendTo(details);
             }
 
             if (!exist) {
@@ -385,6 +415,11 @@
             $('.popover.fade.bottom.in:eq(3)').css('height', height);
             $('.popover.fade.bottom.in:eq(3)').offset({
                 "top": offset.top, "left": (offset.left + width + 10)
+            });
+
+            $('a.chapters').on('click', function (e) {
+                var selection = JSON.parse(this.id.replace("selection_", ""));
+                alert(selection.dam_id);
             });
         }
         function onVersionChange(arg) {
