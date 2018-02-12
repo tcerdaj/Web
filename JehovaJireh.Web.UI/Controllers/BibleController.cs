@@ -13,14 +13,5 @@ namespace JehovaJireh.Web.UI.Controllers
         {
             return View();
         }
-
-        public ActionResult Volume(string lang)
-        {
-            ViewBag.Lang = lang;
-            if (string.IsNullOrEmpty(lang))
-                return RedirectToAction("Index");
-
-            return View();
-        }
     }
 }
