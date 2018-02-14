@@ -21,6 +21,6 @@ namespace JehovaJireh.Web.UI
 				url: "{controller}/{action}/{id}",
 				defaults: new { culture = CultureHelper.GetDefaultCulture(),controller = "Home", action = "Index", id = UrlParameter.Optional }
 			);
-		}
+        }
 	}
 }

@@ -26,6 +26,9 @@ namespace JehovaJireh.Web.UI
             bundles.Add(new ScriptBundle("~/bundles/searchable").Include(
                       "~/Scripts/jquery.searchable-1.0.0.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/pagination").Include(
+                     "~/Scripts/pagination.js"));
+
 
             bundles.Add(new ScriptBundle("~/bundles/common").Include(
 					  "~/Scripts/common.js"));

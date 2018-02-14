@@ -9,7 +9,12 @@ namespace JehovaJireh.Web.UI.Controllers
     public class BibleController : Controller
     {
         // GET: Bible
-        public ActionResult Index()
+        public ActionResult Index(string version = null, string book = null, string chapterid = null)
+        {
+            return View();
+        }
+
+        public ActionResult Seach(string query, string dam_id)
         {
             return View();
         }

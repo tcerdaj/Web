@@ -2015,6 +2015,7 @@
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\knockout.viewmodel.2.0.3.js" />
     <Content Include="Scripts\knockout.viewmodel.2.0.3.min.js" />
+    <Content Include="Scripts\pagination.js" />
     <Content Include="SSCT\css\reset.css" />
     <Content Include="SSCT\css\style.css" />
     <Content Include="SSCT\img\cd-cart.svg" />

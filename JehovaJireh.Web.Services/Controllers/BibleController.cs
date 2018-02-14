@@ -78,7 +78,7 @@ namespace JehovaJireh.Web.Services.Controllers
             {
                 var controller = "library";
                 var action = "volume";
-                var parameters = string.Format("&media=audio&language_family_code={0}", language_family_code);
+                var parameters = string.Format("&media=audio&language_code={0}", language_family_code);
                 response = await GetAsync(controller, action, parameters);
             }
             catch (System.Exception)
