@@ -44,8 +44,8 @@ namespace JehovaJireh.Web.Services
             // Setting Cors
             //var cors = new EnableCorsAttribute(origins: "http://localhost:53371", headers: "*", methods: "GET,POST,DELETE,PUT");
             var cors = new EnableCorsAttribute("*","*","*");
-            cors.SupportsCredentials = true;
-			//config.EnableCors(cors);
+           // cors.SupportsCredentials = true;
+			config.EnableCors(cors);
 
 			// Web API routes
 			config.MapHttpAttributeRoutes();

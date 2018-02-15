@@ -1,6 +1,8 @@
 ﻿/*This is a Common file that store all the function and utility that
 whe need in the whole UI.*/
 
+var generalError = "An server error occurred and has been logged." +
+    "\nPlease contact your administrator. " + "ServerException";
 
 function createCookie(name, value, days) {
 	var expires;

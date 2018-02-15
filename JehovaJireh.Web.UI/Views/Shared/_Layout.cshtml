@@ -255,7 +255,10 @@
 
 		function getCurrentCulture()
 		{
-			console.log("@System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant()");
+            return {
+                "twoLetter": "@System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant()",
+                "threeLetter": "@System.Threading.Thread.CurrentThread.CurrentUICulture.ThreeLetterISOLanguageName.ToLowerInvariant()"
+            }
         }
 
     </script>

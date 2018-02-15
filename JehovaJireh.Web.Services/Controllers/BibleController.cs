@@ -18,10 +18,16 @@ namespace JehovaJireh.Web.Services.Controllers
     {
         private static string apiKey = "";
         private static string endPoint = "";
+        private static string absApiKey = "";
+        private static string absEndPoint = "";
+        private static string absPassword = "";
         public BibleController()
         {
             apiKey = ConfigurationManager.AppSettings["bibleapikey"];
             endPoint = ConfigurationManager.AppSettings["bibleendpoint"];
+            absApiKey = ConfigurationManager.AppSettings["absapikey"]; ;
+            absEndPoint = ConfigurationManager.AppSettings["absendpoint"]; ;
+            absPassword = ConfigurationManager.AppSettings["abspassword"]; ;
         }
 
         /// <summary>
@@ -65,6 +71,23 @@ namespace JehovaJireh.Web.Services.Controllers
             return response;
         }
 
+        [HttpGet]
+        public async Task<HttpResponseMessage> VersionsAbs(string language)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var action = "versions.js";
+                var param = string.Format("language={0}", language);
+                response = await GetAbsAsync(action, param);
+            }
+            catch (System.Exception)
+            {
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+            return response;
+        }
+
         /// <summary>
         /// User needs to select a Bible. Retrieve a list of volumes available in that language. Group these volumes into Bibles by the first 6 characters of the DAM ID.
         /// </summary>
@@ -78,7 +101,7 @@ namespace JehovaJireh.Web.Services.Controllers
             {
                 var controller = "library";
                 var action = "volume";
-                var parameters = string.Format("&media=audio&language_code={0}", language_family_code);
+                var parameters = string.Format("&media=audio&language_family_code={0}", language_family_code);
                 response = await GetAsync(controller, action, parameters);
             }
             catch (System.Exception)
@@ -216,6 +239,20 @@ namespace JehovaJireh.Web.Services.Controllers
                 client.DefaultRequestHeaders.Add("Authorization", "Token " + apiKey);
                 responseMessage = await client.GetAsync(string.Format("{0}{1}/{2}?key={3}{4}&v=2", endPoint, controller, action, apiKey, parameters));
                 responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                return responseMessage;
+            }
+        }
+
+        private async Task<HttpResponseMessage> GetAbsAsync(String action, String param)
+        {
+            using (var handler = new HttpClientHandler { Credentials = new System.Net.NetworkCredential(absApiKey, absPassword) })
+            using (var client = new System.Net.Http.HttpClient(handler))
+            {
+                HttpResponseMessage responseMessage = null;
+                client.DefaultRequestHeaders.Add("Authorization", "password " + absPassword);
+                responseMessage = await client.GetAsync(string.Format("{0}v2/{1}?{2}", absEndPoint, action, param ));
+                responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                string result = await responseMessage.Content.ReadAsStringAsync();
                 return responseMessage;
             }
         }
