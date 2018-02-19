@@ -250,22 +250,31 @@
           
         });
     }
-    var fillLanguages = function () {
-        return $.ajax({
-            url: getBaseUrl() + "bible/languages",
-            datatype: "json",
-            type: "GET",
-            success: function (result) {
-                languages = result;
-            },
-            error: function (xhr, status, error) {
-                openDialog("Error", generalError);
-            },
-            complete: function (r) {
-                $('.search-bar').busyIndicator(false);
-            }
-        });
-        };
+        var fillLanguages = function () {
+            return $.ajax({
+                url: getBaseUrl() + "bible/languages",
+                type: "GET",
+                datatype: "json",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    'Authorization': kendo.format('{0}/oauth/access_token', getBaseUrl()),
+                    'Content-Type': 'application/json'
+                },
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: false
+                },
+                success: function (result) {
+                    languages = result;
+                },
+                error: function (xhr, status, error) {
+                    openDialog("Error", xhr.responseText || generalError);
+                },
+                complete: function (r) {
+                    $('.search-bar').busyIndicator(false);
+                }
+            });
+        }
 
         var fillVersions = function (language) {
             return $.ajax({

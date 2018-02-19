@@ -13,7 +13,7 @@ using System.Web.Http.Cors;
 
 namespace JehovaJireh.Web.Services.Controllers
 {
-    [EnableCors("*", "*", "*")]
+    //[EnableCors(origins: "http://localhost:53371",headers: "*",methods: "*")]
     public class BibleController : ApiController
     {
         private static string apiKey = "";

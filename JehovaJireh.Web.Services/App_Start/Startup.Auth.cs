@@ -13,13 +13,20 @@ using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 using JehovaJireh.Logging;
 using System.Web;
 using System.Web.Http;
+using Microsoft.Owin.Cors;
+using System.Web.Cors;
+using System.Linq;
+using System.Threading.Tasks;
 //using Microsoft.Owin.Cors;
 
 namespace JehovaJireh.Web.Services
 {
 	public partial class Startup
 	{
-		static Startup()
+        
+        static string[] allowedMethods = new string[] { "GET", "PUT", "POST", "DELETE" };
+
+        static Startup()
 		{
 			container = WebApiApplication.BootstrapContainer();
 
@@ -77,7 +84,8 @@ namespace JehovaJireh.Web.Services
             var config = new HttpConfiguration();
             config.MapHttpAttributeRoutes();
             app.UseWebApi(config);
-
+            app.UseCors(CorsOptions.AllowAll);
+            
             // Uncomment the following lines to enable logging in with third party login providers
             //app.UseMicrosoftAccountAuthentication(
             //    clientId: "",
@@ -93,5 +101,5 @@ namespace JehovaJireh.Web.Services
 
             //app.UseGoogleAuthentication();
         }
-	}
+    }
 }

@@ -57,8 +57,18 @@ namespace JehovaJireh.Web.Services
 				FromAssembly.Containing<RepositoryInstaller>());
 		}
 
+        //protected void Application_BeginRequest()
+        //{
+        //    string[] allowedOrigin = new string[] { "http://localhost:53371", "http://jehovajireh.web.ui" };
+        //    var origin = HttpContext.Current.Request.Headers["Origin"];
+        //    if (origin != null && allowedOrigin.Contains(origin))
+        //    {
+        //        HttpContext.Current.Request.Headers.Add("Access-Control-Allow-Origin", "*");
+        //        HttpContext.Current.Request.Headers.Add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+        //    }
+        //}
 
-		protected void Application_End()
+        protected void Application_End()
 		{
 			container.Dispose();
 		}

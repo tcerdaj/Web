@@ -42,13 +42,13 @@ namespace JehovaJireh.Web.Services
             config.Services.Replace(typeof(IExceptionHandler), new OopsExceptionHandler());
 
             // Setting Cors
-            //var cors = new EnableCorsAttribute(origins: "http://localhost:53371", headers: "*", methods: "GET,POST,DELETE,PUT");
-            var cors = new EnableCorsAttribute("*","*","*");
-           // cors.SupportsCredentials = true;
-			config.EnableCors(cors);
+            var cors = new EnableCorsAttribute(origins: "http://localhost:53371, http://jehovajireh.web.ui", headers: "accept,accesstoken,authorization,cache-control,pragma,content-type,origin", methods: "GET,PUT,POST,DELETE,TRACE,HEAD,OPTIONS");
+            //var cors = new EnableCorsAttribute("*","*","*");
+            //cors.SupportsCredentials = true;
+            config.EnableCors();
 
-			// Web API routes
-			config.MapHttpAttributeRoutes();
+            // Web API routes
+            config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
                 name: "IdActionApi",

@@ -16,8 +16,9 @@ namespace JehovaJireh.Web.Services.Providers
 	{
 		private readonly string _publicClientId;
 		private readonly Func<UserManager<User>> _userManagerFactory;
+        static string[] allowedOrigin = new string[] { "http://localhost:53371", "http://jehovajireh.web.ui" };
 
-		public ApplicationOAuthProvider(string publicClientId, Func<UserManager<User>> userManagerFactory)
+        public ApplicationOAuthProvider(string publicClientId, Func<UserManager<User>> userManagerFactory)
 		{
 			if (publicClientId == null)
 			{
@@ -35,7 +36,8 @@ namespace JehovaJireh.Web.Services.Providers
 
 		public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
 		{
-			using (UserManager<User> userManager = _userManagerFactory())
+            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", allowedOrigin);
+            using (UserManager<User> userManager = _userManagerFactory())
 			{
 				User user = await userManager.FindAsync(context.UserName, context.Password);
 
