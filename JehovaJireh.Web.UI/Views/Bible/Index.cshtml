@@ -17,7 +17,8 @@
     <div class="search-bar">
         <div class="btn-group" role="group" aria-label="...">
             <div class="input-group col-md-12">
-                <button id="lang" type="button" class="btn btn-lg btn-danger">Language</button>
+                <button id="ver" type="button" class="btn btn-lg btn-danger">Version</button>
+                <button id="book" type="button" style="display:none;margin-left:15px;" class="btn btn-lg btn-danger">Book</button>
             </div>
         </div>
     </div>
@@ -25,9 +26,11 @@
         <script id="bw-widget-src" src="//es.bibles.org/widget/client"></script>
         <script>
             BIBLESEARCH.widget({
+                "background": "616D74",
+                "color": "2B1616",
+                "placeholder": "Buscar pasajes de la Biblia y palabras clave",
                 "selected": "spa-RVR1960",
-                "versions": "spa-RVR1960",
-                "open": function () { alert('open')}
+                "versions": "eng-ESV,spa-BHTI,spa-BLP,spa-BLPH,spa-BTI,spa-DHH,spa-DHHE,spa-RVC,spa-RVR1960,spa-RVR95,spa-TLA"
             });
         </script>
     </div>
@@ -119,11 +122,28 @@
             placement: 'bottom'
         };
 
-        $('#lang').popover(options);
 
-        $('#lang').on('shown.bs.popover', function (e) {
+        $('#ver').popover(options);
+
+        setTimeout(function () {
+            var cssOptions = {
+                "border-left-width": "0px",
+                "position": "relative",
+                "float": "none",
+                "max-width":"70%"
+            };
+            $(".bw-widget-input").css(cssOptions);
+        }, 500);
+
+        $("#ver").on('hidden.bs.popover', function (e) {
+            $(".popover.fade.bottom:eq(0)").remove();
+        });
+
+        $('#ver').on('shown.bs.popover', function (e) {
             // do something…
             //generate kendo grid
+            //$("#book").popover('hide');
+
             var popover = $('.popover.fade.bottom.in');
             $("#search").kendoComboBox({
                 placeholder: "Search Language...",
@@ -144,7 +164,7 @@
             
             var grid = $("#table").kendoGrid({
                 dataSource: {
-                    type: "jsonp",
+                    type: "json",
                     transport: {
                         read: {
                             url: kendo.format("{0}bible/VersionsAbs?language={1}", getBaseUrl(), language)
@@ -168,6 +188,10 @@
                 selectable: "single",
                 scrollable: true,
                 serverFiltering: true,
+                dataBound: function () {
+                    var rowCount = grid.table.find("tbody > tr:visible").length;
+                    document.getElementById('countVer').innerHTML = rowCount;
+                },
                 change: onVersionChange,
                 columns: [{
                     field: "id",
@@ -200,28 +224,21 @@
                     var read = {
                         dataType: "json",
                         url: function (m) {
-                            return kendo.format("{0}bible/VolumesAbs?language={1}", getBaseUrl(), dataItem.language_family_iso)
+                            return kendo.format("{0}bible/versionsAbs?language={1}", getBaseUrl(), dataItem.language_family_iso)
                         }
                     }
                     var grid = $("#table").data("kendoGrid");
                     grid.dataSource.transport.options.read = read;
                     grid.dataSource.read();
                     //grid.dataSource.filter(filter);
-
-                    $(".row").each(function () {
-                        //s is the value within tr
-                        var s = $(this).text().toLowerCase();
-                        var rowCount = grid.table.find("tbody > tr:visible").length;
-                        document.getElementById('countVer').innerHTML = rowCount;
-                    });
                 }
             }
 
-            var width = popover.css('width');
-            $(this).css('width', width);
-            popover.offset({ top: popover.offset().top, left: $(this).offset().left });
+            //var width = popover.css('width');
+            //$(this).css('width', width);
 
-          
+            popover.offset({ top: popover.offset().top, left: $(this).offset().left });
+            popover.find(".arrow").css("left", (this.clientWidth / 2));
 
             //$("#search").on("keyup", function () {
             //    var g = $(this).val().replace(/[Ａ-Ｚａ-ｚ０-９]/g, function (s) {
@@ -292,13 +309,31 @@
                 }
             });
         };
-    function getOffset(el) {
-        el = el.getBoundingClientRect();
-        return {
-            left: el.left + window.scrollX,
-            top: el.top + window.scrollY
+
+        var fillBooks = function (version) {
+            return $.ajax({
+                url: kendo.format("{0}bible/book?version={1}", getBaseUrl(), version),
+                datatype: "json",
+                type: "GET",
+                async: false,
+                success: function (result) {
+
+                },
+                error: function (xhr, status, error) {
+                    openDialog("Error", generalError);
+                },
+                complete: function (r) {
+                    $('.search-bar').busyIndicator(false);
+                }
+            }).responseJSON;
         }
-    }
+        function getOffset(el) {
+            el = el.getBoundingClientRect();
+            return {
+                left: el.left + window.scrollX,
+                top: el.top + window.scrollY
+            }
+        }
     function onChange(arg) {
         var selected = $.map(this.select(), function (item) {
             return $(item).text();
@@ -462,12 +497,12 @@
         var height = langpopover.height();
 
         //container
-        var container = $('<div id="chapterContainer"></div>');
+        var container = $('<div id="booksContainer"></div>');
 
-        var exist = $("#fieldlist-chapter").length > 0;
-        var details = $("#fieldlist-chapter").length === 0 ? $("<ul id='fieldlist-chapter' style='font-size:25px;'></ul>") : $("#fieldlist-chapter");
-        $("#fieldlist-chapter li").remove();
-        $("#fieldlist-chapter li").empty();
+        var exist = $("#fieldlist-books").length > 0;
+        var details = $("#fieldlist-books").length === 0 ? $("<ul id='fieldlist-books' style='font-size:25px;'></ul>") : $("#fieldlist-books");
+        $("#fieldlist-books li").remove();
+        $("#fieldlist-books li").empty();
 
         for (var i = 0; i < parseInt(chapters); i++) {
             var chapter_id = i + 1;
@@ -497,11 +532,11 @@
         }
 
         if (chapters <= 40)
-            $("#chapterContainer").removeClass("fieldlist-content");
+            $("#booksContainer").removeClass("fieldlist-content");
         else
-            $("#chapterContainer").addClass("fieldlist-content");
+            $("#booksContainer").addClass("fieldlist-content");
 
-        $("#fieldlist-chapter li").css('width', chapters >= 100 ? '50px' : '37px');
+        $("#fieldlist-books li").css('width', chapters >= 100 ? '50px' : '37px');
 
         $(elem).on('shown.bs.popover', function (e) {
             var width = $('.popover.fade.bottom.in:eq(2)').css('width');
@@ -515,138 +550,224 @@
             "top": offset.top, "left": (offset.left + width + 10)
         });
     }
-    function onVersionChange(arg) {
-        var selected = $.map(this.select(), function (item) {
-            return $(item).text();
-        });
-        //Build book list
+        function onVersionChange(arg) {
+            var grid = $("#table").data("kendoGrid");
+            var selectedVersion = grid.dataItem(grid.select());
 
-        $('#chapter').popover('hide');
-        $('#chapter').remove();
-        var grid = $("#table-version").data("kendoGrid");
-        var selectedVersion = grid.dataItem(grid.select());
-        var dam_id = selectedVersion.dam_id;
-        var prevElem = $('#version');
-        var elem = $('<button id="book" type="button" class="btn btn-lg btn-danger">Book</button>');
-        var propover = $('.popover.fade.bottom.in');
+            $.when(fillBooks(selectedVersion.id)).done(function (books) {
+                var ver = $("#ver"), book = $("#book");
+                ver.text(selectedVersion.abbreviation);
+                ver.val(selectedVersion.id);
+                book.show();
+                var prevPopoverBody = $('.popover.fade.bottom.in:eq(0)');
+                var offset = prevPopoverBody.offset();
+                var width = prevPopoverBody.width();
+                var height = prevPopoverBody.height();
+                ver.popover('hide');
+                
+                //container
+                var container = $('<div id="booksContainer"></div>');
+                var chaptersContainer = $('<div id="chaptersContainer"></div>');
 
-        if ($('#book').length === 0)
-            prevElem.after(elem);
-        else
-            elem = $('#book');
+                var exist = $("#fieldlist-books").length > 0;
+                var details = $("#fieldlist-books").length === 0 ? $("<ul id='fieldlist-books'></ul>") : $("#fieldlist-books ");
+                $("#fieldlist-books li").remove();
+                $("#fieldlist-books li").empty();
+                var defaultValue = books.response.books[0];
 
-        var elemIndex = (propover.length > 0 && propover.length <= 2 ? propover.length - 1 : 1).toString();
-        var langpopover = $('.popover.fade.bottom.in:eq(' + elemIndex + ')');
-        var offset = langpopover.offset();
-        var width = langpopover.width();
-
-        //container
-        var container = $("<div>");
-        var details = $([
-            '<div class="row">',
-            '<div class="col-lg-12">',
-            '<input type="search" id="search-book" value="" class="form-control" placeholder="Search book">',
-            '</div>',
-            '</div>',
-            '<div class="row">',
-            '<div class="col-lg-12">',
-            '<div class="table" id="table-book">',
-            '</div>',
-            '<hr>',
-            '</div>',
-            '</div>'].join(""));
-
-        container.append(details);
-
-        $(elem).popover({
-            container: 'body',
-            title: 'Select a book',
-            html: true,
-            content: container.html(),
-            placement: 'bottom'
-        });
-
-        $(elem).on('shown.bs.popover', function (e) {
-            // do something…
-            //generate kendo grid
-            var grid = $("#table-book").kendoGrid({
-                dataSource: {
-                    type: "json",
-                    transport: {
-                        read: {
-                            dataType: "json",
-                            url: function (m) {
-                                return kendo.format("{0}bible/books?dam_id={1}", getBaseUrl(), dam_id)
-                            },
-                        }
-                    },
-                    aggregate: [
-                        { field: "book_id", aggregate: "count" }
-                    ],
-                    sort: {
-                        field: "book_order",
-                        dir: "asc"
-                    },
-                    schema: {
-                        model: {
-                            fields: {
-                                dam_id: { type: "string" },
-                                book_id: { type: "string" },
-                                book_name: { type: "string" },
-                                book_order: { type: "number" },
-                                number_of_chapters: { type: "number" },
-                                chapters: { type: "object" },
-                            }
-                        }
+                if (books && books.response.books) {
+                    var _books = books.response.books;
+                    for (var i = 0; i < _books.length; i++) {
+                        var current_book = _books[i];
+                        var json = JSON.stringify(current_book);
+                        var li = "<li><a id='" + current_book.id + "' class='chapters' href='#' data='" + json + "' >" + current_book.name + "</a></li>";
+                        $(li).appendTo(details);
                     }
-                },
-                height: 300,
-                change: onBookChange,
-                selectable: "single",
-                sortable: true,
-                scrollable: true,
-                // change: onChange,
-                columns: [{
-                    field: "book_id",
-                    title: "Book",
-                    template: '#= book_name # - #= number_of_chapters #',
-                    footerTemplate: "Items: <span id='countBoo'>#: kendo.toString(count, 'book_id')# </span>"
-                }]
-            }).data("kendoGrid");
+                }
 
-            $("#search-book").on("keyup", function () {
-                var g = $(this).val().replace(/[Ａ-Ｚａ-ｚ０-９]/g, function (s) {
-                    return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
-                }).toLowerCase();
+                if (!exist) {
+                    container.append(details);
+                    $(book).popover({
+                        container: 'body',
+                        title: kendo.format('{0} Selected by default', defaultValue.name),
+                        html: true,
+                        content: container[0].outerHTML,
+                        placement: 'bottom'
+                    });
 
-                var filter = {
-                    logic: "or",
-                    filters: [
-                        { field: "book_id", operator: "contains", value: g },
-                        { field: "book_name", operator: "contains", value: g },
-                        { field: "dam_id", operator: "contains", value: g },
-                    ]
-                };
+                    $(book).on('hidden.bs.popover', function (e) {
+                        $(".popover.fade.bottom:eq(0)").remove();
+                    });
 
-                grid.dataSource.filter(filter);
+                    $(book).on('shown.bs.popover', function (e) {
+                        var popoverContent = $(".popover-content");
+                        chaptersContainer.appendTo(popoverContent);
+                        var options = { "height": height + 10, "width": width + 200 };
+                        $('.popover.fade.bottom.in:eq(0)').css(options);
+                        $("f-left").val(kendo.format("{0} books", books.response.books.length));
 
-                $(".row").each(function () {
-                    //s is the value within tr
-                    var s = $(this).text().toLowerCase();
-                    var rowCount = grid.table.find("tbody > tr:visible").length;
-                    document.getElementById('countBoo').innerHTML = rowCount;
-                });
+                        //fill default value chapters when appear.
+                        var firstElement = $("#fieldlist-books:eq(0) li:eq(0)");
+                        firstElement.addClass("active");
+                        var footerDiv = $(kendo.format('<div class="popover-footer"><div class="f-left">{0} books</div><div class="f-right"></div></>', books.response.books.length));
+                        footerDiv.appendTo(popoverContent);
+
+                        buildChaptersList(firstElement, chaptersContainer);
+                        $('#fieldlist-books li').on('click', function (e) {
+                            $(this.parentElement.children).removeClass("active");
+                            $(this).addClass("active");
+                            //build chapters list
+                            $(".popover-title").text(kendo.format("{0} Selected", $(this)[0].firstElementChild.text));
+                            buildChaptersList($(this), chaptersContainer);
+                        });
+                    });
+
+                    $(book).popover('show');
+                    //book.css('width', (width - 10));
+                }
             });
+        
 
-            var width = $('.popover.fade.bottom.in:eq(2)').css('width');
-            $(this).css('width', width);
-        });
+        //var prevElem = $('#version');
+        //var elem = $('<button id="book" type="button" class="btn btn-lg btn-danger">Book</button>');
 
-        $(elem).popover('show');
-        $('.popover.fade.bottom.in:eq(2)').offset({
-            "top": offset.top, "left": (offset.left + width + 10)
-        });
-    }
+        //if ($('#book').length === 0)
+        //    prevElem.after(elem);
+        //else
+        //    elem = $('#book');
+
+        //var elemIndex = (propover.length > 0 && propover.length <= 2 ? propover.length - 1 : 1).toString();
+        //var langpopover = $('.popover.fade.bottom.in:eq(' + elemIndex + ')');
+        //var offset = langpopover.offset();
+        //var width = langpopover.width();
+
+        ////container
+        //var container = $("<div>");
+        //var details = $([
+        //    '<div class="row">',
+        //    '<div class="col-lg-12">',
+        //    '<input type="search" id="search-book" value="" class="form-control" placeholder="Search book">',
+        //    '</div>',
+        //    '</div>',
+        //    '<div class="row">',
+        //    '<div class="col-lg-12">',
+        //    '<div class="table" id="table-book">',
+        //    '</div>',
+        //    '<hr>',
+        //    '</div>',
+        //    '</div>'].join(""));
+
+        //container.append(details);
+
+        //$(elem).popover({
+        //    container: 'body',
+        //    title: 'Select a book',
+        //    html: true,
+        //    content: container.html(),
+        //    placement: 'bottom'
+        //});
+
+        //$(elem).on('shown.bs.popover', function (e) {
+        //    // do something…
+        //    //generate kendo grid
+        //    var grid = $("#table-book").kendoGrid({
+        //        dataSource: {
+        //            type: "json",
+        //            transport: {
+        //                read: {
+        //                    dataType: "json",
+        //                    url: function (m) {
+        //                        return kendo.format("{0}bible/books?dam_id={1}", getBaseUrl(), dam_id)
+        //                    },
+        //                }
+        //            },
+        //            aggregate: [
+        //                { field: "book_id", aggregate: "count" }
+        //            ],
+        //            sort: {
+        //                field: "book_order",
+        //                dir: "asc"
+        //            },
+        //            schema: {
+        //                model: {
+        //                    fields: {
+        //                        dam_id: { type: "string" },
+        //                        book_id: { type: "string" },
+        //                        book_name: { type: "string" },
+        //                        book_order: { type: "number" },
+        //                        number_of_chapters: { type: "number" },
+        //                        chapters: { type: "object" },
+        //                    }
+        //                }
+        //            }
+        //        },
+        //        height: 300,
+        //        change: onBookChange,
+        //        selectable: "single",
+        //        sortable: true,
+        //        scrollable: true,
+        //        // change: onChange,
+        //        columns: [{
+        //            field: "book_id",
+        //            title: "Book",
+        //            template: '#= book_name # - #= number_of_chapters #',
+        //            footerTemplate: "Items: <span id='countBoo'>#: kendo.toString(count, 'book_id')# </span>"
+        //        }]
+        //    }).data("kendoGrid");
+
+        //    $("#search-book").on("keyup", function () {
+        //        var g = $(this).val().replace(/[Ａ-Ｚａ-ｚ０-９]/g, function (s) {
+        //            return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+        //        }).toLowerCase();
+
+        //        var filter = {
+        //            logic: "or",
+        //            filters: [
+        //                { field: "book_id", operator: "contains", value: g },
+        //                { field: "book_name", operator: "contains", value: g },
+        //                { field: "dam_id", operator: "contains", value: g },
+        //            ]
+        //        };
+
+        //        grid.dataSource.filter(filter);
+
+        //        $(".row").each(function () {
+        //            //s is the value within tr
+        //            var s = $(this).text().toLowerCase();
+        //            var rowCount = grid.table.find("tbody > tr:visible").length;
+        //            document.getElementById('countBoo').innerHTML = rowCount;
+        //        });
+        //    });
+
+        //    var width = $('.popover.fade.bottom.in:eq(2)').css('width');
+        //    $(this).css('width', width);
+        //});
+
+        //$(elem).popover('show');
+        //$('.popover.fade.bottom.in:eq(2)').offset({
+        //    "top": offset.top, "left": (offset.left + width + 10)
+        //});
+        }
+
+        function buildChaptersList(elem, container) {
+            container.empty();
+            var ul = $('<ul id="fieldlist-chapters"></ul>');
+            var data = $(elem.find("a")).attr("data");
+            var json = JSON.parse(data);
+            var chapters = json.chapters
+
+            for (var i = 0; i < chapters.length; i++) {
+                var chap = chapters[i];
+                var version = chap.id.split(':')[0], book = json.abbr;
+                var li = kendo.format('<li><a href="Bible/Index?version={0}&book={1}&chapter={2}">{3}</a></li>', version, book, chap.chapter, chap.chapter );
+                $(li).appendTo(ul);
+            }
+
+            ul.appendTo(container);
+            $(".f-right").text(kendo.format("{0} chapters", chapters.length ));
+        }
+
+
     function getSelectedItem(tableName) {
         return $("#" + tableName).data("kendoGrid").dataItem($("#" + tableName).data("kendoGrid").select());
     }
@@ -698,30 +819,27 @@
                 overflow-y: scroll;
                 margin-bottom: 5px;
             }
-            #fieldlist-chapter {
+            #fieldlist-books {
+                font-size:20px;
                 height: auto;
                 overflow: hidden;
                 display: table;
                 padding: 0;
-                margin: 0 auto;
                 list-style: none;
                 background-color:transparent;
-
+                display:inline;
             }
-                #fieldlist-chapter li {
-                    float: left;
-                    padding: 4px;
-                    margin-left: auto;
-                    margin-right: auto;
-                }
+            #fieldlist-books .active {background-color: #616D74;cursor: default;}
+            #fieldlist-books .active a { color: white;}
+            #fieldlist-books li {padding:4px;margin-left:0;margin-right:auto;cursor:pointer;}
+            #fieldlist-chapters {
+                list-style: none;
+                margin-left: 0;
+                padding-left: 5px;
+                display: inline;
+            }
 
-                .demo-hint {
-                    line-height: 22px;
-                    color: #aaa;
-                    font-style: italic;
-                    font-size: .9em;
-                    padding-top: 1em;
-                }
+            .demo-hint {line-height: 22px;color: #aaa;font-style: italic;font-size: .9em;padding-top: 1em;}
 
             .search-bar {
                 padding: 10px;
@@ -738,5 +856,29 @@
                 /*margin: 5px;*/
             }
             .footer a{display:none;}
+            .bw-widget-input-new-value {
+                border-left-width: 0px;
+                position: relative;
+                float: none;
+            }
+            #booksContainer{max-height:360px;overflow:auto;float:left;width:80%}
+            #chaptersContainer {
+                max-height: 360px;
+                overflow: auto;
+                float: right;
+            }
+
+            .popover-content .popover-footer {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                padding: 1rem;
+                background-color: #efefef;
+                text-align: center;
+                display:flex;
+            }
+
+            .popover-content .popover-footer div{width:50%;}
         </style>
     }

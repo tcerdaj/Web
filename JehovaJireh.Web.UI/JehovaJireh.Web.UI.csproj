@@ -2625,6 +2625,7 @@
     <Content Include="Views\Shared\_UserManagePartial.cshtml" />
     <Content Include="Views\Bible\Index.cshtml" />
     <Content Include="Views\Bible\Volume.cshtml" />
+    <Content Include="Views\Bible\Version.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
