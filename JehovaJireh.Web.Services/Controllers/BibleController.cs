@@ -91,7 +91,7 @@ namespace JehovaJireh.Web.Services.Controllers
         /// <summary>
         /// User needs to select a book of the Bible and a chapter. Retrieve a list of books for this Bible.
         /// </summary>
-        /// <param name="dam_id"></param>
+        /// <param name="version"></param>
         /// <returns></returns>
         [HttpGet]
         public async Task<HttpResponseMessage> Book(string version)
@@ -101,6 +101,28 @@ namespace JehovaJireh.Web.Services.Controllers
             {
                 var action = "versions/"+ version + "/books.js";
                 var param = string.Format("include_chapters=true");
+                response = await GetAbsAsync(action, param);
+            }
+            catch (System.Exception)
+            {
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+            return response;
+        }
+
+        /// <summary>
+        /// User needs to select a book of the Bible and a chapter. Retrieve a list of books for this Bible.
+        /// </summary>
+        /// <param name="version"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<HttpResponseMessage> Verses(string id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var action = "chapters/" + id + "/verses.js";
+                var param = string.Format("include_marginalia=true");
                 response = await GetAbsAsync(action, param);
             }
             catch (System.Exception)

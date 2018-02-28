@@ -1,4 +1,7 @@
-﻿using System;
+﻿using JehovaJireh.Web.UI.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -12,11 +15,10 @@ namespace JehovaJireh.Web.UI.Controllers
     public class BibleController : Controller
     {
         // GET: Bible
-        public ActionResult Index(string version = null, string book = null, string chapter = null)
+        public async Task<ActionResult> Index(string id = null)
         {
-            ViewBag.Version = version;
-            ViewBag.Book = book;
-            ViewBag.Chapter = chapter;
+            ViewBag.Id = id;
+            ViewBag.Verses = !string.IsNullOrEmpty(id) ? await GetVerses(id): null;
             return View();
         }
 
@@ -25,21 +27,21 @@ namespace JehovaJireh.Web.UI.Controllers
             return View();
         }
 
-        [HttpGet]
-        [ActionName("Version")]
-        public async Task<ActionResult> Version(string language)
+        public async Task<List<VerseViewModels>> GetVerses(string id)
         {
             string html = string.Empty;
             var response = new HttpResponseMessage();
-            var endPoint = string.Format("{0}bible/Versionshtml?language={1}", GetBaseUrl(), language);
+            var endPoint = string.Format("{0}bible/verses?id={1}", GetBaseUrl(), id);
 
             using (var client = new System.Net.Http.HttpClient())
             {
                 response = await client.GetAsync(endPoint);
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
-                html = await response.Content.ReadAsStringAsync();
-                return Content(html);
-                
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var j = await response.Content.ReadAsStringAsync();
+                var o = JObject.Parse(j);
+                var jo = o["response"]["verses"];
+                var list = JsonConvert.DeserializeObject<List<VerseViewModels>>(jo.ToString());
+                return list;
             }
         }
         private string GetBaseUrl()
