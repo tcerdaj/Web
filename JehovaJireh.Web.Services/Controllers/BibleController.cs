@@ -78,7 +78,7 @@ namespace JehovaJireh.Web.Services.Controllers
             try
             {
                 var action = "versions.js";
-                var param = string.Format("language={0}", language);
+                var param = string.IsNullOrEmpty(language)? string.Empty: string.Format("language={0}", language);
                 response = await GetAbsAsync(action, param);
             }
             catch (System.Exception)

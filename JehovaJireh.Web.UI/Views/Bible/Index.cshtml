@@ -69,43 +69,48 @@
         var selectedVersion = null;
         var selectedBooks = null;
         var selectedVerses = null;
+        var onChangeVersionAuto = false;
+        var myParams = null;
 
         $('.search-bar').busyIndicator(true);
         var loadingPage = false; isClick = false;
 
         $(document).ready(function () {
             loadingPage = true;
-            var myParams = readCookie(cookieName);
-            if (myParams === null || myParams === undefined || myParams === '') {
-                $.when(fillLanguages()).done(function () {
+
+            $.when(fillLanguages()).done(function (_langResult) {
+                myParams = readCookie(cookieName);
+                if (myParams === null || myParams === undefined || myParams === '') {
+
                     for (var i = 0; i < languages.length; i++) {
                         var lang = languages[i];
                         var li = $('<li><a href="/Bible/Volume?lang=' + lang.language_family_code + '">' + lang.language_family_name + '</a></li>');
                         li.appendTo($('#fieldlist'));
                     }
-                });
 
-                $('.section-content').show();
-                init();
-            }
-            else {
-                //build buttons
-                var verses = function () { return @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Verses)); }();
-                var data = null;
-                try {
-                    data = JSON.parse(myParams);
-                } catch (e) {
-                    console.log(e);
+
+                    $('.section-content').show();
+                    init();
                 }
-                //retry call if null
-                if (verses === null && data !== null) {
-                    $.when(fillVersus(data.id)).done(function (result) {
-                        loadSelectedInfo(data, result.response.verses);
-                    });
-                } else if(data !== null) {
-                    loadSelectedInfo(data, verses);
+                else {
+                    //build buttons
+                    var verses = function () { return @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Verses)); }();
+                    var data = null;
+                    try {
+                        data = JSON.parse(myParams);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    //retry call if null
+                    if (verses === null && data !== null) {
+                        $.when(fillVersus(data.id)).done(function (result) {
+                            loadSelectedInfo(data, result.response.verses);
+                        });
+                    } else if (data !== null) {
+                        loadSelectedInfo(data, verses);
+                    }
                 }
-            }
+            });
         });
 
         function loadSelectedInfo(data, verses) {
@@ -124,8 +129,6 @@
                 isClick = true;
             })
 
-            //
-
             var container = $(".divsection .scrollable-holder .scrollable");
             container.empty();
             var divContainer = $(kendo.format('<div class="text-holder {0}"></div>', fullVersion));
@@ -139,12 +142,26 @@
                 var verse = verses[i];
                 $(verse.text).appendTo(divContainer);
             }
-
+            
             var copyright = verses[0].copyright;
             var divFooter = $(kendo.format('<div class="copyright-statement">{0}</div>', copyright));
             divFooter.appendTo(container);
+            var arrows = $('<div class="arrows">'
+                + '<a href="/previous">'
+                + '<div class="prim control"></div>'
+                + '</a>'
+                + '<a href="full-size">'
+                + '<div class="zmim control"></div>'
+                + '</a>'
+                + '<a href="/next">'
+                + '<div class="neim control"></div>'
+                + '</a>'
+                + '</div>');
+
+            arrows.appendTo(container);
+
             $('.search-bar').busyIndicator(false);
-            $('.section-content').show();
+            $('.section-content').hide();
             init(lang);
         }
 
@@ -196,6 +213,10 @@
             $('#ver').on('shown.bs.popover', function (e) {
                 // do something…
                 //generate kendo grid
+                if ($('.popover.fade.bottom.in').length === 2) {
+                    $('#book').click();
+                }
+
                 var popover = $('.popover.fade.bottom.in');
                 $("#search").kendoComboBox({
                     placeholder: "Search Language...",
@@ -221,13 +242,17 @@
                                 url: kendo.format("{0}bible/VersionsAbs?language={1}", getBaseUrl(), (lang || language)),
                                 dataType: "json",
                                 complete: function (data, status) {
-                                    if (status === "success" && lang !== undefined) {
-                                        var fullVersion = selectedVersion.id.substring(0, selectedVersion.id.indexOf(':'));
-                                        var row = grid.table.find(kendo.format("tr td:contains('{0}')", fullVersion));
+                                    if (status === "success" && lang !== undefined && selectedVersion != null) {
+                                        var fullVersion = selectedVersion.id;
+                                        var row = grid.table.find(kendo.format("tr td:contains('{0}')", fullVersion)).parent();
+                                        onChangeVersionAuto = true;
                                         grid.select(row);
                                     }
-                                    else if(status === "error") {
+                                    else if (status === "error") {
                                         openDialog(status, generalError);
+                                    }
+                                    else {
+                                        onChangeVersionAuto = false;
                                     }
                                 }
                             }
@@ -244,8 +269,6 @@
                         }
                     },
                     groupable: false,
-                    dataBound: function () {
-                    },
                     height: 300,
                     selectable: "single",
                     scrollable: true,
@@ -253,6 +276,7 @@
                     dataBound: function () {
                         var rowCount = grid.table.find("tbody > tr:visible").length;
                         document.getElementById('countVer').innerHTML = rowCount;
+                        
                     },
                     change: onVersionChange,
                     columns: [{
@@ -295,6 +319,7 @@
                 }
                 popover.offset({ top: popover.offset().top, left: $(this).offset().left });
                 popover.find(".arrow").css("left", (this.clientWidth / 2));
+                
             });
 
             if (selectedVersion !== null && selectedBooks !== null)
@@ -410,144 +435,7 @@
             var href = url.replace("dam_id", selectedVersion.dam_id).replace("book_id", selectedBook.book_id).replace("chapter_id", mySelection.chapter_id);
             window.location.href = href;
         }
-        function onChange(arg) {
-            var selected = $.map(this.select(), function (item) {
-                return $(item).text();
-            });
-
-            $('#chapter').popover('hide');
-            $('#chapter').remove();
-
-            $('#book').popover('hide');
-            $('#book').remove();
-
-            var grid = $("#table").data("kendoGrid");
-            var selectedLanguage = grid.dataItem(grid.select());
-            var language_family_code = selectedLanguage.language_family_code;
-            var prevElem = $('#lang');
-            var elem = $('<button id="version" type="button" class="btn btn-lg btn-danger">Version</button>');
-
-            if ($('#version').length === 0)
-                prevElem.after(elem);
-            else
-                elem = $('#version');
-
-            var langpopover = $('.popover.fade.bottom.in').length === 2 ? $('.popover.fade.bottom.in:eq(0)') : $('.popover.fade.bottom.in');
-            var offset = langpopover.offset();
-            var width = langpopover.width();
-
-            //container
-            var container = $("<div>");
-            var details = $([
-                '<div class="row">',
-                '<div class="col-lg-12">',
-                '<input type="search" id="search-version" value="" class="form-control" placeholder="Search your prefered version">',
-                '</div>',
-                '</div>',
-                '<div class="row">',
-                '<div class="col-lg-12">',
-                '<div class="table" id="table-version">',
-                '</div>',
-                '<hr>',
-                '</div>',
-                '</div>'].join(""));
-
-            container.append(details);
-
-            $(elem).popover({
-                container: 'body',
-                title: 'Pick your favorite version',
-                html: true,
-                content: container.html(),
-                placement: 'bottom'
-            });
-
-            $(elem).on('shown.bs.popover', function (e) {
-                // do something…
-                //generate kendo grid
-                var grid = $("#table-version").kendoGrid({
-                    dataSource: {
-                        type: "json",
-                        transport: {
-                            read: {
-                                dataType: "json",
-                                url: function (m) {
-                                    return kendo.format("{0}bible/Volumes?language_family_code={1}", getBaseUrl(), language_family_code)
-                                },
-                            }
-                        },
-                        aggregate: [
-                            { field: "version_code", aggregate: "count" }
-                        ],
-                        sort: {
-                            field: "version_code",
-                            dir: "asc"
-                        },
-                        dataBound: function (d) {
-
-                        },
-                        schema: {
-                            model: {
-                                fields: {
-                                    dam_id: { type: "string" },
-                                    version_code: { type: "string" },
-                                    version_name: { type: "string" },
-                                    version_english: { type: "string" },
-                                    collection_code: { type: "string" },
-                                    collection_name: { type: "string" },
-                                    audio_zip_path: { type: "string" }
-                                }
-                            }
-                        }
-                    },
-                    height: 300,
-                    selectable: "single",
-                    scrollable: true,
-                    change: onVersionChange,
-                    columns: [{
-                        field: "version_code",
-                        title: "Version",
-                        template: "#= version_code # #= (version_name !== '') ? (' - ' + version_name) : ''  #",
-                        footerTemplate: "Items: <span id='countVer'> #:kendo.toString(count,'version_code')# </span>"
-                    }]
-                }).data("kendoGrid");
-
-                $("#search-version").on("keyup", function () {
-                    var g = $(this).val().replace(/[Ａ-Ｚａ-ｚ０-９]/g, function (s) {
-                        return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
-                    }).toLowerCase();
-
-                    var filter = {
-                        logic: "or",
-                        filters: [
-                            { field: "version_code", operator: "contains", value: g },
-                            { field: "version_name", operator: "contains", value: g },
-                            { field: "english_name", operator: "contains", value: g },
-                        ]
-                    };
-
-                    grid.dataSource.filter(filter);
-
-                    $(".row").each(function () {
-                        //s is the value within tr
-                        var s = $(this).text().toLowerCase();
-                        var rowCount = grid.table.find("tbody > tr:visible").length;
-                        document.getElementById('countVer').innerHTML = rowCount;
-                    });
-                });
-
-                var width = $('.popover.fade.bottom.in:eq(1)').css('width');
-                $(this).css('width', width);
-                var data = grid.dataSource.data();
-                $('#countVer').text(data.length);
-            });
-
-            $(elem).popover('show');
-
-            $('.popover.fade.bottom.in:eq(1)').offset({
-                "top": offset.top, "left": (offset.left + width + 10)
-            });
-        }
+        
 
         function onBookChange(arg) {
             var selected = $.map(this.select(), function (item) {
@@ -629,17 +517,20 @@
         }
         function onVersionChange(arg) {
             var grid = $("#table").data("kendoGrid");
-            var _selectedVersion = grid.dataItem(grid.select());
+            var _selectedVersion = arg.sender.dataItem(arg.sender.select());
 
             if (_selectedVersion === null) { //this because we re-loading the page with previous selectection.
                 _selectedVersion = selectedVersion;
                 return;
             }
             selectedVersion = _selectedVersion;
+            if (!onChangeVersionAuto) {
+                $.when(fillBooks(selectedVersion.id)).done(function (books) {
+                    buildBookList(selectedVersion, books);
+                });
+            }
 
-            $.when(fillBooks(selectedVersion.id)).done(function (books) {
-                buildBookList(selectedVersion, books);
-            });
+            onChangeVersionAuto = false;
         }
 
         function buildBookList(selectedVersion, books) {
@@ -651,24 +542,36 @@
             var offset = prevPopoverBody.offset();
             var width = prevPopoverBody.width();
             var height = prevPopoverBody.height();
-            ver.popover('hide');
+            //ver.popover('hide');
             selectedBooks = books;
             //container
             var container = $('<div id="booksContainer"></div>');
             var chaptersContainer = $('<div id="chaptersContainer"></div>');
 
             var exist = $("#fieldlist-books").length > 0;
-            var details = $("#fieldlist-books").length === 0 ? $("<ul id='fieldlist-books'></ul>") : $("#fieldlist-books ");
+            var details = $("#fieldlist-books").length === 0 ? $("<ul id='fieldlist-books'></ul>") : $("#fieldlist-books");
             $("#fieldlist-books li").remove();
             $("#fieldlist-books li").empty();
             var defaultValue = books.response.books[0];
+            var _chapterId = 1;
+
+            if (myParams != null) {
+                var _param = JSON.parse(myParams);
+                var _versionId = _param.id.split(".")[0];
+                _chapterId = _param.id.split(".")[1];
+                defaultValue = getItemById(_versionId, books.response.books);
+            }
 
             if (books && books.response.books) {
                 var _books = books.response.books;
                 for (var i = 0; i < _books.length; i++) {
                     var current_book = _books[i];
                     var json = JSON.stringify(current_book);
-                    var li = "<li><a id='" + current_book.id + "' class='chapters' href='#' data='" + json + "' >" + current_book.name + "</a></li>";
+                    if (current_book.id === defaultValue.id)
+                        var li = "<li class='active'><a id='" + current_book.id + "' class='chapters' href='#' data='" + json + "' >" + current_book.name + "</a></li>";
+                    else
+                        var li = "<li><a id='" + current_book.id + "' class='chapters' href='#' data='" + json + "' >" + current_book.name + "</a></li>";
+
                     $(li).appendTo(details);
                 }
             }
@@ -677,7 +580,7 @@
                 container.append(details);
                 var options = {
                     container: 'body',
-                    title: kendo.format('{0} Selected by default', defaultValue.name),
+                    title: kendo.format('{0} Selected', defaultValue.name),
                     html: true,
                     content: container[0].outerHTML,
                     placement: 'bottom'
@@ -685,13 +588,13 @@
 
                 $(book).popover(options);
 
-                $(book).on('hidden.bs.popover', function (e) {
-                    $(".popover.fade.bottom:eq(0)").remove();
-                });
-
                 $(book).on('shown.bs.popover', function (e) {
                     var popoverContent = $(".popover-content");
                     chaptersContainer.appendTo(popoverContent);
+
+                    if ($('.popover.fade.bottom.in').length === 2) {
+                        ver.click();
+                    }
                     var options = { "height": height + 10, "width": width + 200 };
                     if (!loadingPage && !isClick) {
                         $('.popover.fade.bottom.in:eq(0)').css(options);
@@ -704,18 +607,26 @@
                     }
 
                     //fill default value chapters when appear.
-                    var firstElement = $("#fieldlist-books:eq(0) li:eq(0)");
-                    firstElement.addClass("active");
+                    var activeElement = $("#fieldlist-books:eq(0) li.active");
+                    var firstElement = $("#fieldlist-books:eq(0) li:first()");
+                    $('#booksContainer').animate({
+                        scrollTop: activeElement.offset().top - firstElement.offset().top 
+                    }, 'slow');
+
                     var footerDiv = $(kendo.format('<div class="popover-footer"><div class="f-left">{0} books</div><div class="f-right"></div></>', books.response.books.length));
                     footerDiv.appendTo(popoverContent);
 
-                    buildChaptersList(firstElement, chaptersContainer);
+                    buildChaptersList(activeElement, chaptersContainer);
                     $('#fieldlist-books li').on('click', function (e) {
+                        $('.popover.fade.bottom.in').busyIndicator(true);
+                        var thisElement = $(this);
                         $(this.parentElement.children).removeClass("active");
-                        $(this).addClass("active");
-                        //build chapters list
-                        $(".popover-title").text(kendo.format("{0} Selected", $(this)[0].firstElementChild.text));
-                        buildChaptersList($(this), chaptersContainer);
+                        thisElement.addClass("active");
+                        $(".popover-title").text(kendo.format("{0} Selected", thisElement[0].firstElementChild.text));
+
+                        setTimeout(function () {
+                            buildChaptersList(thisElement, chaptersContainer);    
+                        }, 0);
                     });
 
                     isClick = false;
@@ -728,23 +639,54 @@
 
         function buildChaptersList(elem, container) {
             container.empty();
-            var ul = $('<ul id="fieldlist-chapters"></ul>');
+            var ul = $("#fieldlist-chapters").length === 0 ? $('<ul id="fieldlist-chapters"></ul>') : $("#fieldlist-chapters");
+            ul.empty();
             var data = $(elem.find("a")).attr("data");
             var json = JSON.parse(data);
             var chapters = json.chapters
 
             for (var i = 0; i < chapters.length; i++) {
                 var chap = chapters[i];
+                var this_verse = chap.id.substr(chap.id.indexOf(':') + 1, (chap.id.indexOf('.')));
+                var selected_verse = myParams !== '' || myParams !== null || myParams !== undefined ? JSON.parse(myParams) : null;
+                selected_verse = selected_verse !== null ? selected_verse.id.substr(selected_verse.id.indexOf(':') + 1, (selected_verse.id.indexOf('.'))): null;
                 var version = chap.id.split(':')[0], book = json.abbr;
                 var li = kendo.format('<li><a id="{0}" name="{2}" href="#" onclick="gotoVerse(this)">{1}</a></li>', chap.id, chap.chapter, json.name);
+
+                if (this_verse === selected_verse)
+                    li = kendo.format('<li class="active"><a id="{0}" name="{2}" href="#" onclick="gotoVerse(this)">{1}</a></li>', chap.id, chap.chapter, json.name);
+                                
                 $(li).appendTo(ul);
             }
 
             ul.appendTo(container);
-            $(".f-right").text(kendo.format("{0} chapters", chapters.length ));
+            $(".f-right").text(kendo.format("{0} chapters", chapters.length));
+            
+            var itemsAllowinscreen = Math.floor(container.css('max-height').replace('px', '') / ul.children().first().height());
+            if (chapters.length > itemsAllowinscreen)
+                container.css("width", "20%");
+            else
+                container.css("width", "15%");
+
+            var activeElement = $("#fieldlist-chapters:eq(0) li.active");
+            var firstElement = $("#fieldlist-chapters:eq(0) li:first()");
+
+            if (activeElement.length > 0) {
+                container.animate({
+                    scrollTop: activeElement.offset().top - firstElement.offset().top
+                }, 'slow');
+            }
+                        
+            $('.popover.fade.bottom.in').busyIndicator(false);
+
+            $('#fieldlist-chapters li').on('click', function (e) {
+               
+            });
         }
 
         function gotoVerse(id) {
+            $(id).parent().parent().children().removeClass("active");
+            $(id).parent().addClass("active");
             var data = { "id": id.id, "name": id.name, "version": selectedVersion, "books": selectedBooks };
             var jsonString = JSON.stringify(data);
             eraseCookie(cookieName);
@@ -874,14 +816,15 @@
             display: inline;
         }
 
-            #fieldlist-books .active {
+            #fieldlist-books .active, #fieldlist-chapters .active{
                 background-color: #616D74;
                 cursor: default;
             }
-
-                #fieldlist-books .active a {
+        
+                #fieldlist-books .active a, #fieldlist-chapters .active a {
                     color: white;
                 }
+                
 
             #fieldlist-books li {
                 padding: 4px;
@@ -894,7 +837,6 @@
             list-style: none;
             margin-left: 0;
             padding-left: 5px;
-            display: inline;
         }
 
         .demo-hint {
@@ -930,17 +872,19 @@
             float: none;
         }
 
+        #chaptersContainer {
+            max-height: 360px;
+            overflow: auto;
+            float: right;
+            width:15%;
+            text-align:center;
+        }
+
         #booksContainer {
             max-height: 360px;
             overflow: auto;
             float: left;
             width: 80%
-        }
-
-        #chaptersContainer {
-            max-height: 360px;
-            overflow: auto;
-            float: right;
         }
 
         .popover-content .popover-footer {

@@ -97,6 +97,16 @@ function getItemByArray(uid, array) {
     }
     return result !== null ? (result.length > 0 ? result[0]: null ) : null;
 }
+
+function getItemById(id, array) {
+    var result = null;
+    if (!(id === undefined || id === "" || id === null || id === "00000000-0000-0000-0000-000000000000") && !(array === undefined || array === "" || array === null)) {
+        result = $.grep(array, function (n, i) {
+            return n.id === id;
+        });
+    }
+    return result !== null ? (result.length > 0 ? result[0] : null) : null;
+}
 function getArrayByCollectionCode(uid, array) {
     var result = null;
     if (!(uid === undefined || uid === "" || uid === null || uid === "00000000-0000-0000-0000-000000000000") && !(array === undefined || array === "" || array === null)) {
@@ -173,10 +183,18 @@ Array.prototype.removeIfExist = function (element, comparer) {
 
 function openDialog(title, htmlMessage) {
 
-    var applySetup = $("#dialog").length === 0;
-    var dialog = $("#dialog").length === 0 ? $('<div id="dialog"> </div >').appendTo($('.container')) : $("#dialog");
+    var applySetup = $('.container #dialog').length === 0;
+    var dialog;
 
     if (applySetup) {
+        $('.container').append($('<div id="dialog"> </div >'));
+        dialog = $('.container #dialog');
+
+        if (dialog.length === 3) {
+            $('.container #dialog:eq(2)').remove();
+            $('.container #dialog:eq(1)').remove();
+        }
+
         dialog.kendoDialog({
             width: "400px",
             title: title,
@@ -189,6 +207,7 @@ function openDialog(title, htmlMessage) {
         });
     }
     else {
+        dialog = $('.container #dialog');
         dialog.data("kendoDialog").title(title);
         dialog.data("kendoDialog").content(htmlMessage);
     }
