@@ -25,6 +25,8 @@
     </script>
 </div>
 <div class="search-bar">
+    <div class="arrow-left" style="display:none">❮</div>
+    <div class="arrow-right" style="display:none">❯</div>
     <div class="btn-group" role="group" aria-label="...">
         <div class="input-group col-md-12">
             <button id="ver" type="button" class="btn btn-lg btn-danger">Version</button>
@@ -54,9 +56,15 @@
                 <span class="selected-references"></span>
             </div>
         </div>
-        <div class="scrollable" style="height: 735.875px;">
-        </div>
+        <div class="scrollable" style="height: 735.875px;"></div>
     </div>
+   
+</div>
+<div>
+    <ul class="pager">
+        <li class="previous"><a href="#">Previous</a></li>
+        <li class="next"><a href="#">Next</a></li>
+    </ul>
 </div>
 @section Scripts{
     @Styles.Render("~/bundles/kendo-css")
@@ -122,6 +130,7 @@
             var chapter = data.id.split('.')[1];
             var book = kendo.format("{0} {1}", data.name, chapter);
             var bookRef = data.id.substring(data.id.indexOf(':') + 1);
+
             $("#ver").text(version);
             $("#book").text(book);
             $("#book").show();
@@ -146,19 +155,21 @@
             var copyright = verses[0].copyright;
             var divFooter = $(kendo.format('<div class="copyright-statement">{0}</div>', copyright));
             divFooter.appendTo(container);
-            var arrows = $('<div class="arrows">'
-                + '<a href="/previous">'
-                + '<div class="prim control"></div>'
-                + '</a>'
-                + '<a href="full-size">'
-                + '<div class="zmim control"></div>'
-                + '</a>'
-                + '<a href="/next">'
-                + '<div class="neim control"></div>'
-                + '</a>'
-                + '</div>');
 
-            arrows.appendTo(container);
+            //next previous button
+            var selectedBook = getItemById(data.id.split('.')[0], selectedBooks.response.books);
+
+            if (selectedBook !== null && selectedBook.next !== null && selectedBook.next.book !== null) {
+                $('.arrow-right').attr("id", selectedBook.next.book.id + ".1");
+                $('.pager .next a').attr("href", "/bible/index?id=" + selectedBook.next.book.id + ".1");
+                $('.arrow-right').show();
+            }
+
+            if (selectedBook !== null && selectedBook.previous !== null && selectedBook.next.previous !== null) {
+                $('.arrow-left').attr("id", selectedBook.previous.book.id + ".1");
+                $('.pager .previous a').attr("href", "/bible/index?id=" + selectedBook.next.book.id + ".1");
+                $('.arrow-left').show();
+            }
 
             $('.search-bar').busyIndicator(false);
             $('.section-content').hide();
@@ -732,14 +743,15 @@
             line-height: 1.5em;
             margin: 0 10px;
             overflow: visible;
+            position:relative;
         }
-
-            .divsection .scrollable-holder .scrollable .text-holder .s {
-                font-weight: bold;
-                text-align: center;
-                margin-bottom: 4pt;
-                margin-top: 8pt;
-            }
+        
+        .divsection .scrollable-holder .scrollable .text-holder .s {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 4pt;
+            margin-top: 8pt;
+        }
 
             .divsection .scrollable-holder .scrollable .text-holder .p {
                 text-indent: 0.125in;
@@ -900,6 +912,18 @@
 
             .popover-content .popover-footer div {
                 width: 50%;
+            }
+
+        
+        .arrow-left{float:left;padding-left:10px;}
+        .arrow-right { float: right; text-align:right;padding-right:10px}
+        .arrow-left, .arrow-right {vertical-align: middle;line-height:50px;width:50px;}
+            .arrow-left:hover, .arrow-right:hover {
+                -webkit-transition: 0.5s all ease;
+                transition: 0.5s all ease;
+                background-color: #616D74;
+                z-index: -2;
+                cursor:pointer;
             }
     </style>
 }
