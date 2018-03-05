@@ -10,6 +10,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery.cookie")
     @Scripts.Render("~/bundles/common")
 </head>
 <body>
@@ -215,22 +216,26 @@
         }
 
         function getCookiesArray() {
-             var cName = "", cValue = "";
-            document.cookie.split(/; */).forEach(function (cookieraw) {
-                var cookie = cookieraw.split('=');
-                if (cookie[0].indexOf("car") > -1)
-                    cName = cookie[0];//print it
-            });
+            try {
+                var cName = "", cValue = "";
+                document.cookie.split(/; */).forEach(function (cookieraw) {
+                    var cookie = cookieraw.split('=');
+                    if (cookie[0].indexOf("car") > -1)
+                        cName = cookie[0];//print it
+                });
 
-            var userName = '@User.Identity.IsAuthenticated' == 'True' ? '@User.Identity.Name' : '';
-            var cookieName = "";
+                var userName = '@User.Identity.IsAuthenticated' == 'True' ? '@User.Identity.Name' : '';
+                var cookieName = "";
 
-            if (userName !== '')
-                cookieName = "car_" + userName;
-            else
-                cookieName = "car_" + cName;
+                if (userName !== '')
+                    cookieName = "car_" + userName;
+                else
+                    cookieName = "car_" + cName;
+                var cookieArray = JSON.parse(readCookie(cookieName));
+            } catch (e) {
+                return null;
+            }
 
-            var cookieArray = JSON.parse(readCookie(cookieName));
             return cookieArray;
         }
 

@@ -78,8 +78,69 @@ namespace JehovaJireh.Web.Services.Controllers
             try
             {
                 var action = "versions.js";
-                var param = string.Format("language={0}", language);
+                var param = string.IsNullOrEmpty(language)? string.Empty: string.Format("language={0}", language);
                 response = await GetAbsAsync(action, param);
+            }
+            catch (System.Exception)
+            {
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+            return response;
+        }
+
+        /// <summary>
+        /// User needs to select a book of the Bible and a chapter. Retrieve a list of books for this Bible.
+        /// </summary>
+        /// <param name="version"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<HttpResponseMessage> Book(string version)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var action = "versions/"+ version + "/books.js";
+                var param = string.Format("include_chapters=true");
+                response = await GetAbsAsync(action, param);
+            }
+            catch (System.Exception)
+            {
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+            return response;
+        }
+
+        /// <summary>
+        /// User needs to select a book of the Bible and a chapter. Retrieve a list of books for this Bible.
+        /// </summary>
+        /// <param name="version"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<HttpResponseMessage> Verses(string id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var action = "chapters/" + id + "/verses.js";
+                var param = string.Format("include_marginalia=true");
+                response = await GetAbsAsync(action, param);
+            }
+            catch (System.Exception)
+            {
+                response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        public async Task<HttpResponseMessage> VersionsHtml(string language)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var action = "versions.html";
+                var param = string.Format("language={0}", language);
+                response = await GetAbsAsync(action, param, "text/html");
             }
             catch (System.Exception)
             {
@@ -243,7 +304,7 @@ namespace JehovaJireh.Web.Services.Controllers
             }
         }
 
-        private async Task<HttpResponseMessage> GetAbsAsync(String action, String param)
+        private async Task<HttpResponseMessage> GetAbsAsync(String action, String param, string mediaType = "application/json")
         {
             using (var handler = new HttpClientHandler { Credentials = new System.Net.NetworkCredential(absApiKey, absPassword) })
             using (var client = new System.Net.Http.HttpClient(handler))
@@ -251,7 +312,7 @@ namespace JehovaJireh.Web.Services.Controllers
                 HttpResponseMessage responseMessage = null;
                 client.DefaultRequestHeaders.Add("Authorization", "password " + absPassword);
                 responseMessage = await client.GetAsync(string.Format("{0}v2/{1}?{2}", absEndPoint, action, param ));
-                responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
                 string result = await responseMessage.Content.ReadAsStringAsync();
                 return responseMessage;
             }

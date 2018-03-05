@@ -310,6 +310,7 @@
     <Compile Include="Installers\ControllersInstaller.cs" />
     <Compile Include="Installers\ServicesInstaller.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BibleViewModels.cs" />
     <Compile Include="Models\DonationViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -2007,6 +2008,8 @@
     <Content Include="Kendo\kendo.uniform.min.css.map" />
     <Content Include="Kendo\kendo.uniform.mobile.min.css.map" />
     <Content Include="Scripts\draggable-0.1.js" />
+    <Content Include="Scripts\jquery.cookie-1.4.1.min.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.searchable-1.0.0.min.js" />
     <Content Include="Scripts\jquery.signalR-2.1.2.js" />
     <Content Include="Scripts\jquery.signalR-2.1.2.min.js" />
@@ -2626,6 +2629,7 @@
     <Content Include="Views\Shared\_UserManagePartial.cshtml" />
     <Content Include="Views\Bible\Index.cshtml" />
     <Content Include="Views\Bible\Volume.cshtml" />
+    <Content Include="Views\Bible\Version.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

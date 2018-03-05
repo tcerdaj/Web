@@ -82,8 +82,8 @@ namespace JehovaJireh.Web.Services
             //app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
             var config = new HttpConfiguration();
-            config.MapHttpAttributeRoutes();
-            app.UseWebApi(config);
+            //config.MapHttpAttributeRoutes();
+            //app.UseWebApi(config);
             app.UseCors(CorsOptions.AllowAll);
             
             // Uncomment the following lines to enable logging in with third party login providers

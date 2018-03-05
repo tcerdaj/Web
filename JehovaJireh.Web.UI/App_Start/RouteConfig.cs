@@ -9,7 +9,7 @@ namespace JehovaJireh.Web.UI
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-			routes.MapRoute(
+            routes.MapRoute(
 				name: "DefaultCulture",
 				url: "{culture}/{controller}/{action}/{id}",
 				constraints: new { culture = new CultureConstraint(defaultCulture: "nl", pattern: "[a-z]{2}") },

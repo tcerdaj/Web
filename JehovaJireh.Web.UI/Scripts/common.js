@@ -5,32 +5,25 @@ var generalError = "An server error occurred and has been logged." +
     "\nPlease contact your administrator. " + "ServerException";
 
 function createCookie(name, value, days) {
-	var expires;
-
-	if (days) {
-		var date = new Date();
-		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-		expires = "; expires=" + date.toGMTString();
-	} else {
-		expires = "";
-	}
-	document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
+    $.cookie(name, value, { expires: days });
+    //if fails we try using localStorage
+    if (readCookie(name) === null || readCookie(name) === undefined) {
+        localStorage.setItem(name, value);
+    }
 }
 
 function readCookie(name) {
-	var nameEQ = encodeURIComponent(name) + "=";
-	var ca = document.cookie.split(';');
-	for (var i = 0; i < ca.length; i++) {
-		var c = ca[i];
-		while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-		if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
-	}
-	return null;
+    var _localStorage = localStorage.getItem(name);
+    if (_localStorage !== null)
+        return _localStorage;
+    return $.cookie(name);
 }
 
 function eraseCookie(name) {
-	if (name !== '' && name !== undefined)
-		createCookie(name, null, -1);
+    if (name !== '' && name !== undefined) {
+        $.removeCookie(name);
+        localStorage.removeItem(name);
+    }
 }
 
 function getBaseUrl() {
@@ -103,6 +96,16 @@ function getItemByArray(uid, array) {
         });
     }
     return result !== null ? (result.length > 0 ? result[0]: null ) : null;
+}
+
+function getItemById(id, array) {
+    var result = null;
+    if (!(id === undefined || id === "" || id === null || id === "00000000-0000-0000-0000-000000000000") && !(array === undefined || array === "" || array === null)) {
+        result = $.grep(array, function (n, i) {
+            return n.id === id;
+        });
+    }
+    return result !== null ? (result.length > 0 ? result[0] : null) : null;
 }
 function getArrayByCollectionCode(uid, array) {
     var result = null;
@@ -180,10 +183,18 @@ Array.prototype.removeIfExist = function (element, comparer) {
 
 function openDialog(title, htmlMessage) {
 
-    var applySetup = $("#dialog").length === 0;
-    var dialog = $("#dialog").length === 0 ? $('<div id="dialog"> </div >').appendTo($('.container')) : $("#dialog");
+    var applySetup = $('.container #dialog').length === 0;
+    var dialog;
 
     if (applySetup) {
+        $('.container').append($('<div id="dialog"> </div >'));
+        dialog = $('.container #dialog');
+
+        if (dialog.length === 3) {
+            $('.container #dialog:eq(2)').remove();
+            $('.container #dialog:eq(1)').remove();
+        }
+
         dialog.kendoDialog({
             width: "400px",
             title: title,
@@ -196,6 +207,7 @@ function openDialog(title, htmlMessage) {
         });
     }
     else {
+        dialog = $('.container #dialog');
         dialog.data("kendoDialog").title(title);
         dialog.data("kendoDialog").content(htmlMessage);
     }
